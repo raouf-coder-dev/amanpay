@@ -1,0 +1,17 @@
+from django.urls import path
+from . import views
+
+app_name = 'accounts'
+
+urlpatterns = [
+    path('', views.landing_view, name='landing'),
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+    path('logout/', views.logout_view, name='logout'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('dashboard/buyer/', views.buyer_dashboard_view, name='buyer_dashboard'),
+    path('dashboard/seller/', views.seller_dashboard_view, name='seller_dashboard'),
+    path('dashboard/delivery/', views.delivery_dashboard_view, name='delivery_dashboard'),
+    path('settings/', views.settings_view, name='settings'),
+    path('admin-dashboard/', views.admin_dashboard_view, name='admin_dashboard'),
+]

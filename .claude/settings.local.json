@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(winget install:*)",
+      "Bash(where msgfmt:*)",
+      "Bash(where choco:*)",
+      "Read(//c/Program Files/**)",
+      "Bash(choco install:*)",
+      "Bash(python manage.py makemessages -l fr --ignore=venv)",
+      "Bash(python manage.py compilemessages)",
+      "Bash(python manage.py compilemessages --locale=fr)",
+      "Bash(python -c ':*)",
+      "Bash(python manage.py makemigrations accounts)",
+      "Bash(python manage.py migrate)",
+      "Bash(python manage.py clearsessions)",
+      "Bash(python manage.py check)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/)",
+      "Bash(python manage.py runserver --noreload)",
+      "Bash(python -c ' *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/fr/)",
+      "Bash(python manage.py shell -c ' *)",
+      "Bash(python manage.py makemigrations)",
+      "Bash(python -c \"import polib; po=polib.pofile\\('locale/fr/LC_MESSAGES/django.po'\\); po.save_as_mofile\\('locale/fr/LC_MESSAGES/django.mo'\\); print\\('OK', len\\(po\\), 'entries'\\)\")",
+      "Bash(python manage.py makemigrations --check)",
+      "Bash(python manage.py reset_demo)",
+      "Bash(python manage.py test tests.test_full_flow -v 2)",
+      "Bash(python manage.py showmigrations accounts)",
+      "Bash(python manage.py shell -c \"from accounts.models import PlatformWallet, CommissionLog, calculate_commission; print\\('PlatformWallet count:', PlatformWallet.objects.count\\(\\)\\); print\\('CommissionLog count:', CommissionLog.objects.count\\(\\)\\); c=calculate_commission\\(8000\\); print\\('Commission 8000dz:', c\\)\")",
+      "Bash(python -c \"import polib; po=polib.pofile\\('locale/fr/LC_MESSAGES/django.po'\\); po.save_as_mofile\\('locale/fr/LC_MESSAGES/django.mo'\\); print\\('Compiled OK — entries:', len\\(po\\)\\)\")"
+    ]
+  }
+}

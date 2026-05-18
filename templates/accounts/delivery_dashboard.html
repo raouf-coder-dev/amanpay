@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "لوحة التوصيل" %} — AmanPay{% endblock %}
+
+{% block extra_head %}
+<style>
+  .page-header { margin-bottom: 2rem; }
+  .page-header h1 { font-size: 1.55rem; font-weight: 900; display: flex; align-items: center; gap: 0.6rem; }
+  .page-header p  { color: var(--muted-l); font-size: 0.87rem; margin-top: 0.3rem; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+
+  .shipment-card {
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+  }
+  .shipment-card:hover { border-color: var(--border-h); }
+
+  .shipment-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap;
+  }
+  .shipment-info h4 { font-size: 0.98rem; font-weight: 700; margin-bottom: 0.25rem; }
+
+  .shipment-meta {
+    display: flex; flex-wrap: wrap; gap: 0.75rem;
+    margin-top: 0.75rem; font-size: 0.81rem; color: var(--muted-l);
+  }
+  .meta-item { display: flex; align-items: center; gap: 0.3rem; }
+
+  .actions-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+
+  .tx-code { font-family: monospace; font-size: 0.9rem; letter-spacing: 0.15em; color: var(--indigo-s); font-weight: 700; }
+
+  .empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted-l); }
+  .empty-state svg { opacity: 0.3; margin-bottom: 1rem; }
+
+  .confirm-box {
+    display: none;
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 10px;
+    padding: 1rem; margin-top: 0.75rem;
+    font-size: 0.87rem;
+  }
+  .confirm-box.open { display: block; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--yellow);"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    {% trans "لوحة التوصيل" %}
+  </h1>
+  <p>{% trans "مرحباً" %}، <strong>{{ user.company_name|default:user.username }}</strong></p>
+</div>
+
+<div class="stats-row">
+  <div class="glass stat-card">
+    <div class="stat-label">{% trans "قيد الشحن" %}</div>
+    <div class="stat-value text-yellow">{{ shipped_count|default:"0" }}</div>
+    <div class="stat-sub">{% trans "بانتظار التسليم" %}</div>
+  </div>
+  <div class="glass stat-card">
+    <div class="stat-label">{% trans "تم التسليم" %}</div>
+    <div class="stat-value text-green">{{ delivered_count|default:"0" }}</div>
+    <div class="stat-sub">{% trans "هذا الشهر" %}</div>
+  </div>
+  <div class="glass stat-card">
+    <div class="stat-label">{% trans "متنازع عليها" %}</div>
+    <div class="stat-value text-red">{{ disputed_count|default:"0" }}</div>
+    <div class="stat-sub">{% trans "تحتاج متابعة" %}</div>
+  </div>
+</div>
+
+<div class="flex-between mb-2" style="margin-bottom:1.25rem;">
+  <h3 style="font-size:0.95rem;font-weight:700;display:flex;align-items:center;gap:0.5rem;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted-l);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    {% trans "الشحنات المسندة إليّ" %}
+  </h3>
+</div>
+
+{% if transactions %}
+  {% for tx in transactions %}
+  <div class="shipment-card">
+    <div class="shipment-top">
+      <div class="shipment-info">
+        <h4>{{ tx.product_name }}</h4>
+        <span class="tx-code">#{{ tx.code }}</span>
+      </div>
+      <span class="badge badge-{{ tx.status|lower }}">{{ tx.get_status_display }}</span>
+    </div>
+
+    <div class="shipment-meta">
+      <span class="meta-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        {% trans "البائع" %}: {{ tx.seller.username }}
+      </span>
+      <span class="meta-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        {% trans "المشتري" %}: {{ tx.buyer.username|default:"—" }}
+      </span>
+      <span class="meta-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        {{ tx.amount }} {% trans "دج" %}
+      </span>
+      <span class="meta-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        {{ tx.created_at|date:"d/m/Y" }}
+      </span>
+    </div>
+
+    <div class="actions-row" style="margin-top:0.75rem;">
+      <a href="{% url 'transactions:detail' tx.pk %}" class="btn btn-ghost btn-sm">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        {% trans "تفاصيل" %}
+      </a>
+    </div>
+
+    {% if tx.status == 'SHIPPED' %}
+    <div class="actions-row">
+      <form method="post" action="{% url 'transactions:confirm_delivery' tx.pk %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success btn-sm">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          {% trans "تأكيد التسليم" %}
+        </button>
+      </form>
+
+      <button class="btn btn-danger btn-sm" onclick="toggleReject('reject-{{ tx.id }}')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        {% trans "رفع إشكال" %}
+      </button>
+    </div>
+
+    <div class="confirm-box" id="reject-{{ tx.id }}">
+      <p style="margin-bottom:0.75rem;font-weight:600;">{% trans "هل تريد رفع إشكال لهذه الصفقة؟" %}</p>
+      <form method="post" action="{% url 'transactions:dispute' tx.pk %}">
+        {% csrf_token %}
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <textarea class="form-input" name="dispute_reason" rows="2"
+            placeholder="{% trans 'اشرح سبب الإشكال...' %}" required></textarea>
+        </div>
+        <div style="display:flex;gap:0.5rem;">
+          <button type="submit" class="btn btn-danger btn-sm">{% trans "إرسال الإشكال" %}</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="toggleReject('reject-{{ tx.id }}')">{% trans "إلغاء" %}</button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+{% else %}
+  <div class="glass empty-state">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    <p>{% trans "لا توجد شحنات مسندة إليك حالياً." %}</p>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function toggleReject(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+</script>
+{% endblock %}

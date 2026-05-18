@@ -1,0 +1,595 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}AmanPay{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ── Core palette ── */
+      --bg-primary:    #0A0F1E;
+      --bg-secondary:  #0D1530;
+      --bg-card:       #111827;
+      --bg-card-hover: #131F35;
+      --bg-input:      #0D1530;
+
+      --blue-primary:  #2563EB;
+      --blue-light:    #3B82F6;
+      --blue-glow:     rgba(37,99,235,0.15);
+
+      --text-primary:   #F9FAFB;
+      --text-secondary: #9CA3AF;
+      --text-muted:     #4B5563;
+
+      --border:        rgba(255,255,255,0.06);
+      --border-active: rgba(37,99,235,0.5);
+
+      --green:         #10B981;
+      --green-bg:      rgba(16,185,129,0.1);
+      --yellow:        #F59E0B;
+      --yellow-bg:     rgba(245,158,11,0.1);
+      --red:           #EF4444;
+      --red-bg:        rgba(239,68,68,0.1);
+      --blue-badge:    #3B82F6;
+      --blue-badge-bg: rgba(59,130,246,0.1);
+      --purple:        #8B5CF6;
+      --purple-bg:     rgba(139,92,246,0.1);
+
+      --shadow-sm:   0 1px 3px rgba(0,0,0,0.4);
+      --shadow-md:   0 4px 20px rgba(0,0,0,0.5);
+      --shadow-blue: 0 0 30px rgba(37,99,235,0.15);
+
+      --transition: all 0.2s ease;
+      --radius-sm:  8px;
+      --radius-md:  12px;
+      --radius-lg:  16px;
+
+      /* ── Backwards-compat aliases ── */
+      --bg:        var(--bg-primary);
+      --bg2:       var(--bg-secondary);
+      --bg3:       #1E2A3B;
+      --surface:   rgba(255,255,255,0.03);
+      --surface-h: rgba(255,255,255,0.05);
+      --border-h:  var(--border-active);
+      --indigo:    var(--blue-primary);
+      --indigo-h:  #1D4ED8;
+      --indigo-s:  var(--blue-light);
+      --green-s:   #34D399;
+      --text:      var(--text-primary);
+      --muted:     var(--text-muted);
+      --muted-l:   var(--text-secondary);
+      --radius:    var(--radius-lg);
+      --blur:      0px;
+      --shadow:    var(--shadow-md);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.6);
+      --glow-i:    var(--blue-glow);
+      --glow-g:    rgba(16,185,129,0.12);
+    }
+
+    body {
+      font-family: {% if LANGUAGE_CODE == 'ar' %}'Cairo', sans-serif{% else %}'Inter', 'Cairo', sans-serif{% endif %};
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--blue-primary); }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+      height: 56px;
+      background: rgba(10,15,30,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-brand {
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      letter-spacing: -0.01em;
+    }
+    .navbar-brand .brand-icon {
+      width: 28px; height: 28px;
+      background: var(--blue-primary);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .navbar-end { display: flex; align-items: center; gap: 8px; }
+
+    .nav-user {
+      font-size: 0.82rem; color: var(--text-secondary);
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+    .nav-user:hover { background: rgba(255,255,255,0.04); color: var(--text-primary); }
+
+    .nav-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--blue-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.72rem; color: #fff; flex-shrink: 0;
+    }
+
+    /* ── Back button ── */
+    .btn-back {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn-back:hover { border-color: var(--border-active); color: var(--text-primary); background: rgba(255,255,255,0.04); }
+
+    /* ── Language switcher ── */
+    .lang-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .lang-btn:hover { border-color: var(--blue-primary); color: var(--text-primary); }
+
+    /* ── Logout ── */
+    .btn-logout {
+      background: transparent;
+      border: 1px solid rgba(239,68,68,0.2);
+      color: #F87171;
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-logout:hover { background: var(--red-bg); border-color: rgba(239,68,68,0.4); }
+
+    /* ── Admin link ── */
+    .btn-admin {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; font-weight: 600;
+      color: var(--green);
+      text-decoration: none;
+      padding: 5px 10px;
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+    .btn-admin:hover { background: var(--green-bg); border-color: rgba(16,185,129,0.5); }
+
+    /* ── Main content ── */
+    .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    /* ── Card ── */
+    .glass {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+    .glass:hover { border-color: rgba(255,255,255,0.1); }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); opacity: 0.9; }
+
+    .btn-primary {
+      background: var(--blue-primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--blue-light); box-shadow: var(--shadow-blue); }
+
+    .btn-success {
+      background: var(--green);
+      color: #fff;
+    }
+    .btn-success:hover { background: #0EA272; box-shadow: 0 0 20px rgba(16,185,129,0.3); }
+
+    .btn-danger {
+      background: var(--red);
+      color: #fff;
+    }
+    .btn-danger:hover { background: #DC2626; box-shadow: 0 0 20px rgba(239,68,68,0.3); }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .btn-ghost:hover { border-color: var(--blue-primary); color: var(--text-primary); background: rgba(37,99,235,0.06); }
+
+    .btn-sm { padding: 6px 12px; font-size: 0.78rem; border-radius: 6px; }
+    .btn-lg { padding: 12px 28px; font-size: 0.95rem; border-radius: var(--radius-md); }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block; margin-bottom: 6px;
+      font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;
+    }
+    .form-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 11px 16px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.875rem;
+      transition: var(--transition);
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--blue-primary);
+      box-shadow: 0 0 0 3px var(--blue-glow);
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+    select.form-input { cursor: pointer; }
+    select.form-input option { background: var(--bg-card); color: var(--text-primary); }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+    .badge-pending   { background: var(--yellow-bg);      color: var(--yellow); }
+    .badge-funded    { background: var(--blue-badge-bg);  color: var(--blue-badge); }
+    .badge-shipped   { background: var(--purple-bg);      color: var(--purple); }
+    .badge-delivered { background: var(--green-bg);       color: var(--green); }
+    .badge-completed { background: var(--green-bg);       color: var(--green); }
+    .badge-disputed  { background: var(--red-bg);         color: var(--red); }
+    .badge-refunded  { background: rgba(239,68,68,0.08);  color: #F87171; }
+    .badge-cancelled { background: rgba(75,85,99,0.15);   color: var(--text-secondary); }
+
+    /* ── Table ── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: 10px 16px;
+      text-align: start;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      vertical-align: middle;
+    }
+    tbody tr { transition: background 0.15s; }
+    tbody tr:hover td { background: rgba(255,255,255,0.02); color: var(--text-primary); }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* ── Alerts ── */
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex; align-items: flex-start; gap: 8px;
+      border-inline-start: 3px solid transparent;
+    }
+    .alert-error   { background: var(--red-bg);    border-color: var(--red);    color: #FCA5A5; }
+    .alert-success { background: var(--green-bg);  border-color: var(--green);  color: #6EE7B7; }
+    .alert-info    { background: var(--blue-glow); border-color: var(--blue-primary); color: #93C5FD; }
+    .alert-warning { background: var(--yellow-bg); border-color: var(--yellow); color: #FCD34D; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+    /* ── Stat card ── */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--blue-primary);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .stat-card:hover { border-color: rgba(255,255,255,0.1); }
+    .stat-card:hover::after { opacity: 1; }
+
+    .stat-label {
+      font-size: 11px; color: var(--text-muted); font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+    }
+    .stat-value { font-size: 28px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .stat-sub   { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+    /* ── Color helpers ── */
+    .text-green  { color: var(--green)  !important; }
+    .text-yellow { color: var(--yellow) !important; }
+    .text-red    { color: var(--red)    !important; }
+    .text-indigo { color: var(--blue-light) !important; }
+    .text-muted  { color: var(--text-secondary) !important; }
+    .text-sm     { font-size: 0.78rem; }
+    .text-center { text-align: center; }
+    .fw-bold     { font-weight: 700; }
+
+    /* ── Grid helpers ── */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 16px; }
+    .flex         { display: flex; }
+    .flex-between { display: flex; align-items: center; justify-content: space-between; }
+    .gap-1 { gap: 8px; }
+    .gap-2 { gap: 16px; }
+    .mt-1  { margin-top: 8px; }
+    .mt-2  { margin-top: 16px; }
+    .mt-3  { margin-top: 24px; }
+    .mb-2  { margin-bottom: 16px; }
+    .p-2   { padding: 24px; }
+
+    /* ── Section header ── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-size: 11px; font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.3s ease both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .navbar { padding: 0 16px; }
+      .main   { padding: 20px 16px; }
+      .stat-value { font-size: 22px; }
+    }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+  {% load i18n %}{% get_current_language as CURRENT_LANG %}
+  <div style="display:flex; align-items:center; gap:8px;">
+    <a href="{% url 'accounts:landing' %}" class="navbar-brand">
+      <span class="brand-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </span>
+      AmanPay
+    </a>
+    {% if request.resolver_match.url_name != 'landing' %}
+      <button onclick="goBack()" class="btn-back" title="{% trans 'رجوع' %}" style="background:none;border:1px solid var(--border);cursor:pointer;padding:0;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          {% if LANGUAGE_CODE == 'ar' %}<polyline points="9 18 15 12 9 6"/>{% else %}<polyline points="15 18 9 12 15 6"/>{% endif %}
+        </svg>
+      </button>
+    {% endif %}
+  </div>
+
+  <div class="navbar-end">
+    {% if user.is_authenticated %}
+      {% if CURRENT_LANG == 'fr' %}
+        <a href="{% if user.role == 'BUYER' %}/fr/dashboard/buyer/{% elif user.role == 'SELLER' %}/fr/dashboard/seller/{% elif user.role == 'DELIVERY' %}/fr/dashboard/delivery/{% else %}/fr/dashboard/{% endif %}"
+           class="btn-back" title="{% trans 'الرئيسية' %}">
+      {% else %}
+        <a href="{% if user.role == 'BUYER' %}{% url 'accounts:buyer_dashboard' %}{% elif user.role == 'SELLER' %}{% url 'accounts:seller_dashboard' %}{% elif user.role == 'DELIVERY' %}{% url 'accounts:delivery_dashboard' %}{% else %}{% url 'accounts:dashboard' %}{% endif %}"
+           class="btn-back" title="{% trans 'الرئيسية' %}">
+      {% endif %}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </a>
+      {% if user.is_staff %}
+        <a href="{% url 'accounts:admin_dashboard' %}" class="btn-admin">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          {% trans "سلة AmanPay" %}
+        </a>
+      {% endif %}
+      <a href="{% url 'accounts:settings' %}" class="nav-user">
+        <div class="nav-avatar">{{ user.username|first|upper }}</div>
+        <span class="text-sm" style="max-width:80px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ user.username }}</span>
+      </a>
+    {% endif %}
+
+    {# ── Language switcher ── #}
+    {% if CURRENT_LANG == 'fr' %}
+      <form action="/i18n/setlang/" method="post" style="display:inline">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
+        <input name="language" type="hidden" value="ar">
+        <button class="lang-btn" type="submit">ع</button>
+      </form>
+    {% else %}
+      <form action="/i18n/setlang/" method="post" style="display:inline">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="/fr{{ request.get_full_path }}">
+        <input name="language" type="hidden" value="fr">
+        <button class="lang-btn" type="submit">Fr</button>
+      </form>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+      <a href="{% url 'accounts:logout' %}" class="btn-logout">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        {% trans "خروج" %}
+      </a>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="main">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} fade-up">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  {% block content %}{% endblock %}
+</div>
+
+{% block extra_js %}{% endblock %}
+<script>
+  // Polling — تحديث تلقائي فقط على صفحات العرض
+  (function() {
+    var path = window.location.pathname;
+    var isDashboard = (
+      path.indexOf('dashboard') !== -1 ||
+      path.indexOf('wallet') !== -1
+    );
+    if (!isDashboard) return;
+
+    var pollingTimer = null;
+
+    function startPolling() {
+      clearTimeout(pollingTimer);
+      pollingTimer = setTimeout(function() {
+        window.location.reload();
+      }, 15000);
+    }
+
+    function stopPolling() {
+      clearTimeout(pollingTimer);
+      pollingTimer = null;
+    }
+
+    function isModalOpen() {
+      var m = document.getElementById('newTxModal');
+      return m && m.style.display !== 'none';
+    }
+
+    document.addEventListener('focusin', function(e) {
+      var t = e.target.tagName;
+      if (t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT') {
+        stopPolling();
+      }
+    });
+
+    document.addEventListener('focusout', function(e) {
+      var t = e.target.tagName;
+      if (t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT') {
+        setTimeout(function() {
+          if (!isModalOpen()) startPolling();
+        }, 1000);
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('newTxModal');
+      if (modal) {
+        new MutationObserver(function() {
+          if (modal.style.display === 'none') {
+            startPolling();
+          } else {
+            stopPolling();
+          }
+        }).observe(modal, { attributes: true, attributeFilter: ['style'] });
+      }
+    });
+
+    startPolling();
+  })();
+
+  {% get_current_language as CURRENT_LANG %}
+  var _LANG = '{{ CURRENT_LANG }}';
+  var _HOME = '{% if user.is_authenticated %}{% if user.role == "BUYER" %}{% if CURRENT_LANG == "fr" %}/fr{% url "accounts:buyer_dashboard" %}{% else %}{% url "accounts:buyer_dashboard" %}{% endif %}{% elif user.role == "SELLER" %}{% if CURRENT_LANG == "fr" %}/fr{% url "accounts:seller_dashboard" %}{% else %}{% url "accounts:seller_dashboard" %}{% endif %}{% elif user.role == "DELIVERY" %}{% if CURRENT_LANG == "fr" %}/fr{% url "accounts:delivery_dashboard" %}{% else %}{% url "accounts:delivery_dashboard" %}{% endif %}{% else %}{% url "accounts:dashboard" %}{% endif %}{% else %}{% url "accounts:landing" %}{% endif %}';
+
+  function goBack() {
+    if (document.referrer && document.referrer !== window.location.href) {
+      window.location.href = document.referrer;
+    } else {
+      var lang = _LANG;
+      {% if user.role == 'BUYER' %}
+        window.location.href = lang === 'fr' ? '/fr/dashboard/buyer/' : '/dashboard/buyer/';
+      {% elif user.role == 'SELLER' %}
+        window.location.href = lang === 'fr' ? '/fr/dashboard/seller/' : '/dashboard/seller/';
+      {% elif user.role == 'DELIVERY' %}
+        window.location.href = lang === 'fr' ? '/fr/dashboard/delivery/' : '/dashboard/delivery/';
+      {% else %}
+        window.location.href = '/';
+      {% endif %}
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "تقييم البائع" %} — AmanPay{% endblock %}
+
+{% block extra_head %}
+<style>
+  .review-wrap { max-width: 520px; margin: 0 auto; }
+  .review-header { text-align: center; margin-bottom: 2rem; }
+  .review-header h1 { font-size: 1.4rem; font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+  .review-header p  { color: var(--muted-l); font-size: 0.87rem; margin-top: 0.5rem; }
+
+  .stars-select { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 1.5rem; }
+  .star-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); transition: color 0.15s, transform 0.1s;
+    line-height: 1; padding: 0.2rem;
+  }
+  .star-btn:hover, .star-btn.active { color: var(--yellow); transform: scale(1.18); }
+  .star-btn svg { display: block; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="review-wrap">
+  <div class="review-header">
+    <h1>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color:var(--yellow);"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      {% trans "تقييم البائع" %}
+    </h1>
+    <p>
+      {% trans "الصفقة" %} #{{ transaction.code }} —
+      {% trans "البائع" %}: <strong>{{ transaction.seller.username }}</strong>
+    </p>
+  </div>
+
+  <div class="glass" style="padding:2rem;">
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label class="form-label" style="text-align:center; display:block; margin-bottom:1rem;">
+          {% trans "التقييم" %}
+        </label>
+        <div class="stars-select" id="starsRow">
+          {% for i in "12345" %}
+          <button type="button" class="star-btn" data-value="{{ forloop.counter }}" onclick="setRating({{ forloop.counter }})">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          {% endfor %}
+        </div>
+        <input type="hidden" name="rating" id="ratingInput" required>
+      </div>
+
+      <div class="form-group" style="margin-top:1.5rem;">
+        <label class="form-label">{% trans "تعليقك" %} ({% trans "اختياري" %})</label>
+        <textarea class="form-input" name="comment" rows="4" style="resize:vertical;"
+          placeholder="{% trans 'شاركنا تجربتك مع هذا البائع...' %}"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; margin-top:1rem;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        {% trans "إرسال التقييم" %}
+      </button>
+      <button onclick="goBack()" class="btn btn-ghost" style="width:100%; margin-top:0.5rem; justify-content:center;">
+        {% trans "رجوع" %}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function setRating(val) {
+    document.getElementById('ratingInput').value = val;
+    document.querySelectorAll('.star-btn').forEach(function(btn) {
+      const v = parseInt(btn.dataset.value);
+      btn.classList.toggle('active', v <= val);
+      const svg = btn.querySelector('svg');
+      if (v <= val) {
+        svg.setAttribute('fill', 'currentColor');
+      } else {
+        svg.setAttribute('fill', 'none');
+      }
+    });
+  }
+</script>
+{% endblock %}
