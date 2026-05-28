@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Q, Avg
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.http import HttpResponseRedirect
@@ -99,6 +99,8 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
+    if request.user.is_staff:
+        return redirect('accounts:admin_dashboard')
     role = request.user.role
     if role == User.Role.SELLER:
         return redirect('accounts:seller_dashboard')
@@ -110,7 +112,10 @@ def dashboard_view(request):
 @login_required
 def buyer_dashboard_view(request):
     from transactions.models import Transaction
-    wallet = request.user.wallet
+    wallet, _created = Wallet.objects.get_or_create(
+        user=request.user,
+        defaults={'balance': 50000, 'frozen_balance': 0},
+    )
     wallet.refresh_from_db()
     transactions = Transaction.objects.filter(buyer=request.user).order_by('-created_at')
     active_count = transactions.filter(status__in=['FUNDED', 'SHIPPED']).count()
@@ -125,7 +130,10 @@ def buyer_dashboard_view(request):
 def seller_dashboard_view(request):
     from transactions.models import Transaction
     from django.db.models import Sum
-    wallet = request.user.wallet
+    wallet, _created = Wallet.objects.get_or_create(
+        user=request.user,
+        defaults={'balance': 50000, 'frozen_balance': 0},
+    )
     wallet.refresh_from_db()
     transactions = Transaction.objects.filter(seller=request.user).order_by('-created_at')
     pending_amount = transactions.filter(
@@ -165,6 +173,8 @@ def settings_view(request):
 @staff_member_required(login_url='accounts:login')
 def admin_dashboard_view(request):
     from transactions.models import Transaction
+    from django.db.models.functions import TruncMonth
+    from datetime import timedelta
 
     now = timezone.now()
 
@@ -193,9 +203,59 @@ def admin_dashboard_view(request):
         volume=Sum('original_amount'),
     )
 
-    recent_transactions = Transaction.objects.select_related(
+    # ── Feature 1: user search (GET, read-only) ─────────────────────────────
+    search_query = request.GET.get('q', '').strip()
+    search_result = None
+    search_no_match = False
+    if search_query:
+        if search_query.isdigit():
+            search_result = User.objects.filter(
+                Q(id=search_query) | Q(username__iexact=search_query)
+            ).first()
+        else:
+            search_result = User.objects.filter(username__iexact=search_query).first()
+        if search_result is None:
+            search_no_match = True
+        else:
+            search_result.tx_count = Transaction.objects.filter(
+                Q(seller=search_result) | Q(buyer=search_result) | Q(delivery_company=search_result)
+            ).count()
+
+    # ── Feature 1b: transaction search by ID or code (GET, read-only) ───────
+    tx_search_query = request.GET.get('tx_q', '').strip()
+    tx_search_no_match = False
+    if tx_search_query:
+        tx_match = None
+        if tx_search_query.isdigit():
+            tx_match = (
+                Transaction.objects.filter(Q(id=tx_search_query) | Q(code=tx_search_query)).first()
+                or Transaction.objects.filter(code=tx_search_query).first()
+            )
+        else:
+            tx_match = Transaction.objects.filter(code__iexact=tx_search_query).first()
+        if tx_match:
+            return redirect('transactions:detail', pk=tx_match.pk)
+        tx_search_no_match = True
+
+    # ── Feature 2: transactions filter by date range + status ───────────────
+    date_from = request.GET.get('date_from', '').strip()
+    date_to   = request.GET.get('date_to', '').strip()
+    status_filter = request.GET.get('status_filter', '').strip()
+
+    tx_qs = Transaction.objects.select_related(
         'seller', 'buyer', 'delivery_company'
-    ).order_by('-created_at')[:10]
+    ).order_by('-created_at')
+
+    filter_active = bool(date_from or date_to or status_filter)
+    if date_from:
+        tx_qs = tx_qs.filter(created_at__date__gte=date_from)
+    if date_to:
+        tx_qs = tx_qs.filter(created_at__date__lte=date_to)
+    if status_filter:
+        tx_qs = tx_qs.filter(status=status_filter)
+
+    # عند تطبيق فلتر اعرض كل المطابقات (مقيّدة بـ 200 لأمان الأداء)؛ وإلا آخر 10 كالسلوك الحالي.
+    recent_transactions = tx_qs[:200] if filter_active else tx_qs[:10]
 
     recent_commissions = CommissionLog.objects.select_related(
         'transaction__seller', 'transaction__buyer'
@@ -205,6 +265,31 @@ def admin_dashboard_view(request):
         total_sales=Count('sales'),
         completed_sales=Count('sales', filter=Q(sales__status='COMPLETED')),
     ).order_by('-completed_sales')[:5]
+
+    # ── All users (latest 50, with wallet prefetched) ──────────────────────
+    all_users = User.objects.select_related('wallet').order_by('-id')[:50]
+
+    # ── Feature 3: monthly commissions chart — last 6 months ────────────────
+    six_months_ago = (now - timedelta(days=183)).replace(day=1)
+    monthly_qs = (
+        CommissionLog.objects
+        .filter(created_at__gte=six_months_ago)
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=Sum('commission_amount'), count=Count('id'))
+        .order_by('month')
+    )
+    monthly_chart = [
+        {
+            'label': row['month'].strftime('%Y-%m'),
+            'total': float(row['total'] or 0),
+            'count': row['count'],
+        }
+        for row in monthly_qs
+    ]
+
+    # خيارات حالات الصفقة لـ select الفلتر (نمرّر الـ choices الكاملة)
+    status_choices = Transaction.Status.choices
 
     return render(request, 'accounts/admin_dashboard.html', {
         'total_users':    total_users,
@@ -222,6 +307,57 @@ def admin_dashboard_view(request):
         'recent_transactions': recent_transactions,
         'recent_commissions':  recent_commissions,
         'top_sellers':         top_sellers,
+        'all_users':           all_users,
+        # search
+        'search_query':    search_query,
+        'search_result':   search_result,
+        'search_no_match': search_no_match,
+        # filter
+        'date_from':      date_from,
+        'date_to':        date_to,
+        'status_filter':  status_filter,
+        'status_choices': status_choices,
+        'filter_active':  filter_active,
+        # chart
+        'monthly_chart':  monthly_chart,
+    })
+
+
+@staff_member_required(login_url='accounts:login')
+def admin_user_detail(request, user_id):
+    from transactions.models import Transaction, Review
+
+    user = get_object_or_404(User, pk=user_id)
+    wallet, _created = Wallet.objects.get_or_create(
+        user=user,
+        defaults={'balance': 50000, 'frozen_balance': 0},
+    )
+
+    sales_count     = Transaction.objects.filter(seller=user).count()
+    purchases_count = Transaction.objects.filter(buyer=user).count()
+    deliveries_count = Transaction.objects.filter(delivery_company=user).count()
+
+    avg_rating = Review.objects.filter(seller=user).aggregate(avg=Avg('rating'))['avg'] or 0
+    reviews_count = Review.objects.filter(seller=user).count()
+
+    commissions_paid = CommissionLog.objects.filter(
+        transaction__seller=user
+    ).aggregate(total=Sum('commission_amount'))['total'] or 0
+
+    user_transactions = Transaction.objects.filter(
+        Q(seller=user) | Q(buyer=user) | Q(delivery_company=user)
+    ).select_related('seller', 'buyer', 'delivery_company').order_by('-created_at')[:50]
+
+    return render(request, 'accounts/admin_user_detail.html', {
+        'profile_user':     user,
+        'wallet':           wallet,
+        'sales_count':      sales_count,
+        'purchases_count':  purchases_count,
+        'deliveries_count': deliveries_count,
+        'avg_rating':       avg_rating,
+        'reviews_count':    reviews_count,
+        'commissions_paid': commissions_paid,
+        'user_transactions': user_transactions,
     })
 
 

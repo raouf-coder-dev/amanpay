@@ -1,0 +1,1086 @@
+You are given a task to integrate an existing React component in the codebase
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+two-factor-authentication-block.tsx
+"use client";
+
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import {
+Card,
+CardContent,
+CardDescription,
+CardHeader,
+CardFooter,
+CardTitle,
+} from "@/components/ui/card";
+import {
+InputOTP,
+InputOTPGroup,
+InputOTPSlot,
+InputOTPSeparator,
+} from "@/components/ui/input-otp";
+
+import { useState } from "react";
+import { Shield, ArrowLeft, RefreshCw } from "lucide-react";
+
+interface FormErrors {
+code?: string;
+general?: string;
+}
+
+const TwoFactorAuthBlock = ()  => {
+const [code, setCode] = useState("");
+const [errors, setErrors] = useState<FormErrors>({});
+const [isLoading, setIsLoading] = useState(false);
+const [isResending, setIsResending] = useState(false);
+const [resendSuccess, setResendSuccess] = useState(false);
+
+const handleCodeChange = (value: string) => {
+  setCode(value);
+
+  if (errors.code) {
+    setErrors((prev) => ({ ...prev, code: undefined }));
+  }
+};
+
+const handleCodeComplete = (value: string) => {
+  setCode(value);
+  if (value.length === 6) {
+    handleSubmit();
+  }
+};
+
+const validateForm = (): boolean => {
+  const newErrors: FormErrors = {};
+
+  if (code.length !== 6) {
+    newErrors.code = "Please enter the complete 6-digit code";
+  } else if (!/^d{6}$/.test(code)) {
+    newErrors.code = "Code must contain only numbers";
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+
+const handleSubmit = async (e?: React.FormEvent) => {
+  if (e) e.preventDefault();
+
+  if (!validateForm()) {
+    return;
+  }
+
+  setIsLoading(true);
+  setErrors({});
+
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    if (code === "123456") {
+      console.log("Code verified successfully");
+    } else {
+      setErrors({ general: "Invalid verification code. Please try again." });
+    }
+  } catch (error) {
+    setErrors({ general: "An unexpected error occurred. Please try again." });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+const handleResendCode = async () => {
+  setIsResending(true);
+  setErrors({});
+  setResendSuccess(false);
+
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    setResendSuccess(true);
+    setCode("");
+
+    setTimeout(() => setResendSuccess(false), 5000);
+  } catch (error) {
+    setErrors({ general: "Failed to resend code. Please try again." });
+  } finally {
+    setIsResending(false);
+  }
+};
+
+return (
+  <Card className="w-full max-w-md mx-auto flex flex-col gap-6">
+    <CardHeader className="text-center flex flex-col items-center justify-center">
+      <div className="flex justify-center mb-4">
+        <Shield className="h-12 w-12 text-primary" />
+      </div>
+      <CardTitle className="text-2xl font-bold">
+        Two-Factor Authentication
+      </CardTitle>
+      <CardDescription>
+        Enter the 6-digit code sent to your device
+      </CardDescription>
+    </CardHeader>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <CardContent className="flex flex-col gap-3">
+        {errors.general && (
+          <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+            {errors.general}
+          </div>
+        )}
+
+        {resendSuccess && (
+          <div className="p-3 text-sm text-green-600 bg-green-50 border border-green-200 rounded-md">
+            New verification code sent successfully!
+          </div>
+        )}
+
+        <div className="flex flex-col gap-3 items-center">
+          <Label className="text-center">Verification Code</Label>
+          <InputOTP
+            maxLength={6}
+            value={code}
+            onChange={handleCodeChange}
+            onComplete={handleCodeComplete}
+            disabled={isLoading}
+            pattern="[0-9]*"
+            variant={errors.code ? "destructive" : "default"}
+            otpSize="default"
+          >
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+            </InputOTPGroup>
+            <InputOTPSeparator />
+            <InputOTPGroup>
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+          {errors.code && (
+            <p className="text-sm text-red-600 text-center">{errors.code}</p>
+          )}
+        </div>
+
+        <div className="text-center">
+          <p className="text-sm text-muted-foreground">
+            Didn't receive the code?{" "}
+            <button
+              type="button"
+              onClick={handleResendCode}
+              disabled={isResending}
+              className="text-primary hover:underline disabled:opacity-50"
+            >
+              {isResending ? (
+                <>
+                  <RefreshCw className="inline h-3 w-3 mr-1 animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                "Resend Code"
+              )}
+            </button>
+          </p>
+        </div>
+      </CardContent>
+
+      <CardFooter className="flex flex-col flex flex-col gap-4">
+        <Button
+          type="submit"
+          
+          className="w-full"
+          loading={isLoading}
+          disabled={isLoading || code.length < 6}
+        >
+          {isLoading ? "Verifying..." : "Verify Code"}
+        </Button>
+
+        <Button
+          variant={"ghost"}
+          
+          className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground w-full"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Sign In
+        </Button>
+      </CardFooter>
+    </form>
+  </Card>
+);
+}
+
+export default TwoFactorAuthBlock;
+
+demo.tsx
+import TwoFactorAuthBlock from "@/components/ui/two-factor-authentication-block";
+
+export default function DemoOne() {
+  return <TwoFactorAuthBlock />;
+}
+
+```
+
+Copy-paste these files for dependencies:
+```tsx
+preetsuthar17/input
+"use client";
+
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+import { Eye, EyeOff, X } from "lucide-react";
+
+const inputVariants = cva(
+  "flex w-full rounded-ele border border-border bg-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-sm/2",
+  {
+    variants: {
+      variant: {
+        default: "border-border",
+        destructive:
+          "border-destructive focus-visible:ring-destructive",
+        ghost:
+          "border-transparent bg-accent focus-visible:bg-input focus-visible:border-border",
+      },
+      size: {
+        default: "h-9 px-3 py-2",
+        sm: "h-8 px-2 py-1 text-xs",
+        lg: "h-10 px-4 py-2",
+        xl: "h-12 px-6 py-3 text-base",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+);
+
+export interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
+    VariantProps<typeof inputVariants> {
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  error?: boolean;
+  clearable?: boolean;
+  onClear?: () => void;
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      className,
+      variant,
+      size,
+      type = "text",
+      leftIcon,
+      rightIcon,
+      error,
+      clearable,
+      onClear,
+      value,
+      ...props
+    },
+    ref,
+  ) => {
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [internalValue, setInternalValue] = React.useState(
+      props.defaultValue || "",
+    );
+    
+    // Create internal ref if no ref is provided
+    const internalRef = React.useRef<HTMLInputElement>(null);
+    const inputRef = ref || internalRef;
+
+    const inputVariant = error ? "destructive" : variant;
+    const isPassword = type === "password";
+    const actualType = isPassword && showPassword ? "text" : type;
+
+    // Determine if this is a controlled component
+    const isControlled = value !== undefined;
+    const inputValue = isControlled ? value : internalValue;
+    const showClearButton =
+      clearable && inputValue && String(inputValue).length > 0;
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!isControlled) {
+        setInternalValue(e.target.value);
+      }
+      props.onChange?.(e);
+    };
+
+    const handleClear = () => {
+      // Get reference to the input element
+      const inputElement = typeof inputRef === 'function' ? null : inputRef?.current;
+      
+      if (inputElement) {
+        // Set the input's value directly
+        inputElement.value = "";
+        
+        // Create a proper synthetic event
+        const event = new Event('input', { bubbles: true });
+        Object.defineProperty(event, 'target', {
+          writable: false,
+          value: inputElement
+        });
+        
+        // Dispatch the event to trigger onChange handlers
+        inputElement.dispatchEvent(event);
+      }
+
+      // Update internal state for uncontrolled components
+      if (!isControlled) {
+        setInternalValue("");
+      }
+      
+      // Call the onClear callback
+      onClear?.();
+      
+      // Create synthetic React event for onChange
+      if (props.onChange) {
+        const syntheticEvent = {
+          target: { value: "" },
+          currentTarget: { value: "" },
+          preventDefault: () => {},
+          stopPropagation: () => {},
+        } as React.ChangeEvent<HTMLInputElement>;
+        
+        props.onChange(syntheticEvent);
+      }
+    };
+
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
+
+    return (
+      <div className="relative w-full">
+        {leftIcon && (
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground [&_svg]:size-4 [&_svg]:shrink-0 z-10">
+            {leftIcon}
+          </div>
+        )}
+
+        <input
+          type={actualType}
+          className={cn(
+            inputVariants({ variant: inputVariant, size, className }),
+            leftIcon && "pl-10",
+            (rightIcon || isPassword || showClearButton) && "pr-10"
+          )}
+          ref={inputRef}
+          {...(isControlled
+            ? { value: inputValue }
+            : { defaultValue: props.defaultValue })}
+          onChange={handleInputChange}
+          {...(({ defaultValue, ...rest }) => rest)(props)}
+        />
+
+        {/* Right side icons container */}
+        {(rightIcon || isPassword || showClearButton) && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 z-10">
+            {/* Custom right icon */}
+            {rightIcon && (
+              <div className="text-muted-foreground [&_svg]:size-4 [&_svg]:shrink-0">
+                {rightIcon}
+              </div>
+            )}
+
+            {/* Clear button */}
+            {showClearButton && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="text-muted-foreground hover:text-foreground transition-colors [&_svg]:size-4 [&_svg]:shrink-0"
+                tabIndex={-1}
+              >
+                <X />
+              </button>
+            )}
+
+            {/* Password visibility toggle */}
+            {isPassword && (
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="text-muted-foreground hover:text-foreground transition-colors [&_svg]:size-4 [&_svg]:shrink-0"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff /> : <Eye />}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  },
+);
+
+Input.displayName = "Input";
+
+export { Input, inputVariants };
+```
+```tsx
+preetsuthar17/label
+"use client";
+
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const labelVariants = cva(
+  "text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+  {
+    variants: {
+      variant: {
+        default: "text-foreground",
+        destructive: "text-destructive",
+        muted: "text-muted-foreground",
+      },
+      size: {
+        default: "text-sm",
+        sm: "text-xs",
+        lg: "text-base",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+);
+
+export interface LabelProps
+  extends React.LabelHTMLAttributes<HTMLLabelElement>,
+    VariantProps<typeof labelVariants> {
+  required?: boolean;
+  optional?: boolean;
+}
+
+const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
+  (
+    { className, variant, size, required, optional, children, ...props },
+    ref,
+  ) => {
+    return (
+      <label
+        ref={ref}
+        className={cn(labelVariants({ variant, size, className }))}
+        {...props}
+      >
+        {children}
+        {required && (
+          <span
+            className="text-destructive ml-1"
+            aria-label="required"
+          >
+            *
+          </span>
+        )}
+        {optional && !required && (
+          <span className="text-muted-foreground ml-1 font-normal">
+            (optional)
+          </span>
+        )}
+      </label>
+    );
+  },
+);
+
+Label.displayName = "Label";
+
+export { Label, labelVariants };
+```
+```tsx
+preetsuthar17/card
+"use client";
+
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const cardVariants = cva(
+  "relative rounded-card bg-card text-card-foreground transition-all duration-300 ease-out overflow-hidden",
+  {
+    variants: {
+      variant: {
+        default: "border border-border",
+        outline:
+          "border-2 border-border  hover:border-primary/30",
+        ghost: "border-transparent hover:bg-accent ",
+      },
+      size: {
+        sm: "p-4",
+        default: "p-6",
+        lg: "p-8",
+        xl: "p-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
+
+export interface CardProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof cardVariants> {}
+
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, variant, size, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(cardVariants({ variant, size }), className)}
+      {...props}
+    />
+  )
+);
+Card.displayName = "Card";
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-2", className)}
+    {...props}
+  />
+));
+CardHeader.displayName = "CardHeader";
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-xl font-semibold leading-tight tracking-tight text-foreground",
+      className
+    )}
+    {...props}
+  />
+));
+CardTitle.displayName = "CardTitle";
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn(
+      "text-sm text-muted-foreground leading-relaxed",
+      className
+    )}
+    {...props}
+  />
+));
+CardDescription.displayName = "CardDescription";
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("space-y-4", className)} {...props} />
+));
+CardContent.displayName = "CardContent";
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center justify-between", className)}
+    {...props}
+  />
+));
+CardFooter.displayName = "CardFooter";
+
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  cardVariants,
+};
+```
+```tsx
+preetsuthar17/input-otp
+"use client";
+
+import * as React from "react";
+import { OTPInput, OTPInputContext } from "input-otp";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
+
+const inputOTPVariants = cva(
+  "flex items-center gap-1 sm:gap-2 has-[:disabled]:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "",
+        destructive: "",
+      },
+      size: {
+        sm: "gap-0.5 sm:gap-1",
+        default: "gap-1 sm:gap-2",
+        lg: "gap-2 sm:gap-3",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
+
+const inputOTPSlotVariants = cva(
+  "relative flex items-center justify-center border-y border-r border-border bg-input text-xs sm:text-sm transition-all focus-within:z-10 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-l ",
+  {
+    variants: {
+      variant: {
+        default: "border-border text-foreground",
+        destructive:
+          "border-destructive text-destructive-foreground focus-within:ring-ring",
+      },
+      size: {
+        sm: "h-6 w-6 sm:h-8 sm:w-8 text-xs",
+        default: "h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm",
+        lg: "h-10 w-10 sm:h-12 sm:w-12 text-sm sm:text-base",
+      },
+      state: {
+        default: "",
+        active:
+          "border-primary ring-2 ring-ring ring-offset-2",
+        filled:
+          "bg-accent border-border text-accent-foreground",
+      },
+      position: {
+        first: "border-l rounded-l-ele",
+        middle: "rounded-sm",
+        last: "rounded-r-ele",
+        single: "border-l rounded-ele",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+      state: "default",
+      position: "middle",
+    },
+  }
+);
+
+export interface InputOTPProps {
+  maxLength: number;
+  value?: string;
+  onChange?: (newValue: string) => void;
+  onComplete?: (newValue: string) => void;
+  disabled?: boolean;
+  pattern?: string;
+  className?: string;
+  containerClassName?: string;
+  animated?: boolean;
+  variant?: "default" | "destructive";
+  otpSize?: "sm" | "default" | "lg";
+  children?: React.ReactNode;
+}
+
+const InputOTP = React.forwardRef<
+  React.ElementRef<typeof OTPInput>,
+  InputOTPProps
+>(
+  (
+    {
+      className,
+      containerClassName,
+      variant,
+      otpSize,
+      animated = true,
+      children,
+      ...props
+    },
+    ref
+  ) => (
+    <OTPInput
+      ref={ref}
+      containerClassName={cn(
+        inputOTPVariants({ variant, size: otpSize }),
+        containerClassName
+      )}
+      className={cn("disabled:cursor-not-allowed", className)}
+      {...props}
+    >
+      {children}
+    </OTPInput>
+  )
+);
+InputOTP.displayName = "InputOTP";
+
+const InputOTPGroup = React.forwardRef<
+  React.ElementRef<"div">,
+  React.ComponentPropsWithoutRef<"div"> &
+    Omit<VariantProps<typeof inputOTPVariants>, "size"> & {
+      otpSize?: "sm" | "default" | "lg";
+    }
+>(({ className, variant, otpSize, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(inputOTPVariants({ variant, size: otpSize }), className)}
+    {...props}
+  />
+));
+InputOTPGroup.displayName = "InputOTPGroup";
+
+const InputOTPSlot = React.forwardRef<
+  React.ElementRef<"div">,
+  React.ComponentPropsWithoutRef<"div"> &
+    Omit<VariantProps<typeof inputOTPSlotVariants>, "size"> & {
+      index: number;
+      animated?: boolean;
+      otpSize?: "sm" | "default" | "lg";
+    }
+>(
+  (
+    { index, className, variant, otpSize, state, animated = true, ...props },
+    ref
+  ) => {
+    const inputOTPContext = React.useContext(OTPInputContext);
+    const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
+
+    const currentState = isActive ? "active" : char ? "filled" : "default";
+
+    // Determine position based on index and total slots
+    const totalSlots = inputOTPContext.slots.length;
+    const position =
+      totalSlots === 1
+        ? "single"
+        : index === 0
+        ? "first"
+        : index === totalSlots - 1
+        ? "last"
+        : "middle";
+
+    const slotContent = (
+      <div
+        ref={ref}
+        className={cn(
+          inputOTPSlotVariants({
+            variant,
+            size: otpSize,
+            state: state || currentState,
+            position,
+          }),
+          className
+        )}
+        {...props}
+      >
+        {char}
+        {hasFakeCaret && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <motion.div
+              className="h-3 w-px sm:h-4 sm:w-px bg-foreground"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{
+                duration: 1.2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          </div>
+        )}
+      </div>
+    );
+
+    if (!animated) return slotContent;
+
+    return (
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{
+          duration: 0.2,
+          delay: index * 0.05,
+          ease: "easeOut",
+        }}
+      >
+        {slotContent}
+      </motion.div>
+    );
+  }
+);
+InputOTPSlot.displayName = "InputOTPSlot";
+
+const InputOTPSeparator = React.forwardRef<
+  React.ElementRef<"div">,
+  React.ComponentPropsWithoutRef<"div"> & VariantProps<typeof inputOTPVariants>
+>(({ variant, size, ...props }, ref) => (
+  <div
+    ref={ref}
+    role="separator"
+    className={cn(
+      "flex items-center justify-center text-muted-foreground",
+      size === "sm"
+        ? "text-xs"
+        : size === "lg"
+        ? "text-sm sm:text-base"
+        : "text-xs sm:text-sm"
+    )}
+    {...props}
+  >
+    -
+  </div>
+));
+InputOTPSeparator.displayName = "InputOTPSeparator";
+
+export {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+  inputOTPVariants,
+  inputOTPSlotVariants,
+};
+```
+```tsx
+preetsuthar17/button
+"use client";
+
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ele text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring shadow-sm/2",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive shadow-sm/2",
+        outline:
+          "border border-border text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring shadow-sm/2",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 focus-visible:ring-ring",
+        ghost:
+          "text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
+        link: "text-secondary-foreground underline-offset-4 hover:underline focus-visible:ring-ring",
+      },
+      size: {
+        default: "h-9 px-4 py-2",
+        sm: "h-8 px-3 text-xs",
+        lg: "h-10 px-8",
+        xl: "h-12 px-10 text-base",
+        icon: "h-9 w-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
+
+export type CustomButtonProps = Omit<
+  ButtonProps,
+  keyof React.ComponentProps<"button">
+>;
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  loading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      loading = false,
+      leftIcon,
+      rightIcon,
+      children,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : "button";
+
+    const content = (
+      <>
+        {loading && (
+          <svg
+            className="animate-spin h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+        )}
+        {leftIcon && !loading && leftIcon}
+        {children}
+        {rightIcon && !loading && rightIcon}
+      </>
+    );
+
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        disabled={disabled || loading}
+        {...props}
+      >
+        {asChild ? children : content}
+      </Comp>
+    );
+  }
+);
+
+Button.displayName = "Button";
+
+export { Button, buttonVariants };
+```
+
+Install NPM dependencies:
+```bash
+lucide-react, class-variance-authority, motion, input-otp, @radix-ui/react-slot
+```
+
+Extend existing Tailwind 4 index.css with this code (or if project uses Tailwind 3, extend tailwind.config.js or globals.css):
+```css
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --hu-font-geist: var(----hu-font-geist);
+  --hu-font-jetbrains: var(----hu-font-jetbrains);
+  --radius: var(----radius);
+  --card-radius: var(----card-radius);
+  --color-hu-background: var(----hu-background);
+  --color-hu-foreground: var(----hu-foreground);
+  --color-hu-card: var(----hu-card);
+  --color-hu-card-foreground: var(----hu-card-foreground);
+  --color-hu-primary: var(----hu-primary);
+  --color-hu-primary-foreground: var(----hu-primary-foreground);
+  --color-hu-secondary: var(----hu-secondary);
+  --color-hu-secondary-foreground: var(----hu-secondary-foreground);
+  --color-hu-muted: var(----hu-muted);
+  --color-hu-muted-foreground: var(----hu-muted-foreground);
+  --color-hu-accent: var(----hu-accent);
+  --color-hu-accent-foreground: var(----hu-accent-foreground);
+  --color-hu-destructive: var(----hu-destructive);
+  --color-hu-destructive-foreground: var(----hu-destructive-foreground);
+  --color-hu-border: var(----hu-border);
+  --color-hu-input: var(----hu-input);
+  --color-hu-ring: var(----hu-ring);
+  --color-color-fd-background: var(----color-fd-background);
+  --color-color-fd-card: var(----color-fd-card);
+}
+
+:root {
+  --hu-font-geist: var(--font-geist);
+  --hu-font-jetbrains: var(--font-jetbrains-mono);
+  --radius: 8px;
+  --card-radius: 10px;
+  --hu-background: 0, 0%, 100%;
+  --hu-foreground: 0, 0%, 14%;
+  --hu-card: 0, 0%, 99%;
+  --hu-card-foreground: 0, 0%, 14%;
+  --hu-primary: 235, 100%, 60%;
+  --hu-primary-foreground: 0, 0%, 98%;
+  --hu-secondary: 0, 0%, 97%;
+  --hu-secondary-foreground: 0, 0%, 20%;
+  --hu-muted: 0, 0%, 97%;
+  --hu-muted-foreground: 0, 0%, 56%;
+  --hu-accent: 0, 0%, 96%;
+  --hu-accent-foreground: 0, 0%, 20%;
+  --hu-destructive: 9, 96%, 47%;
+  --hu-destructive-foreground: 0, 0%, 98%;
+  --hu-border: 0, 0%, 92%;
+  --hu-input: 0, 0%, 100%;
+  --hu-ring: 0, 0%, 71%;
+  --color-fd-background: hsl(var(--hu-background));
+  --color-fd-card: hsl(var(--hu-background));
+}
+
+.dark {
+  --hu-background: 0, 0%, 7%;
+  --hu-foreground: 0, 0%, 100%;
+  --hu-card: 0, 0%, 9%;
+  --hu-card-foreground: 0, 0%, 100%;
+  --hu-primary: 235, 100%, 60%;
+  --hu-primary-foreground: 0, 0%, 98%;
+  --hu-secondary: 0, 0%, 15%;
+  --hu-secondary-foreground: 0, 0%, 100%;
+  --hu-muted: 0, 0%, 15%;
+  --hu-muted-foreground: 0, 0%, 71%;
+  --hu-accent: 0, 0%, 15%;
+  --hu-accent-foreground: 0, 0%, 100%;
+  --hu-destructive: 0, 84%, 50%;
+  --hu-destructive-foreground: 0, 0%, 98%;
+  --hu-border: 0, 0%, 100%, 10%;
+  --hu-input: 0, 0%, 100%, 5%;
+  --hu-ring: 0, 0%, 56%;
+  --color-fd-background: hsl(var(--hu-background));
+  --color-fd-card: hsl(var(--hu-background));
+}
+
+```
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them

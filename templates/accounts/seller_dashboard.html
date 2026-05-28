@@ -16,14 +16,13 @@
 
   .code-badge {
     display: inline-flex; align-items: center; gap: 0.4rem;
-    background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2);
+    background: rgba(112,51,255,0.08); border: 1px solid rgba(112,51,255,0.2);
     border-radius: 6px; padding: 0.2rem 0.6rem;
     cursor: pointer; transition: background 0.15s;
   }
-  .code-badge:hover { background: rgba(37,99,235,0.16); }
+  .code-badge:hover { background: rgba(112,51,255,0.16); }
 
-  .empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted-l); }
-  .empty-state svg { opacity: 0.3; margin-bottom: 1rem; }
+  /* حالة الفراغ معرّفة في design-system.css */
 </style>
 {% endblock %}
 
@@ -31,56 +30,56 @@
 <div class="page-header">
   <div>
     <h1>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--indigo-s);"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--indigo-s);"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       {% trans "لوحة البائع" %}
     </h1>
     <p>{% trans "مرحباً" %}، <strong>{{ user.username }}</strong> · {{ user.store_name }}</p>
   </div>
   <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
     <a href="{% url 'transactions:wallet_history' %}" class="btn btn-ghost btn-sm">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
       {% trans "سجل الرصيد" %}
     </a>
     <button class="btn btn-primary btn-sm" onclick="document.getElementById('newTxModal').style.display='flex'">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       {% trans "صفقة جديدة" %}
     </button>
   </div>
 </div>
 
 <div class="stats-row">
-  <div class="glass stat-card">
-    <div class="stat-label">{% trans "الرصيد المتاح" %}</div>
-    <div class="stat-value text-green">
+  <div class="stat-card">
+    <div class="stat-value green">
       {{ wallet.available_balance }} <span style="font-size:0.9rem;color:var(--muted-l);">{% trans "دج" %}</span>
     </div>
-    <div class="stat-sub">{% trans "إجمالي المبيعات المحصّلة" %}</div>
+    <div class="stat-label">{% trans "الرصيد المتاح" %}</div>
+    <div class="stat-sublabel">{% trans "إجمالي المبيعات المحصّلة" %}</div>
   </div>
-  <div class="glass stat-card">
-    <div class="stat-label">{% trans "قيد الانتظار" %}</div>
-    <div class="stat-value text-yellow">
+  <div class="stat-card">
+    <div class="stat-value yellow">
       {{ pending_amount|default:"0" }} <span style="font-size:0.9rem;color:var(--muted-l);">{% trans "دج" %}</span>
     </div>
-    <div class="stat-sub">{% trans "مبالغ مجمّدة في الضمان" %}</div>
+    <div class="stat-label">{% trans "قيد الانتظار" %}</div>
+    <div class="stat-sublabel">{% trans "مبالغ مجمّدة في الضمان" %}</div>
   </div>
-  <div class="glass stat-card">
+  <div class="stat-card">
+    <div class="stat-value blue">{{ completed_count|default:"0" }}</div>
     <div class="stat-label">{% trans "مكتملة" %}</div>
-    <div class="stat-value text-indigo">{{ completed_count|default:"0" }}</div>
-    <div class="stat-sub">{% trans "صفقة ناجحة" %}</div>
+    <div class="stat-sublabel">{% trans "صفقة ناجحة" %}</div>
   </div>
 </div>
 
 <div class="glass p-2">
   <div class="flex-between mb-2">
     <h3 style="font-size:0.95rem; font-weight:700; display:flex; align-items:center; gap:0.5rem;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted-l);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted-l);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       {% trans "صفقاتي" %}
     </h3>
   </div>
 
   {% if transactions %}
-    <div class="table-wrap">
-      <table>
+    <div class="table-wrapper">
+      <table class="data-table">
         <thead>
           <tr>
             <th>{% trans "الكود" %}</th>
@@ -99,7 +98,7 @@
             <td>
               <span class="code-badge" onclick="copyCode('{{ tx.code }}')" title="{% trans 'نسخ' %}">
                 <span class="tx-code">#{{ tx.code }}</span>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted-l);"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted-l); width:12px; height:12px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </span>
             </td>
             <td>{{ tx.product_name }}</td>
@@ -116,10 +115,10 @@
     </div>
   {% else %}
     <div class="empty-state">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <p>{% trans "لم تُنشئ أي صفقة بعد." %}</p>
+      <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <div class="empty-state-title">{% trans "لم تُنشئ أي صفقة بعد." %}</div>
       <button class="btn btn-primary btn-sm mt-2" onclick="document.getElementById('newTxModal').style.display='flex'">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         {% trans "أنشئ صفقتك الأولى" %}
       </button>
     </div>
@@ -127,45 +126,49 @@
 </div>
 
 <!-- New Transaction Modal -->
-<div id="newTxModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); z-index:200; align-items:center; justify-content:center; padding:1rem;">
-  <div class="glass" style="width:100%;max-width:500px;padding:2rem;position:relative;animation:fadeUp 0.3s ease both;">
-    <button onclick="document.getElementById('newTxModal').style.display='none'"
-      style="position:absolute;top:1rem;{% if LANGUAGE_CODE == 'ar' %}left{% else %}right{% endif %}:1rem;background:var(--surface-h);border:1px solid var(--border);color:var(--muted-l);width:30px;height:30px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:color 0.2s;">✕</button>
-
-    <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--indigo-s);"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      {% trans "صفقة جديدة" %}
-    </h3>
+<div id="newTxModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 class="modal-title">{% trans "صفقة جديدة" %}</h3>
+      <button type="button" class="modal-close" onclick="document.getElementById('newTxModal').style.display='none'"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
 
     <form method="post" action="{% url 'transactions:create' %}">
       {% csrf_token %}
-      <div class="form-group">
-        <label class="form-label">{% trans "اسم المنتج" %}</label>
-        <input class="form-input" type="text" name="product_name" required>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">{% trans "اسم المنتج" %}</label>
+          <input class="form-input" type="text" name="product_name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{% trans "الوصف" %}</label>
+          <textarea class="form-input" name="description" rows="3" style="resize:vertical;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{% trans "المبلغ" %} ({% trans "دج" %})</label>
+          <input class="form-input" type="number" name="amount" min="1" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">{% trans "شركة التوصيل" %} / Société de livraison</label>
+          <select class="form-select" name="delivery_company">
+            <option value="">— {% trans "اختر شركة التوصيل" %} —</option>
+            {% for company in delivery_companies %}
+              <option value="{{ company.id }}">{{ company.company_name|default:company.username }}</option>
+            {% empty %}
+              <option value="" disabled>{% trans "لا توجد شركات توصيل مسجلة" %}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">{% trans "الوصف" %}</label>
-        <textarea class="form-input" name="description" rows="3" style="resize:vertical;"></textarea>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('newTxModal').style.display='none'">
+          {% trans "إلغاء" %}
+        </button>
+        <button type="submit" class="btn btn-primary">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          {% trans "إنشاء الصفقة" %}
+        </button>
       </div>
-      <div class="form-group">
-        <label class="form-label">{% trans "المبلغ" %} ({% trans "دج" %})</label>
-        <input class="form-input" type="number" name="amount" min="1" step="0.01" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">{% trans "شركة التوصيل" %} / Société de livraison</label>
-        <select class="form-input" name="delivery_company">
-          <option value="">— {% trans "اختر شركة التوصيل" %} —</option>
-          {% for company in delivery_companies %}
-            <option value="{{ company.id }}">{{ company.company_name|default:company.username }}</option>
-          {% empty %}
-            <option value="" disabled>{% trans "لا توجد شركات توصيل مسجلة" %}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <button type="submit" class="btn btn-primary" style="width:100%;">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        {% trans "إنشاء الصفقة" %}
-      </button>
     </form>
   </div>
 </div>

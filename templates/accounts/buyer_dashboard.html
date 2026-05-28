@@ -15,19 +15,12 @@
   .join-box h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
   .join-input-row { display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap; }
   .join-input-row .form-group { margin-bottom: 0; flex: 1; min-width: 160px; }
-  .code-input {
-    font-size: 1.5rem; font-weight: 900;
-    letter-spacing: 0.35em; text-align: center;
-    font-family: 'Courier New', monospace;
-    color: var(--indigo-s);
-  }
+  /* خانات إدخال الكود معرّفة في design-system.css */
 
   .tx-amount { font-weight: 700; color: var(--text); }
   .tx-code   { font-family: monospace; font-size: 0.95rem; letter-spacing: 0.15em; color: var(--indigo-s); font-weight: 700; }
 
-  .empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted-l); }
-  .empty-state svg { opacity: 0.3; margin-bottom: 1rem; }
-  .empty-state p { font-size: 0.9rem; }
+  /* حالة الفراغ معرّفة في design-system.css */
 </style>
 {% endblock %}
 
@@ -35,42 +28,42 @@
 <div class="page-header">
   <div>
     <h1>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--green);"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green);"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       {% trans "لوحة المشتري" %}
     </h1>
     <p>{% trans "مرحباً" %}، <strong>{{ user.username }}</strong></p>
   </div>
   <a href="{% url 'transactions:wallet_history' %}" class="btn btn-ghost btn-sm">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
     {% trans "سجل الرصيد" %}
   </a>
 </div>
 
 <div class="stats-row">
-  <div class="glass stat-card">
-    <div class="stat-label">{% trans "الرصيد المتاح" %}</div>
-    <div class="stat-value text-green">
+  <div class="stat-card">
+    <div class="stat-value green">
       {{ wallet.available_balance }} <span style="font-size:0.9rem;color:var(--muted-l);">{% trans "دج" %}</span>
     </div>
-    <div class="stat-sub">{% trans "قابل للاستخدام فوراً" %}</div>
+    <div class="stat-label">{% trans "الرصيد المتاح" %}</div>
+    <div class="stat-sublabel">{% trans "قابل للاستخدام فوراً" %}</div>
   </div>
-  <div class="glass stat-card">
-    <div class="stat-label">{% trans "الرصيد المحجوز" %}</div>
-    <div class="stat-value text-yellow">
+  <div class="stat-card">
+    <div class="stat-value yellow">
       {{ wallet.frozen_balance }} <span style="font-size:0.9rem;color:var(--muted-l);">{% trans "دج" %}</span>
     </div>
-    <div class="stat-sub">{% trans "في انتظار اكتمال الصفقات" %}</div>
+    <div class="stat-label">{% trans "الرصيد المحجوز" %}</div>
+    <div class="stat-sublabel">{% trans "في انتظار اكتمال الصفقات" %}</div>
   </div>
-  <div class="glass stat-card">
+  <div class="stat-card">
+    <div class="stat-value blue">{{ active_count|default:"0" }}</div>
     <div class="stat-label">{% trans "الصفقات النشطة" %}</div>
-    <div class="stat-value text-indigo">{{ active_count|default:"0" }}</div>
-    <div class="stat-sub">{% trans "صفقة جارية" %}</div>
+    <div class="stat-sublabel">{% trans "صفقة جارية" %}</div>
   </div>
 </div>
 
 <div class="glass join-box">
   <h3>
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--indigo-s);"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--indigo-s);"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
     {% trans "الانضمام لصفقة" %}
   </h3>
   <form method="post" action="{% url 'transactions:join' %}">
@@ -78,11 +71,18 @@
     <div class="join-input-row">
       <div class="form-group">
         <label class="form-label">{% trans "كود الصفقة" %} (6 {% trans "أرقام" %})</label>
-        <input class="form-input code-input" type="text" name="code"
-          maxlength="6" pattern="\d{6}" placeholder="000000" inputmode="numeric">
+        <div class="otp-group" id="otpGroup">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" autocomplete="off">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" autocomplete="off">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" autocomplete="off">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" autocomplete="off">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" autocomplete="off">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" autocomplete="off">
+        </div>
+        <input type="hidden" name="code" id="codeHidden">
       </div>
       <button type="submit" class="btn btn-primary">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         {% trans "تأكيد" %}
       </button>
     </div>
@@ -92,14 +92,14 @@
 <div class="glass p-2">
   <div class="flex-between mb-2">
     <h3 style="font-size:0.95rem; font-weight:700; display:flex; align-items:center; gap:0.5rem;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted-l);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted-l);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       {% trans "صفقاتي" %}
     </h3>
   </div>
 
   {% if transactions %}
-    <div class="table-wrap">
-      <table>
+    <div class="table-wrapper">
+      <table class="data-table">
         <thead>
           <tr>
             <th>{% trans "الكود" %}</th>
@@ -128,10 +128,58 @@
     </div>
   {% else %}
     <div class="empty-state">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      <p>{% trans "لا توجد صفقات بعد." %}</p>
-      <p class="text-sm mt-1" style="color:var(--muted);">{% trans "أدخل كود الصفقة من البائع للانضمام." %}</p>
+      <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <div class="empty-state-title">{% trans "لا توجد صفقات بعد." %}</div>
+      <div class="empty-state-text">{% trans "أدخل كود الصفقة من البائع للانضمام." %}</div>
     </div>
   {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // إدخال كود الصفقة عبر 6 خانات — يجمّع القيمة في الحقل المخفي name="code"
+  (function() {
+    var group = document.getElementById('otpGroup');
+    if (!group) return;
+    var hidden = document.getElementById('codeHidden');
+    var digits = Array.prototype.slice.call(group.querySelectorAll('.otp-digit'));
+
+    function sync() {
+      var code = '';
+      digits.forEach(function(d) {
+        code += d.value;
+        d.classList.toggle('filled', d.value !== '');
+      });
+      hidden.value = code;
+    }
+
+    digits.forEach(function(digit, i) {
+      digit.addEventListener('input', function() {
+        digit.value = digit.value.replace(/[^0-9]/g, '').slice(0, 1);
+        if (digit.value && i < digits.length - 1) {
+          digits[i + 1].focus();
+        }
+        sync();
+      });
+
+      digit.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !digit.value && i > 0) {
+          digits[i - 1].focus();
+        }
+      });
+
+      digit.addEventListener('paste', function(e) {
+        e.preventDefault();
+        var text = (e.clipboardData || window.clipboardData).getData('text');
+        var nums = text.replace(/[^0-9]/g, '').slice(0, digits.length);
+        for (var j = 0; j < nums.length; j++) {
+          digits[j].value = nums[j];
+        }
+        sync();
+        digits[Math.min(nums.length, digits.length - 1)].focus();
+      });
+    });
+  })();
+</script>
 {% endblock %}

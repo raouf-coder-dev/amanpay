@@ -1,0 +1,1212 @@
+You are given a task to integrate an existing React component in the codebase
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+vercel-navbar.tsx
+"use client";
+
+import * as React from "react";
+import Link from "next/link";
+import type { ReactElement } from "react";
+import { useTheme } from "next-themes";
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Vercel } from "@aliimam/logos";
+import { cn } from "@/lib/utils";
+import {
+  Bot,
+  Box,
+  Calendar1,
+  ChartNoAxesColumnIncreasing,
+  Cpu,
+  AArrowUp,
+  Globe,
+  LayoutGrid,
+  PenTool,
+  ScanText,
+  Shield,
+  Smile,
+  Sparkle,
+  BookText,
+  BriefcaseBusiness,
+  Code,
+  Component,
+  Codepen,
+  Network,
+  Sparkles,
+  ScreenShare,
+  AppWindow,
+  Layers,
+  Monitor, 
+  Moon, 
+  Sun,
+  CirclePlus,
+  LogOut,
+} from "@aliimam/icons";
+import { Button } from "@/components/ui/button"; 
+import { useState, useCallback, useEffect } from "react"; 
+
+const cloud: {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  description: string;
+}[] = [
+  {
+    title: "AI SDK",
+    href: "#",
+    icon: <Box strokeWidth={2} />,
+    description: "The AI Toolkit for Typescript",
+  },
+  {
+    title: "AI Gateway",
+    href: "#",
+    icon: <Sparkle strokeWidth={2} />,
+    description: "One endpoint, all your models",
+  },
+  {
+    title: "Vercel Agent",
+    href: "#",
+    icon: <AArrowUp strokeWidth={2} />,
+    description: "An agent that knows your stack",
+  },
+];
+
+const core: {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  description: string;
+}[] = [
+  {
+    title: "CI/CD",
+    href: "#",
+    icon: <LayoutGrid strokeWidth={2} />,
+    description: "Helping teams ship 6× faster",
+  },
+  {
+    title: "Content Delivery",
+    href: "#",
+    icon: <Globe strokeWidth={2} />,
+    description: "Fast, scalable, and reliable",
+  },
+  {
+    title: "Fluid Compute",
+    href: "#",
+    icon: <Cpu strokeWidth={2} />,
+    description: "Servers, in serverless form",
+  },
+  {
+    title: "Observability",
+    href: "#",
+    icon: <ChartNoAxesColumnIncreasing strokeWidth={2} />,
+    description: "Trace every step",
+  },
+];
+
+const security: {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  description: string;
+}[] = [
+  {
+    title: "Bot Management",
+    href: "#",
+    icon: <Bot strokeWidth={2} />,
+    description: "Scalable bot protection",
+  },
+  {
+    title: "BotID",
+    href: "#",
+    icon: <ScanText strokeWidth={2} />,
+    description: "Invisible CAPTCHA",
+  },
+  {
+    title: "Platform Security",
+    href: "#",
+    icon: <Shield strokeWidth={2} />,
+    description: "DDOS Protection, Firewall",
+  },
+  {
+    title: "Web Application Firewall",
+    href: "#",
+    icon: <Calendar1 strokeWidth={2} />,
+    description: "Granular, custom protection",
+  },
+];
+
+const company: {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  description: string;
+}[] = [
+  {
+    title: "Customers",
+    href: "#",
+    icon: <Smile strokeWidth={2} />,
+    description: "Trusted by the best teams",
+  },
+  {
+    title: "Blog",
+    href: "#",
+    icon: <PenTool strokeWidth={2} />,
+    description: "The latest posts and changes",
+  },
+  {
+    title: "Changelog",
+    href: "#",
+    icon: <BookText strokeWidth={2} />,
+    description: "See what shipped",
+  },
+  {
+    title: "Press",
+    href: "#",
+    icon: <BriefcaseBusiness strokeWidth={2} />,
+    description: "Read the latest news",
+  },
+  {
+    title: "Events",
+    href: "#",
+    icon: <Calendar1 strokeWidth={2} />,
+    description: "Join us at an event",
+  },
+];
+
+const open: {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  description: string;
+}[] = [
+  {
+    title: "Next.js",
+    href: "#",
+    icon: <Code strokeWidth={2} />,
+    description: "The native Next.js platform",
+  },
+  {
+    title: "Nuxt",
+    href: "#",
+    icon: <Component strokeWidth={2} />,
+    description: "The progressive web framework",
+  },
+  {
+    title: "Svelte",
+    href: "#",
+    icon: <Codepen strokeWidth={2} />,
+    description: "The web's efficient Ul framework",
+  },
+  {
+    title: "Turborepo",
+    href: "#",
+    icon: <Network strokeWidth={2} />,
+    description: "Speed with Enterprise scale",
+  },
+];
+
+const tools: {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  description: string;
+}[] = [
+  {
+    title: "Academy",
+    href: "#",
+    icon: <Code strokeWidth={2} />,
+    description: "Learn the ins and outs of Vercel",
+  },
+  {
+    title: "Marketplace",
+    href: "#",
+    icon: <Component strokeWidth={2} />,
+    description: "Extend and automate workflows",
+  },
+  {
+    title: "Templates",
+    href: "#",
+    icon: <Codepen strokeWidth={2} />,
+    description: "Jumpstart app development",
+  },
+  {
+    title: "Guides",
+    href: "#",
+    icon: <Network strokeWidth={2} />,
+    description: "Find help quickly",
+  },
+  {
+    title: "Partner Finder",
+    href: "#",
+    icon: <Network strokeWidth={2} />,
+    description: "Get help from solution partners",
+  },
+];
+
+const cases: {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  description: string;
+}[] = [
+  {
+    title: "Al Apps",
+    href: "#",
+    icon: <Sparkles strokeWidth={2} />,
+    description: "Deploy at the speed of Al",
+  },
+  {
+    title: "Composable Commerce",
+    href: "#",
+    icon: <Component strokeWidth={2} />,
+    description: "Power storefronts that convert",
+  },
+  {
+    title: "Marketing Sites",
+    href: "#",
+    icon: <ScreenShare strokeWidth={2} />,
+    description: "Jumpstart app development",
+  },
+  {
+    title: "Multi-tenant Platforms",
+    href: "#",
+    icon: <Network strokeWidth={2} />,
+    description: "Scale apps with one codebase",
+  },
+  {
+    title: "Web Apps",
+    href: "#",
+    icon: <AppWindow strokeWidth={2} />,
+    description: "Ship features, not infrastructure",
+  },
+];
+
+const users: {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  description: string;
+}[] = [
+  {
+    title: "Platform Engineers",
+    href: "#",
+    icon: <Code strokeWidth={2} />,
+    description: "Automate away repetition",
+  },
+  {
+    title: "Design Engineers",
+    href: "#",
+    icon: <Layers strokeWidth={2} />,
+    description: "Deploy for every idea",
+  },
+];
+
+export function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  return (
+    <div
+      className={`flex sticky px-4 z-50 top-0 w-full bg-background items-center h-16 justify-between transition-border duration-300 ${
+        scrolled ? "border-b" : "border-b-0"
+      }`}
+    >
+      {" "}
+      <div className="flex items-center justify-between w-full  mx-auto max-w-7xl">
+        <div className="flex h-14 justify-center">
+          <Vercel size={100} className="h-14" type="wordmark" />
+          <NavigationMenu className="ml-8 hidden lg:flex" viewport={true}>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "rounded-full h-7.5 font-normal text-muted-foreground"
+                  )}
+                >
+                  Products
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="bg-background">
+                  <ul className="grid w-[400px] pt-2 grid-cols-3 md:w-[800px]">
+                    <div>
+                      <span className="p-4 text-muted-foreground">
+                        AI Cloud
+                      </span>
+                      {cloud.map((component) => (
+                        <ListItem
+                          key={component.title}
+                          title={component.title}
+                          icon={component.icon}
+                          href={component.href}
+                        >
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </div>
+                    <div>
+                      <span className="p-4 text-muted-foreground">
+                        Core Platform
+                      </span>
+                      {core.map((component) => (
+                        <ListItem
+                          key={component.title}
+                          title={component.title}
+                          icon={component.icon}
+                          href={component.href}
+                        >
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </div>
+                    <div>
+                      <span className="p-4 text-muted-foreground">
+                        Security
+                      </span>
+                      {security.map((component) => (
+                        <ListItem
+                          key={component.title}
+                          title={component.title}
+                          icon={component.icon}
+                          href={component.href}
+                        >
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </div>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "rounded-full h-7.5 font-normal text-muted-foreground"
+                  )}
+                >
+                  Resources
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="bg-background">
+                  <ul className="grid w-[400px] pt-2 grid-cols-3 md:w-[800px]">
+                    <div>
+                      <span className="p-4 text-muted-foreground">Company</span>
+                      {company.map((component) => (
+                        <ListItem
+                          key={component.title}
+                          title={component.title}
+                          icon={component.icon}
+                          href={component.href}
+                        >
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </div>
+                    <div>
+                      <span className="p-4 text-muted-foreground">
+                        Open Source
+                      </span>
+                      {open.map((component) => (
+                        <ListItem
+                          key={component.title}
+                          title={component.title}
+                          icon={component.icon}
+                          href={component.href}
+                        >
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </div>
+                    <div>
+                      <span className="p-4 text-muted-foreground">Tools</span>
+                      {tools.map((component) => (
+                        <ListItem
+                          key={component.title}
+                          title={component.title}
+                          icon={component.icon}
+                          href={component.href}
+                        >
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </div>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "rounded-full h-7.5 font-normal text-muted-foreground"
+                  )}
+                >
+                  Solutions
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="bg-background">
+                  <ul className="grid w-[400px] pt-2 grid-cols-2 md:w-[550px]">
+                    <div>
+                      <span className="p-4 text-muted-foreground">
+                        Use Cases
+                      </span>
+                      {cases.map((component) => (
+                        <ListItem
+                          key={component.title}
+                          title={component.title}
+                          icon={component.icon}
+                          href={component.href}
+                        >
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </div>
+                    <div>
+                      <span className="p-4 text-muted-foreground">Users</span>
+                      {users.map((component) => (
+                        <ListItem
+                          key={component.title}
+                          title={component.title}
+                          icon={component.icon}
+                          href={component.href}
+                        >
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </div>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "rounded-full h-7.5 font-normal text-muted-foreground"
+                  )}
+                >
+                  <Link href="#">Enterprise</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "rounded-full h-7.5 font-normal text-muted-foreground"
+                  )}
+                >
+                  <Link href="#">Docs</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "rounded-full h-7.5 font-normal text-muted-foreground"
+                  )}
+                >
+                  <Link href="#">Pricing</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+        <div className="flex gap-2">
+          <Button variant={"outline"} size={"sm"}>
+            Contact
+          </Button>
+          <Button variant={"outline"} size={"sm"}>
+            Dashboard
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="border">
+                <AvatarImage src="https://raw.githubusercontent.com/aliimam-in/templates/refs/heads/main/apps/vercel/public/ali.jpg" alt="Ali Imam" />
+                <AvatarFallback>AI</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-70 p-3 rounded-xl" align="end">
+              <div className="p-2">
+                <h1 className="font-semibold">Ali Imam</h1>
+                <p className="text-sm text-muted-foreground">
+                  contact@aliimam.in
+                </p>
+              </div>
+              <DropdownMenuGroup>
+                <DropdownMenuItem className="py-3">Dadhboard</DropdownMenuItem>
+                <DropdownMenuItem className="py-3">
+                  Account Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem className="py-3 justify-between">
+                  Create Taems <CirclePlus strokeWidth={2} />
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator className="-mx-3" />
+              <DropdownMenuGroup>
+                <DropdownMenuItem className="py-3 justify-between">
+                  Theme <ThemeSwitcher />
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator className="-mx-3" />
+
+              <DropdownMenuItem className="py-3 justify-between">
+                Logout <LogOut strokeWidth={2} />
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="-mx-3" />
+              <DropdownMenuItem className="pt-3">
+                <Button className="w-full">Upgrade to Pro</Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ListItem({
+  title,
+  icon,
+  children,
+  href,
+  ...props
+}: React.ComponentPropsWithoutRef<"li"> & {
+  href: string;
+  icon: ReactElement;
+}) {
+  return (
+    <li {...props}>
+      <NavigationMenuLink asChild className="hover:bg-transparent">
+        <Link href={href}>
+          <div className="flex gap-3 items-start rounded-md p-2">
+            <div className="border rounded-sm p-2 icon-container">{icon}</div>
+            <div className="text-container">
+              <div className="text-sm font-medium leading-none">{title}</div>
+              <p className="text-muted-foreground line-clamp-2 pt-1 text-xs leading-snug">
+                {children}
+              </p>
+            </div>
+          </div>
+        </Link>
+      </NavigationMenuLink>
+
+      <style jsx>{`
+        li:hover .icon-container {
+          background-color: var(--foreground);
+          color: var(--background);
+          transform: scale(1.05);
+          transition: all 0.2s ease;
+        }
+
+        li:hover .text-container .text-sm {
+          color: var(--foreground); /* Change title color on hover */
+          transition: color 0.2s ease;
+        }
+
+        li:hover .text-container p {
+          color: var(--foreground); /* Change description color on hover */
+          transition: color 0.2s ease;
+        }
+      `}</style>
+    </li>
+  );
+}
+
+
+
+const themes = [
+  {
+    key: "system",
+    icon: Monitor,
+    label: "System theme",
+  },
+  {
+    key: "light",
+    icon: Sun,
+    label: "Light theme",
+  },
+  {
+    key: "dark",
+    icon: Moon,
+    label: "Dark theme",
+  },
+];
+
+export type ThemeSwitcherProps = {
+  value?: "light" | "dark" | "system";
+  onChange?: (theme: "light" | "dark" | "system") => void;
+  defaultValue?: "light" | "dark" | "system";
+  className?: string;
+};
+
+const ThemeSwitcher = ({ 
+  className,
+}: ThemeSwitcherProps) => {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  const handleThemeClick = useCallback(
+    (themeKey: "light" | "dark" | "system") => {
+      setTheme(themeKey);
+    },
+    [setTheme]
+  );
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return (
+    <div
+      className={cn(
+        "relative isolate flex h-7 rounded-full bg-background p-1 ring-1 ring-border",
+        className
+      )}
+    >
+      {themes.map(({ key, icon: Icon, label }) => {
+        const isActive = theme === key;
+
+        return (
+          <button
+            aria-label={label}
+            className="relative h-5 w-6 rounded-full"
+            key={key}
+            onClick={() => handleThemeClick(key as "light" | "dark" | "system")}
+            type="button"
+          >
+            {isActive && (
+              <div className="absolute inset-0 rounded-full bg-secondary" />
+            )}
+            <Icon
+              className={cn(
+                "relative z-10 m-auto h-3.5 w-3.5",
+                isActive ? "text-foreground" : "text-muted-foreground"
+              )}
+            />
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
+
+demo.tsx
+import { Header } from "@/components/ui/vercel-navbar";
+
+export default function DemoOne() {
+  return <Header />;
+}
+
+```
+
+Copy-paste these files for dependencies:
+```tsx
+shadcn/button
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline:
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  },
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }
+
+```
+```tsx
+shadcn/navigation-menu
+import * as React from "react"
+import { ChevronDownIcon } from "@radix-ui/react-icons"
+import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
+import { cva } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const NavigationMenu = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
+>(({ className, children, ...props }, ref) => (
+  <NavigationMenuPrimitive.Root
+    ref={ref}
+    className={cn(
+      "relative z-10 flex max-w-max flex-1 items-center justify-center",
+      className
+    )}
+    {...props}
+  >
+    {children}
+    <NavigationMenuViewport />
+  </NavigationMenuPrimitive.Root>
+))
+NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName
+
+const NavigationMenuList = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuPrimitive.List>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>
+>(({ className, ...props }, ref) => (
+  <NavigationMenuPrimitive.List
+    ref={ref}
+    className={cn(
+      "group flex flex-1 list-none items-center justify-center space-x-1",
+      className
+    )}
+    {...props}
+  />
+))
+NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName
+
+const NavigationMenuItem = NavigationMenuPrimitive.Item
+
+const navigationMenuTriggerStyle = cva(
+  "group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+)
+
+const NavigationMenuTrigger = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => (
+  <NavigationMenuPrimitive.Trigger
+    ref={ref}
+    className={cn(navigationMenuTriggerStyle(), "group", className)}
+    {...props}
+  >
+    {children}{" "}
+    <ChevronDownIcon
+      className="relative top-[1px] ml-1 h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180"
+      aria-hidden="true"
+    />
+  </NavigationMenuPrimitive.Trigger>
+))
+NavigationMenuTrigger.displayName = NavigationMenuPrimitive.Trigger.displayName
+
+const NavigationMenuContent = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>
+>(({ className, ...props }, ref) => (
+  <NavigationMenuPrimitive.Content
+    ref={ref}
+    className={cn(
+      "left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto ",
+      className
+    )}
+    {...props}
+  />
+))
+NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName
+
+const NavigationMenuLink = NavigationMenuPrimitive.Link
+
+const NavigationMenuViewport = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuPrimitive.Viewport>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>
+>(({ className, ...props }, ref) => (
+  <div className={cn("absolute left-0 top-full flex justify-center")}>
+    <NavigationMenuPrimitive.Viewport
+      className={cn(
+        "origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]",
+        className
+      )}
+      ref={ref}
+      {...props}
+    />
+  </div>
+))
+NavigationMenuViewport.displayName =
+  NavigationMenuPrimitive.Viewport.displayName
+
+const NavigationMenuIndicator = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuPrimitive.Indicator>,
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Indicator>
+>(({ className, ...props }, ref) => (
+  <NavigationMenuPrimitive.Indicator
+    ref={ref}
+    className={cn(
+      "top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in",
+      className
+    )}
+    {...props}
+  >
+    <div className="relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md" />
+  </NavigationMenuPrimitive.Indicator>
+))
+NavigationMenuIndicator.displayName =
+  NavigationMenuPrimitive.Indicator.displayName
+
+export {
+  navigationMenuTriggerStyle,
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+  NavigationMenuLink,
+  NavigationMenuIndicator,
+  NavigationMenuViewport,
+}
+
+```
+```tsx
+shadcn/avatar
+"use client"
+
+import * as React from "react"
+import * as AvatarPrimitive from "@radix-ui/react-avatar"
+
+import { cn } from "@/lib/utils"
+
+const Avatar = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Root
+    ref={ref}
+    className={cn(
+      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
+      className,
+    )}
+    {...props}
+  />
+))
+Avatar.displayName = AvatarPrimitive.Root.displayName
+
+const AvatarImage = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Image>,
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Image
+    ref={ref}
+    className={cn("aspect-square h-full w-full", className)}
+    {...props}
+  />
+))
+AvatarImage.displayName = AvatarPrimitive.Image.displayName
+
+const AvatarFallback = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Fallback>,
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Fallback
+    ref={ref}
+    className={cn(
+      "flex h-full w-full items-center justify-center rounded-full bg-muted",
+      className,
+    )}
+    {...props}
+  />
+))
+AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
+
+export { Avatar, AvatarImage, AvatarFallback }
+
+```
+```tsx
+shadcn/dropdown-menu
+"use client"
+
+import * as React from "react"
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
+import { Check, ChevronRight, Circle } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+
+const DropdownMenu = DropdownMenuPrimitive.Root
+
+const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
+
+const DropdownMenuGroup = DropdownMenuPrimitive.Group
+
+const DropdownMenuPortal = DropdownMenuPrimitive.Portal
+
+const DropdownMenuSub = DropdownMenuPrimitive.Sub
+
+const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup
+
+const DropdownMenuSubTrigger = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
+    inset?: boolean
+  }
+>(({ className, inset, children, ...props }, ref) => (
+  <DropdownMenuPrimitive.SubTrigger
+    ref={ref}
+    className={cn(
+      "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent data-[state=open]:bg-accent",
+      inset && "pl-8",
+      className,
+    )}
+    {...props}
+  >
+    {children}
+    <ChevronRight className="ml-auto h-4 w-4" />
+  </DropdownMenuPrimitive.SubTrigger>
+))
+DropdownMenuSubTrigger.displayName =
+  DropdownMenuPrimitive.SubTrigger.displayName
+
+const DropdownMenuSubContent = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
+>(({ className, ...props }, ref) => (
+  <DropdownMenuPrimitive.SubContent
+    ref={ref}
+    className={cn(
+      "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      className,
+    )}
+    {...props}
+  />
+))
+DropdownMenuSubContent.displayName =
+  DropdownMenuPrimitive.SubContent.displayName
+
+const DropdownMenuContent = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
+>(({ className, sideOffset = 4, ...props }, ref) => (
+  <DropdownMenuPrimitive.Portal>
+    <DropdownMenuPrimitive.Content
+      ref={ref}
+      sideOffset={sideOffset}
+      className={cn(
+        "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        className,
+      )}
+      {...props}
+    />
+  </DropdownMenuPrimitive.Portal>
+))
+DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName
+
+const DropdownMenuItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
+    inset?: boolean
+  }
+>(({ className, inset, ...props }, ref) => (
+  <DropdownMenuPrimitive.Item
+    ref={ref}
+    className={cn(
+      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      inset && "pl-8",
+      className,
+    )}
+    {...props}
+  />
+))
+DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName
+
+const DropdownMenuCheckboxItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
+>(({ className, children, checked, ...props }, ref) => (
+  <DropdownMenuPrimitive.CheckboxItem
+    ref={ref}
+    className={cn(
+      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      className,
+    )}
+    checked={checked}
+    {...props}
+  >
+    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+      <DropdownMenuPrimitive.ItemIndicator>
+        <Check className="h-4 w-4" />
+      </DropdownMenuPrimitive.ItemIndicator>
+    </span>
+    {children}
+  </DropdownMenuPrimitive.CheckboxItem>
+))
+DropdownMenuCheckboxItem.displayName =
+  DropdownMenuPrimitive.CheckboxItem.displayName
+
+const DropdownMenuRadioItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
+>(({ className, children, ...props }, ref) => (
+  <DropdownMenuPrimitive.RadioItem
+    ref={ref}
+    className={cn(
+      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      className,
+    )}
+    {...props}
+  >
+    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+      <DropdownMenuPrimitive.ItemIndicator>
+        <Circle className="h-2 w-2 fill-current" />
+      </DropdownMenuPrimitive.ItemIndicator>
+    </span>
+    {children}
+  </DropdownMenuPrimitive.RadioItem>
+))
+DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName
+
+const DropdownMenuLabel = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Label>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
+    inset?: boolean
+  }
+>(({ className, inset, ...props }, ref) => (
+  <DropdownMenuPrimitive.Label
+    ref={ref}
+    className={cn(
+      "px-2 py-1.5 text-sm font-semibold",
+      inset && "pl-8",
+      className,
+    )}
+    {...props}
+  />
+))
+DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName
+
+const DropdownMenuSeparator = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
+>(({ className, ...props }, ref) => (
+  <DropdownMenuPrimitive.Separator
+    ref={ref}
+    className={cn("-mx-1 my-1 h-px bg-muted", className)}
+    {...props}
+  />
+))
+DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName
+
+const DropdownMenuShortcut = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLSpanElement>) => {
+  return (
+    <span
+      className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
+      {...props}
+    />
+  )
+}
+DropdownMenuShortcut.displayName = "DropdownMenuShortcut"
+
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuRadioGroup,
+}
+
+```
+
+Install NPM dependencies:
+```bash
+next, next-themes, @aliimam/icons, @aliimam/logos, @radix-ui/react-slot, class-variance-authority, @radix-ui/react-icons, @radix-ui/react-navigation-menu, @radix-ui/react-avatar, lucide-react, @radix-ui/react-dropdown-menu
+```
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them

@@ -110,11 +110,12 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 
 # Session management
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 60 * 60 * 2
+SESSION_COOKIE_AGE = 3600  # ساعة واحدة
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_SAVE_EVERY_REQUEST = True
 
-# Auth URLs
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/dashboard/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+# Auth URLs — يجب أن تطابق المسارات الفعلية في accounts/urls.py (المُركَّبة على /)
+# تجنّباً لـ TemplateDoesNotExist عند توجيه @login_required لمسار Django الافتراضي.
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

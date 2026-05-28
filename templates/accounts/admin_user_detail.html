@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "ملف المستخدم" %} #{{ profile_user.id }} — AmanPay{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+  <div>
+    <h1 style="font-size:1.55rem; font-weight:900; display:flex; align-items:center; gap:0.6rem;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue-primary);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      {{ profile_user.username }}
+      <span style="color:var(--text-muted); font-size:0.85rem; font-family:monospace; font-weight:600;">#{{ profile_user.id }}</span>
+    </h1>
+    <p style="color:var(--text-secondary); font-size:0.87rem; margin-top:0.3rem;">{% trans "ملف المستخدم — عرض القراءة فقط" %}</p>
+  </div>
+  <a href="{% url 'accounts:admin_dashboard' %}" class="btn btn-ghost">{% trans "← العودة للوحة الأدمن" %}</a>
+</div>
+
+<!-- ── Section 1: Profile info ── -->
+<div class="info-card">
+  <div class="info-card-title">{% trans "المعلومات الأساسية" %}</div>
+  <div class="info-row"><span class="info-label">ID</span><span class="info-value">{{ profile_user.id }}</span></div>
+  <div class="info-row"><span class="info-label">{% trans "اسم المستخدم" %}</span><span class="info-value">{{ profile_user.username }}</span></div>
+  <div class="info-row"><span class="info-label">{% trans "الدور" %}</span><span class="info-value">{{ profile_user.get_role_display|default:"—" }}</span></div>
+  <div class="info-row"><span class="info-label">{% trans "البريد الإلكتروني" %}</span><span class="info-value">{{ profile_user.email|default:"—" }}</span></div>
+  <div class="info-row"><span class="info-label">{% trans "رقم الهاتف" %}</span><span class="info-value">{{ profile_user.phone|default:"—" }}</span></div>
+  <div class="info-row"><span class="info-label">{% trans "تاريخ التسجيل" %}</span><span class="info-value">{{ profile_user.date_joined|date:"d/m/Y H:i" }}</span></div>
+  {% if profile_user.is_seller %}
+    <div class="info-row"><span class="info-label">{% trans "اسم المتجر" %}</span><span class="info-value">{{ profile_user.store_name|default:"—" }}</span></div>
+  {% endif %}
+  {% if profile_user.is_delivery %}
+    <div class="info-row"><span class="info-label">{% trans "اسم شركة التوصيل" %}</span><span class="info-value">{{ profile_user.company_name|default:"—" }}</span></div>
+  {% endif %}
+</div>
+
+<!-- ── Section 2: Wallet ── -->
+<div class="info-card">
+  <div class="info-card-title">{% trans "المحفظة" %}</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:16px;">
+    <div class="stat-card">
+      <div class="stat-value green">{{ wallet.available_balance|floatformat:2 }}</div>
+      <div class="stat-label">{% trans "الرصيد المتاح" %}</div>
+      <div class="stat-sublabel">{% trans "دج" %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value yellow">{{ wallet.frozen_balance|floatformat:2 }}</div>
+      <div class="stat-label">{% trans "الرصيد المجمّد" %}</div>
+      <div class="stat-sublabel">{% trans "دج" %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value blue">{{ wallet.balance|floatformat:2 }}</div>
+      <div class="stat-label">{% trans "الرصيد الإجمالي" %}</div>
+      <div class="stat-sublabel">{% trans "دج" %}</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 3: Activity stats ── -->
+<div class="info-card">
+  <div class="info-card-title">{% trans "نشاط الحساب" %}</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px;">
+    <div class="stat-card">
+      <div class="stat-value blue">{{ sales_count }}</div>
+      <div class="stat-label">{% trans "كبائع" %}</div>
+      <div class="stat-sublabel">{% trans "صفقة" %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value green">{{ purchases_count }}</div>
+      <div class="stat-label">{% trans "كمشتري" %}</div>
+      <div class="stat-sublabel">{% trans "صفقة" %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ deliveries_count }}</div>
+      <div class="stat-label">{% trans "كشركة توصيل" %}</div>
+      <div class="stat-sublabel">{% trans "صفقة" %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value yellow">{{ avg_rating|floatformat:2 }}</div>
+      <div class="stat-label">{% trans "متوسط التقييم" %}</div>
+      <div class="stat-sublabel">{{ reviews_count }} {% trans "تقييم" %}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value red">{{ commissions_paid|floatformat:2 }}</div>
+      <div class="stat-label">{% trans "إجمالي العمولات المدفوعة" %}</div>
+      <div class="stat-sublabel">{% trans "دج" %}</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 4: Transactions ── -->
+<div class="info-card">
+  <div class="info-card-title">{% trans "صفقات المستخدم" %}</div>
+  {% if user_transactions %}
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{% trans "رقم الصفقة" %}</th>
+          <th>{% trans "الكود" %}</th>
+          <th>{% trans "الدور" %}</th>
+          <th>{% trans "المبلغ" %}</th>
+          <th>{% trans "الحالة" %}</th>
+          <th>{% trans "التاريخ" %}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tx in user_transactions %}
+        <tr>
+          <td><span style="color:var(--text-muted);font-size:0.82rem;font-family:monospace;">#{{ tx.id }}</span></td>
+          <td><span style="font-family:monospace;color:var(--blue-primary);font-weight:700;letter-spacing:.1em;">#{{ tx.code }}</span></td>
+          <td class="text-sm">
+            {% if tx.seller_id == profile_user.id %}{% trans "بائع" %}
+            {% elif tx.buyer_id == profile_user.id %}{% trans "مشتري" %}
+            {% elif tx.delivery_company_id == profile_user.id %}{% trans "توصيل" %}
+            {% else %}—{% endif %}
+          </td>
+          <td style="font-weight:700;">{{ tx.amount|floatformat:2 }} {% trans "دج" %}</td>
+          <td><span class="badge badge-{{ tx.status|lower }}">{{ tx.get_status_display }}</span></td>
+          <td class="text-muted text-sm">{{ tx.created_at|date:"d/m/Y" }}</td>
+          <td><a href="{% url 'transactions:detail' tx.pk %}" class="btn btn-ghost btn-sm">{% trans "تفاصيل" %}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <div class="empty-state-title">{% trans "لا توجد صفقات لهذا المستخدم." %}</div>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

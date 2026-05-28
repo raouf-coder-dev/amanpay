@@ -3,165 +3,208 @@
 
 {% block title %}{% trans "لوحة الأدمن" %} — AmanPay{% endblock %}
 
-{% block extra_head %}
-<style>
-  .admin-header { margin-bottom:2rem; display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
-  .admin-header h1 { font-size:1.55rem; font-weight:900; display:flex; align-items:center; gap:0.6rem; }
-  .admin-header p  { color:var(--muted-l); font-size:0.87rem; margin-top:0.3rem; }
-
-  .section-box { padding:1.5rem; margin-bottom:1.75rem; }
-  .section-title {
-    font-size:0.72rem; font-weight:700; color:var(--muted-l);
-    text-transform:uppercase; letter-spacing:0.09em;
-    margin-bottom:1rem; padding-bottom:0.6rem;
-    border-bottom:1px solid var(--border);
-    display:flex; align-items:center; gap:0.5rem;
-  }
-
-  .sg4 { display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:1rem; margin-bottom:0; }
-  .sg5 { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:1rem; margin-bottom:0; }
-  .sg3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:1rem; margin-bottom:1.75rem; }
-
-  .ct { border-top:3px solid; }
-  .ct-indigo { border-color:var(--indigo-s); }
-  .ct-green  { border-color:var(--green); }
-  .ct-yellow { border-color:var(--yellow); }
-  .ct-blue   { border-color:#60A5FA; }
-  .ct-red    { border-color:var(--red); }
-  .ct-muted  { border-color:var(--muted); }
-
-  .platform-card {
-    background:linear-gradient(135deg,rgba(16,185,129,.15) 0%,rgba(99,102,241,.1) 100%);
-    border:1px solid rgba(16,185,129,.3); border-radius:14px;
-    padding:1.75rem 2rem; text-align:center;
-  }
-  .platform-card .pb-val { font-size:2.8rem; font-weight:900; color:var(--green); line-height:1.1; }
-  .platform-card .pb-sub { font-size:0.78rem; color:var(--muted); margin-top:0.5rem; }
-
-  .rate-badge { display:inline-flex; align-items:center; padding:.2rem .6rem; border-radius:6px; font-weight:700; font-size:.78rem; }
-  .rate-2   { background:rgba(16,185,129,.12); color:var(--green);    border:1px solid rgba(16,185,129,.25); }
-  .rate-1-5 { background:rgba(245,158,11,.12); color:var(--yellow);   border:1px solid rgba(245,158,11,.25); }
-  .rate-1   { background:rgba(99,102,241,.12); color:var(--indigo-s); border:1px solid rgba(99,102,241,.25); }
-
-  .empty-state { text-align:center; padding:3rem 1rem; color:var(--muted-l); }
-  .empty-state svg { opacity:.3; display:block; margin:0 auto 1rem; }
-  .rank-badge { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; font-size:.75rem; font-weight:900; }
-  .rank-1 { background:rgba(245,158,11,.2); color:var(--yellow); }
-  .rank-2 { background:rgba(156,163,175,.15); color:#9CA3AF; }
-  .rank-3 { background:rgba(180,130,80,.15); color:#CD7F32; }
-  .rank-n { background:rgba(255,255,255,.05); color:var(--muted-l); }
-</style>
-{% endblock %}
-
 {% block content %}
 
 <!-- Header -->
-<div class="admin-header">
-  <div>
-    <h1>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--indigo-s);"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      {% trans "لوحة الأدمن" %}
-    </h1>
-    <p>{% trans "إحصائيات سلة AmanPay والعمولات" %}</p>
-  </div>
+<div style="margin-bottom:24px;">
+  <h1 style="font-size:1.55rem; font-weight:900; display:flex; align-items:center; gap:0.6rem;">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue-primary);"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    {% trans "لوحة الأدمن" %}
+  </h1>
+  <p style="color:var(--text-secondary); font-size:0.87rem; margin-top:0.3rem;">{% trans "إحصائيات سلة AmanPay والعمولات" %}</p>
 </div>
 
 <!-- ── Section 1: User Stats ── -->
-<div class="glass section-box">
-  <div class="section-title">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    {% trans "إحصائيات المستخدمين" %}
-  </div>
-  <div class="sg4">
-    <div class="glass stat-card ct ct-indigo">
+<div class="info-card">
+  <div class="info-card-title">{% trans "إحصائيات المستخدمين" %}</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:16px;">
+    <div class="stat-card">
+      <div class="stat-value blue">{{ total_users }}</div>
       <div class="stat-label">{% trans "إجمالي المستخدمين" %}</div>
-      <div class="stat-value text-indigo">{{ total_users }}</div>
-      <div class="stat-sub">{% trans "مستخدم مسجل" %}</div>
+      <div class="stat-sublabel">{% trans "مستخدم مسجل" %}</div>
     </div>
-    <div class="glass stat-card ct ct-green">
+    <div class="stat-card">
+      <div class="stat-value green">{{ total_buyers }}</div>
       <div class="stat-label">{% trans "المشترين" %}</div>
-      <div class="stat-value text-green">{{ total_buyers }}</div>
-      <div class="stat-sub">{% trans "حساب مشتري" %}</div>
+      <div class="stat-sublabel">{% trans "حساب مشتري" %}</div>
     </div>
-    <div class="glass stat-card ct ct-yellow">
+    <div class="stat-card">
+      <div class="stat-value yellow">{{ total_sellers }}</div>
       <div class="stat-label">{% trans "البائعين" %}</div>
-      <div class="stat-value text-yellow">{{ total_sellers }}</div>
-      <div class="stat-sub">{% trans "حساب بائع" %}</div>
+      <div class="stat-sublabel">{% trans "حساب بائع" %}</div>
     </div>
-    <div class="glass stat-card ct ct-muted">
+    <div class="stat-card">
+      <div class="stat-value">{{ total_delivery }}</div>
       <div class="stat-label">{% trans "شركات التوصيل" %}</div>
-      <div class="stat-value" style="color:var(--muted-l);">{{ total_delivery }}</div>
-      <div class="stat-sub">{% trans "شركة مسجلة" %}</div>
+      <div class="stat-sublabel">{% trans "شركة مسجلة" %}</div>
     </div>
   </div>
+</div>
+
+<!-- ── Feature 1: User Search ── -->
+<div class="info-card">
+  <div class="info-card-title">{% trans "بحث عن مستخدم" %}</div>
+  <form method="get" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:0;">
+    <div class="form-group" style="flex:1; min-width:220px; margin-bottom:0;">
+      <label class="form-label">{% trans "ID أو اسم المستخدم" %}</label>
+      <input class="form-input" type="text" name="q" value="{{ search_query }}" placeholder="{% trans 'ID أو اسم المستخدم' %}">
+    </div>
+    <button type="submit" class="btn btn-primary">{% trans "بحث" %}</button>
+    {% if search_query %}
+      <a href="{% url 'accounts:admin_dashboard' %}{% if date_from or date_to or status_filter %}?{% if date_from %}date_from={{ date_from }}&{% endif %}{% if date_to %}date_to={{ date_to }}&{% endif %}{% if status_filter %}status_filter={{ status_filter }}{% endif %}{% endif %}" class="btn btn-ghost">{% trans "مسح" %}</a>
+    {% endif %}
+    {# preserve filter state on search #}
+    {% if date_from %}<input type="hidden" name="date_from" value="{{ date_from }}">{% endif %}
+    {% if date_to %}<input type="hidden" name="date_to" value="{{ date_to }}">{% endif %}
+    {% if status_filter %}<input type="hidden" name="status_filter" value="{{ status_filter }}">{% endif %}
+  </form>
+
+  {% if search_no_match %}
+    <div class="alert alert-warning" style="margin-top:16px;">{% trans "لا يوجد مستخدم بهذا المعرّف" %}</div>
+  {% endif %}
+
+  {% if search_result %}
+    <div class="info-card" style="margin-top:16px; margin-bottom:0;">
+      <div class="info-card-title">{% trans "نتيجة البحث" %}</div>
+      <div class="info-row"><span class="info-label">ID</span><span class="info-value">{{ search_result.id }}</span></div>
+      <div class="info-row"><span class="info-label">{% trans "اسم المستخدم" %}</span><span class="info-value">{{ search_result.username }}</span></div>
+      <div class="info-row"><span class="info-label">{% trans "الدور" %}</span><span class="info-value">{{ search_result.get_role_display|default:"—" }}</span></div>
+      <div style="margin-top:16px;">
+        <a href="{% url 'accounts:admin_user_detail' search_result.id %}" class="btn btn-primary">{% trans "عرض الملف الكامل" %}</a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<!-- ── Feature 3: Transaction lookup by ID / code ── -->
+<div class="info-card">
+  <div class="info-card-title">{% trans "بحث عن صفقة" %}</div>
+  <form method="get" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:0;">
+    <div class="form-group" style="flex:1; min-width:220px; margin-bottom:0;">
+      <label class="form-label">{% trans "رقم الصفقة أو الكود" %}</label>
+      <input class="form-input" type="text" name="tx_q" value="{{ tx_search_query }}" placeholder="{% trans 'رقم الصفقة أو الكود' %}">
+    </div>
+    <button type="submit" class="btn btn-primary">{% trans "بحث" %}</button>
+    {% if tx_search_query %}
+      <a href="{% url 'accounts:admin_dashboard' %}" class="btn btn-ghost">{% trans "مسح" %}</a>
+    {% endif %}
+    {# preserve other state on submit #}
+    {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+    {% if date_from %}<input type="hidden" name="date_from" value="{{ date_from }}">{% endif %}
+    {% if date_to %}<input type="hidden" name="date_to" value="{{ date_to }}">{% endif %}
+    {% if status_filter %}<input type="hidden" name="status_filter" value="{{ status_filter }}">{% endif %}
+  </form>
+
+  {% if tx_search_no_match %}
+    <div class="alert alert-warning" style="margin-top:16px;">{% trans "لا توجد صفقة بهذا الرقم" %}</div>
+  {% endif %}
 </div>
 
 <!-- ── Section 2: Transaction Stats ── -->
-<div class="glass section-box">
-  <div class="section-title">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-    {% trans "إحصائيات الصفقات" %}
-  </div>
-  <div class="sg5">
-    <div class="glass stat-card ct ct-indigo">
+<div class="info-card">
+  <div class="info-card-title">{% trans "إحصائيات الصفقات" %}</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:16px;">
+    <div class="stat-card">
+      <div class="stat-value blue">{{ total_transactions }}</div>
       <div class="stat-label">{% trans "إجمالي الصفقات" %}</div>
-      <div class="stat-value text-indigo">{{ total_transactions }}</div>
-      <div class="stat-sub">{% trans "في النظام" %}</div>
+      <div class="stat-sublabel">{% trans "في النظام" %}</div>
     </div>
-    <div class="glass stat-card ct ct-green">
+    <div class="stat-card">
+      <div class="stat-value green">{{ completed }}</div>
       <div class="stat-label">{% trans "مكتملة" %}</div>
-      <div class="stat-value text-green">{{ completed }}</div>
-      <div class="stat-sub">{% trans "بنجاح" %}</div>
+      <div class="stat-sublabel">{% trans "بنجاح" %}</div>
     </div>
-    <div class="glass stat-card ct ct-yellow">
+    <div class="stat-card">
+      <div class="stat-value yellow">{{ pending }}</div>
       <div class="stat-label">{% trans "في الانتظار" %}</div>
-      <div class="stat-value text-yellow">{{ pending }}</div>
-      <div class="stat-sub">{% trans "تنتظر المشتري" %}</div>
+      <div class="stat-sublabel">{% trans "تنتظر المشتري" %}</div>
     </div>
-    <div class="glass stat-card ct ct-blue">
+    <div class="stat-card">
+      <div class="stat-value blue">{{ funded }}</div>
       <div class="stat-label">{% trans "ممولة" %}</div>
-      <div class="stat-value" style="color:#93C5FD;">{{ funded }}</div>
-      <div class="stat-sub">{% trans "مجمّد المبلغ" %}</div>
+      <div class="stat-sublabel">{% trans "مجمّد المبلغ" %}</div>
     </div>
-    <div class="glass stat-card ct ct-red">
+    <div class="stat-card">
+      <div class="stat-value red">{{ disputed }}</div>
       <div class="stat-label">{% trans "متنازع عليها" %}</div>
-      <div class="stat-value text-red">{{ disputed }}</div>
-      <div class="stat-sub">{% trans "تحتاج مراجعة" %}</div>
+      <div class="stat-sublabel">{% trans "تحتاج مراجعة" %}</div>
     </div>
   </div>
 </div>
 
-<!-- ── Section 3: Financial Stats ── -->
-<div class="sg3">
-  <div class="platform-card">
-    <div class="stat-label" style="margin-bottom:.5rem;">{% trans "سلة AmanPay" %}</div>
-    <div class="pb-val">{{ platform.balance|floatformat:2 }}</div>
-    <div style="font-size:.85rem;color:var(--muted-l);margin-top:.2rem;">{% trans "دج" %}</div>
-    <div class="pb-sub">{% trans "إجمالي الصفقات المُنجزة" %}: <strong style="color:var(--green);">{{ platform.total_transactions }}</strong></div>
+<!-- ── Section 3: Financial KPIs (metric cards) ── -->
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-bottom:16px;">
+  <div class="metric-card">
+    <div class="metric-value green">
+      {{ platform.balance|floatformat:2 }}
+      <span style="font-size:14px; color:var(--text-secondary); font-weight:600;">{% trans "دج" %}</span>
+    </div>
+    <div class="metric-label">{% trans "سلة AmanPay" %}</div>
+    <div class="metric-sublabel">{% trans "إجمالي الصفقات المُنجزة" %}: <strong style="color:var(--green);">{{ platform.total_transactions }}</strong></div>
   </div>
-  <div class="glass stat-card" style="text-align:center;">
-    <div class="stat-label">{% trans "إجمالي حجم المعاملات المكتملة" %}</div>
-    <div class="stat-value text-yellow">{{ total_volume|floatformat:2 }}</div>
-    <div class="stat-sub">{% trans "دج" %}</div>
+  <div class="metric-card">
+    <div class="metric-value yellow">
+      {{ total_volume|floatformat:2 }}
+      <span style="font-size:14px; color:var(--text-secondary); font-weight:600;">{% trans "دج" %}</span>
+    </div>
+    <div class="metric-label">{% trans "إجمالي حجم المعاملات المكتملة" %}</div>
   </div>
-  <div class="glass stat-card" style="text-align:center;">
-    <div class="stat-label">{% trans "عمولات الشهر الحالي" %}</div>
-    <div class="stat-value text-green">{{ monthly.commission|floatformat:2|default:"0.00" }}</div>
-    <div class="stat-sub">{% trans "دج" %} — {{ monthly.count|default:"0" }} {% trans "إجمالي الصفقات" %}</div>
+  <div class="metric-card">
+    <div class="metric-value green">
+      {{ monthly.commission|floatformat:2|default:"0.00" }}
+      <span style="font-size:14px; color:var(--text-secondary); font-weight:600;">{% trans "دج" %}</span>
+    </div>
+    <div class="metric-label">{% trans "عمولات الشهر الحالي" %}</div>
+    <div class="metric-sublabel">{{ monthly.count|default:"0" }} {% trans "إجمالي الصفقات" %}</div>
   </div>
 </div>
 
-<!-- ── Section 4: Last 10 Transactions ── -->
-<div class="glass section-box">
-  <div class="section-title">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    {% trans "آخر الصفقات" %}
+<!-- ── Section: Monthly Commissions Chart ── -->
+{% if monthly_chart %}
+<div class="chart-container">
+  <div style="font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:12px;">{% trans "العمولات الشهرية" %}</div>
+  <div style="position:relative; height:240px;">
+    <canvas id="commissionsChart"></canvas>
   </div>
+</div>
+{% endif %}
+
+<!-- ── Section 4: Last 10 Transactions (+ Feature 2: filter) ── -->
+<div class="info-card">
+  <div class="info-card-title">{% trans "آخر الصفقات" %}</div>
+
+  <form method="get" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px;">
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">{% trans "من تاريخ" %}</label>
+      <input class="form-input" type="date" name="date_from" value="{{ date_from }}" style="min-width:150px;">
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">{% trans "إلى تاريخ" %}</label>
+      <input class="form-input" type="date" name="date_to" value="{{ date_to }}" style="min-width:150px;">
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">{% trans "الحالة" %}</label>
+      <select class="form-select" name="status_filter" style="min-width:170px;">
+        <option value="">— {% trans "كل الحالات" %} —</option>
+        {% for value, label in status_choices %}
+          <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">{% trans "تطبيق" %}</button>
+    {% if filter_active %}
+      <a href="{% url 'accounts:admin_dashboard' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="btn btn-ghost">{% trans "مسح" %}</a>
+    {% endif %}
+    {# preserve search on filter submit #}
+    {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+  </form>
+
   {% if recent_transactions %}
-  <div class="table-wrap">
-    <table>
+  <div class="table-wrapper">
+    <table class="data-table">
       <thead>
         <tr>
+          <th>{% trans "رقم الصفقة" %}</th>
           <th>{% trans "الكود" %}</th>
           <th>{% trans "البائع" %}</th>
           <th>{% trans "المشتري" %}</th>
@@ -174,7 +217,8 @@
       <tbody>
         {% for tx in recent_transactions %}
         <tr>
-          <td><span style="font-family:monospace;color:var(--indigo-s);font-weight:700;letter-spacing:.1em;">#{{ tx.code }}</span></td>
+          <td><span style="color:var(--text-muted);font-size:0.82rem;font-family:monospace;">#{{ tx.id }}</span></td>
+          <td><span style="font-family:monospace;color:var(--blue-primary);font-weight:700;letter-spacing:.1em;">#{{ tx.code }}</span></td>
           <td>{{ tx.seller.username }}</td>
           <td>{{ tx.buyer.username|default:"—" }}</td>
           <td style="font-weight:700;">{{ tx.amount|floatformat:2 }} {% trans "دج" %}</td>
@@ -188,20 +232,17 @@
   </div>
   {% else %}
   <div class="empty-state">
-    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-    <p>{% trans "لا توجد صفقات بعد." %}</p>
+    <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <div class="empty-state-title">{% trans "لا توجد صفقات بعد." %}</div>
   </div>
   {% endif %}
 </div>
 
 <!-- ── Section 5: Commission Tiers ── -->
-<div class="glass section-box">
-  <div class="section-title">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    {% trans "شرائح العمولة" %}
-  </div>
-  <div class="table-wrap">
-    <table>
+<div class="info-card">
+  <div class="info-card-title">{% trans "شرائح العمولة" %}</div>
+  <div class="table-wrapper">
+    <table class="data-table">
       <thead>
         <tr>
           <th>{% trans "الشريحة" %}</th>
@@ -212,18 +253,18 @@
       <tbody>
         <tr>
           <td>0 — 5,000 {% trans "دج" %}</td>
-          <td><span class="rate-badge rate-2">2%</span></td>
+          <td><span class="badge badge-completed">2%</span></td>
           <td style="color:var(--green);font-weight:700;">100 {% trans "دج" %}</td>
         </tr>
         <tr>
           <td>5,001 — 20,000 {% trans "دج" %}</td>
-          <td><span class="rate-badge rate-1-5">1.5%</span></td>
+          <td><span class="badge badge-pending">1.5%</span></td>
           <td style="color:var(--yellow);font-weight:700;">150 {% trans "دج" %}</td>
         </tr>
         <tr>
           <td>+20,000 {% trans "دج" %}</td>
-          <td><span class="rate-badge rate-1">1%</span></td>
-          <td style="color:var(--muted-l);font-weight:700;">200 {% trans "دج" %}</td>
+          <td><span class="badge badge-funded">1%</span></td>
+          <td style="color:var(--text-secondary);font-weight:700;">200 {% trans "دج" %}</td>
         </tr>
       </tbody>
     </table>
@@ -231,14 +272,11 @@
 </div>
 
 <!-- ── Section 6: Last 5 Commissions ── -->
-<div class="glass section-box">
-  <div class="section-title">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-    {% trans "آخر العمولات" %}
-  </div>
+<div class="info-card">
+  <div class="info-card-title">{% trans "آخر العمولات" %}</div>
   {% if recent_commissions %}
-  <div class="table-wrap">
-    <table>
+  <div class="table-wrapper">
+    <table class="data-table">
       <thead>
         <tr>
           <th>{% trans "الصفقة" %}</th>
@@ -251,14 +289,12 @@
       <tbody>
         {% for log in recent_commissions %}
         <tr>
-          <td>
-            <a href="{% url 'transactions:detail' log.transaction.pk %}" class="btn btn-ghost btn-sm">#{{ log.transaction.code }}</a>
-          </td>
+          <td><a href="{% url 'transactions:detail' log.transaction.pk %}" class="btn btn-ghost btn-sm">#{{ log.transaction.code }}</a></td>
           <td style="font-weight:600;">{{ log.original_amount|floatformat:2 }} {% trans "دج" %}</td>
           <td>
-            {% if log.commission_rate == 2.0 %}<span class="rate-badge rate-2">2%</span>
-            {% elif log.commission_rate == 1.5 %}<span class="rate-badge rate-1-5">1.5%</span>
-            {% else %}<span class="rate-badge rate-1">1%</span>{% endif %}
+            {% if log.commission_rate == 2.0 %}<span class="badge badge-completed">2%</span>
+            {% elif log.commission_rate == 1.5 %}<span class="badge badge-pending">1.5%</span>
+            {% else %}<span class="badge badge-funded">1%</span>{% endif %}
           </td>
           <td style="font-weight:700;color:var(--yellow);">{{ log.commission_amount|floatformat:2 }} {% trans "دج" %}</td>
           <td class="text-muted text-sm">{{ log.created_at|date:"d/m/Y H:i" }}</td>
@@ -269,24 +305,61 @@
   </div>
   {% else %}
   <div class="empty-state">
-    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-    <p>{% trans "لا توجد عمولات بعد." %}</p>
+    <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    <div class="empty-state-title">{% trans "لا توجد عمولات بعد." %}</div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- ── Section: All Users (latest 50) ── -->
+<div class="info-card">
+  <div class="info-card-title">{% trans "كل المستخدمين" %}</div>
+  {% if all_users %}
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>{% trans "اسم المستخدم" %}</th>
+          <th>{% trans "الدور" %}</th>
+          <th>{% trans "البريد الإلكتروني" %}</th>
+          <th>{% trans "رصيد المحفظة" %}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in all_users %}
+        <tr>
+          <td><span style="color:var(--text-muted);font-size:0.82rem;font-family:monospace;">#{{ u.id }}</span></td>
+          <td style="font-weight:700;">{{ u.username }}</td>
+          <td class="text-sm">{{ u.get_role_display|default:"—" }}</td>
+          <td class="text-muted text-sm">{{ u.email|default:"—" }}</td>
+          <td style="font-weight:700;color:var(--green);">{{ u.wallet.balance|default:"0"|floatformat:2 }} {% trans "دج" %}</td>
+          <td><a href="{% url 'accounts:admin_user_detail' u.id %}" class="btn btn-ghost btn-sm">{% trans "عرض الملف الكامل" %}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="text-muted text-sm" style="margin-top:8px;">{% trans "يُعرض أحدث 50 مستخدماً" %}</div>
+  {% else %}
+  <div class="empty-state">
+    <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <div class="empty-state-title">{% trans "لا يوجد مستخدمون بعد." %}</div>
   </div>
   {% endif %}
 </div>
 
 <!-- ── Section 7: Top Sellers ── -->
-<div class="glass section-box" style="margin-bottom:0;">
-  <div class="section-title">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-    {% trans "أكثر البائعين نشاطاً" %}
-  </div>
+<div class="info-card">
+  <div class="info-card-title">{% trans "أكثر البائعين نشاطاً" %}</div>
   {% if top_sellers %}
-  <div class="table-wrap">
-    <table>
+  <div class="table-wrapper">
+    <table class="data-table">
       <thead>
         <tr>
           <th style="width:48px;">#</th>
+          <th>ID</th>
           <th>{% trans "البائع" %}</th>
           <th>{% trans "إجمالي الصفقات" %}</th>
           <th>{% trans "مكتملة" %}</th>
@@ -295,13 +368,10 @@
       <tbody>
         {% for seller in top_sellers %}
         <tr>
-          <td>
-            <span class="rank-badge {% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% else %}rank-n{% endif %}">
-              {{ forloop.counter }}
-            </span>
-          </td>
-          <td style="font-weight:700;">{{ seller.username }}</td>
-          <td style="color:var(--indigo-s);">{{ seller.total_sales }}</td>
+          <td style="font-weight:700;">{{ forloop.counter }}</td>
+          <td><span style="color:var(--text-muted);font-size:0.82rem;font-family:monospace;">#{{ seller.id }}</span></td>
+          <td style="font-weight:700;"><a href="{% url 'accounts:admin_user_detail' seller.id %}" style="color:inherit;text-decoration:none;">{{ seller.username }}</a></td>
+          <td style="color:var(--blue-primary);">{{ seller.total_sales }}</td>
           <td style="color:var(--green);font-weight:700;">{{ seller.completed_sales }}</td>
         </tr>
         {% endfor %}
@@ -310,10 +380,47 @@
   </div>
   {% else %}
   <div class="empty-state">
-    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-    <p>{% trans "لا يوجد بائعون بعد." %}</p>
+    <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    <div class="empty-state-title">{% trans "لا يوجد بائعون بعد." %}</div>
   </div>
   {% endif %}
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+{% if monthly_chart %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script>
+  (function() {
+    var canvas = document.getElementById('commissionsChart');
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    var labels = [{% for row in monthly_chart %}"{{ row.label|escapejs }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+    var values = [{% for row in monthly_chart %}{{ row.total|stringformat:".2f" }}{% if not forloop.last %},{% endif %}{% endfor %}];
+
+    var cs = getComputedStyle(document.documentElement);
+    var blue   = cs.getPropertyValue('--blue-primary').trim() || '#2563EB';
+    var border = cs.getPropertyValue('--border').trim() || 'rgba(255,255,255,0.06)';
+    var muted  = cs.getPropertyValue('--text-muted').trim() || '#9CA3AF';
+
+    new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{ data: values, backgroundColor: blue, borderRadius: 6, maxBarThickness: 60 }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: border }, ticks: { color: muted } },
+          x: { grid: { display: false }, ticks: { color: muted } }
+        }
+      }
+    });
+  })();
+</script>
+{% endif %}
 {% endblock %}

@@ -5,22 +5,6 @@
 
 {% block extra_head %}
 <style>
-  .auth-wrap {
-    min-height: calc(100vh - 60px);
-    display: flex; align-items: center; justify-content: center;
-    padding: 2rem 1rem;
-  }
-  .auth-card { width: 100%; max-width: 540px; padding: 2.5rem 2.25rem; animation: fadeUp 0.4s ease both; }
-  .auth-brand {
-    text-align: center; margin-bottom: 1.75rem;
-  }
-  .auth-brand-logo {
-    font-size: 1.7rem; font-weight: 900;
-    color: var(--blue-light);
-    letter-spacing: -0.02em; display: block; margin-bottom: 0.4rem;
-  }
-  .auth-title { font-size: 1.2rem; font-weight: 700; }
-
   /* Step label */
   .step-lbl {
     font-size: 0.7rem; font-weight: 700; color: var(--indigo-s);
@@ -42,20 +26,20 @@
     transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
     background: transparent;
   }
-  .role-opt:hover { border-color: rgba(37,99,235,0.45); background: rgba(37,99,235,0.06); }
+  .role-opt:hover { border-color: rgba(112,51,255,0.45); background: rgba(112,51,255,0.06); }
   .role-opt.active {
     border-color: var(--blue-primary);
-    background: rgba(37,99,235,0.1);
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    background: rgba(112,51,255,0.1);
+    box-shadow: 0 0 0 3px rgba(112,51,255,0.15);
   }
   .role-opt .ri {
     width: 40px; height: 40px; border-radius: 10px;
-    background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.15);
+    background: rgba(112,51,255,0.08); border: 1px solid rgba(112,51,255,0.15);
     display: flex; align-items: center; justify-content: center;
     margin: 0 auto 0.6rem; color: var(--blue-light);
     transition: background 0.2s;
   }
-  .role-opt.active .ri { background: rgba(37,99,235,0.18); }
+  .role-opt.active .ri { background: rgba(112,51,255,0.18); }
   .role-opt .rt { font-size: 0.82rem; font-weight: 700; color: var(--text); }
   .role-opt .rs { font-size: 0.7rem; color: var(--muted-l); }
 
@@ -63,54 +47,46 @@
   .form-section { display: none; }
   .form-section.visible { display: block; }
 
-  .auth-footer {
-    text-align: center; margin-top: 1.5rem;
-    font-size: 0.84rem; color: var(--muted-l);
-  }
-  .auth-footer a { color: var(--indigo-s); text-decoration: none; font-weight: 600; }
-  .auth-footer a:hover { text-decoration: underline; }
-
   .grid-2i { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   @media(max-width:480px){ .grid-2i { grid-template-columns: 1fr; } }
 
   .form-errors {
-    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+    background: var(--red-bg);
+    border: 1px solid color-mix(in srgb, var(--red) 35%, transparent);
     border-radius: 10px; padding: 0.9rem 1rem; margin-bottom: 1.25rem;
-    font-size: 0.84rem; color: #FCA5A5;
+    font-size: 0.84rem; color: var(--red);
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="auth-wrap">
-  <div class="glass auth-card">
-    <div class="auth-brand">
-      <span class="auth-brand-logo">AmanPay</span>
-      <div class="auth-title">{% trans "حساب جديد" %}</div>
-    </div>
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-title">{% trans "حساب جديد" %}</div>
+    <div class="auth-subtitle">{% trans "انضمّ إلى AmanPay" %}</div>
 
     <div class="step-lbl">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
       ① {% trans "اختر نوع حسابك" %}
     </div>
     <div class="role-picker" id="rolePicker">
       <div class="role-opt" data-role="BUYER" onclick="selectRole('BUYER')">
         <div class="ri" style="color:var(--green);background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.2);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         </div>
         <div class="rt">{% trans "مشتري" %}</div>
         <div class="rs">Acheteur</div>
       </div>
       <div class="role-opt" data-role="SELLER" onclick="selectRole('SELLER')">
         <div class="ri">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </div>
         <div class="rt">{% trans "بائع" %}</div>
         <div class="rs">Vendeur</div>
       </div>
       <div class="role-opt" data-role="DELIVERY" onclick="selectRole('DELIVERY')">
         <div class="ri" style="color:var(--yellow);background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.2);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
         </div>
         <div class="rt">{% trans "شركة توصيل" %}</div>
         <div class="rs">Livraison</div>
@@ -130,7 +106,7 @@
 
       <div class="form-section" id="commonSection">
         <div class="step-lbl">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           ② {% trans "البيانات الأساسية" %}
         </div>
 
@@ -169,7 +145,7 @@
 
       <div class="form-section" id="sellerSection">
         <div class="step-lbl">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
           ③ {% trans "بيانات المتجر" %}
         </div>
         <div class="form-group">
@@ -188,7 +164,7 @@
 
       <div class="form-section" id="deliverySection">
         <div class="step-lbl">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/></svg>
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/></svg>
           ③ {% trans "بيانات الشركة" %}
         </div>
         <div class="grid-2i">
@@ -205,7 +181,7 @@
 
       <div class="form-section" id="submitSection">
         <button type="submit" class="btn btn-primary" style="width:100%;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
           {% trans "إنشاء الحساب" %}
         </button>
       </div>

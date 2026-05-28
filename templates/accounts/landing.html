@@ -1,167 +1,212 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}AmanPay — {% trans "وساطة مالية آمنة" %}{% endblock %}
-
-{% block extra_head %}
-<style>
-  .hero {
-    text-align: center;
-    padding: 5rem 1rem 4rem;
-    position: relative;
-  }
-  .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    font-size: 0.75rem; font-weight: 700; color: var(--blue-light);
-    text-transform: uppercase; letter-spacing: 0.1em;
-    background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.2);
-    border-radius: 20px; padding: 0.3rem 0.9rem;
-    margin-bottom: 1.5rem;
-  }
-  .hero-logo {
-    font-size: clamp(2.8rem, 9vw, 5rem);
-    font-weight: 900;
-    color: var(--blue-light);
-    line-height: 1.05; margin-bottom: 1.25rem;
-    letter-spacing: -0.02em;
-  }
-  .hero-sub {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
-    color: var(--muted-l); margin-bottom: 2.5rem; font-weight: 500;
-    max-width: 480px; margin-inline: auto;
-    line-height: 1.7;
-  }
-  .hero-actions {
-    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-    margin-bottom: 4rem;
-  }
-
-  /* Role cards */
-  .roles-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 3rem;
-  }
-  .role-card {
-    padding: 2rem 1.5rem;
-    text-align: center;
-    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-    cursor: default;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg-card);
-  }
-  .role-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--border-h);
-    box-shadow: var(--glow-i), 0 16px 48px rgba(0,0,0,0.4);
-  }
-  .role-icon-wrap {
-    width: 60px; height: 60px; border-radius: 16px;
-    background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.2);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 1.25rem; color: var(--blue-light);
-    transition: background 0.2s, transform 0.2s;
-  }
-  .role-card:hover .role-icon-wrap { background: rgba(37,99,235,0.18); transform: scale(1.05); }
-  .role-icon-wrap.green { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.2); color: var(--green); }
-  .role-card:hover .role-icon-wrap.green { background: rgba(16,185,129,0.2); }
-  .role-icon-wrap.yellow { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.2); color: var(--yellow); }
-  .role-card:hover .role-icon-wrap.yellow { background: rgba(245,158,11,0.2); }
-  .role-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .role-sub   { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.75rem; font-weight: 600; letter-spacing: 0.04em; }
-  .role-desc  { font-size: 0.84rem; color: var(--muted-l); line-height: 1.7; }
-
-  /* Trust bar */
-  .trust-bar {
-    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
-    padding: 2rem 1rem;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 0;
-  }
-  .trust-item { text-align: center; }
-  .trust-num  { font-size: 2rem; font-weight: 900; color: var(--indigo-s); line-height: 1; }
-  .trust-lbl  { font-size: 0.76rem; color: var(--muted-l); margin-top: 0.3rem; }
-
-  .section-label {
-    text-align: center;
-    font-size: 0.72rem; font-weight: 700; color: var(--muted-l);
-    text-transform: uppercase; letter-spacing: 0.1em;
-    margin-bottom: 2rem;
-  }
-  .section-label strong { color: var(--text); font-size: 1.4rem; display: block; margin-top: 0.4rem; letter-spacing: 0; text-transform: none; }
-</style>
-{% endblock %}
+{% block title %}AmanPay — {% trans "وسيط مالي آمن للتجارة الإلكترونية" %}{% endblock %}
 
 {% block content %}
-<section class="hero">
-  <div class="hero-eyebrow">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-    {% trans "منصة وساطة مالية آمنة" %}
+
+<!-- ── Hero ── -->
+<section class="landing-hero">
+  <div class="hero-grid">
+    <div class="hero-content">
+      <h1 class="hero-title">{% trans "لا تبِع ولا تشترِ عبر الإنترنت دون وسيط آمن" %}</h1>
+      <p class="hero-sub">{% trans "أمان باي وسيط مالي محايد يحمي البائع والمشتري في كل صفقة عبر الإنترنت." %}</p>
+      <div class="hero-actions">
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          {% trans "ابدأ الآن" %}
+        </a>
+        <a href="#how-it-works" class="btn btn-ghost btn-lg">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          {% trans "كيف يعمل" %}
+        </a>
+      </div>
+
+      <div class="hero-trust">
+        <span class="hero-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+          {% trans "أموالك محفوظة حتى تأكيد الاستلام" %}
+        </span>
+        <span class="hero-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          {% trans "اتصال آمن مشفّر" %}
+        </span>
+        <span class="hero-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+          {% trans "وسيط محايد" %} 100%
+        </span>
+      </div>
+
+      <p style="margin-top:20px; font-size:14px; color:var(--text-secondary);">
+        {% trans "لديك حساب بالفعل؟" %}
+        <a href="{% url 'accounts:login' %}" style="color:var(--blue-primary); font-weight:600; text-decoration:none;">{% trans "تسجيل الدخول" %}</a>
+      </p>
+    </div>
+
+    <!-- بطاقة لوحة تحكم وهمية — عرض بصري فقط -->
+    <div class="hero-mockup" aria-hidden="true">
+      <div class="mockup-head">
+        <span class="mockup-dot"></span>
+        <span class="mockup-label">{% trans "لوحة التحكم" %}</span>
+      </div>
+      <div class="mockup-balance">
+        <span class="mockup-balance-label">{% trans "الرصيد" %}</span>
+        <span class="mockup-balance-value">50,000 {% trans "دج" %}</span>
+      </div>
+      <div class="mockup-status">
+        <span class="badge badge-funded">{% trans "صفقة قيد التنفيذ" %}</span>
+      </div>
+      <div class="mockup-tx">
+        <span class="mockup-tx-code">#834192</span>
+        <span class="mockup-tx-amount">12,500 {% trans "دج" %}</span>
+      </div>
+    </div>
   </div>
-  <h1 class="hero-logo">AmanPay</h1>
-  <p class="hero-sub">
-    {% trans "وساطة مالية آمنة" %} &nbsp;·&nbsp; Paiement sécurisé
+</section>
+
+<!-- ── How it works (5 steps) ── -->
+<section id="how-it-works" class="landing-section">
+  <h2 class="section-heading">{% trans "كيف يعمل أمان باي" %}</h2>
+  <p class="section-sub">{% trans "خمس خطوات بسيطة لإتمام صفقة آمنة" %}</p>
+  <div class="steps-row">
+    <div class="step-item">
+      <span class="step-number">1</span>
+      <span class="step-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      <h3 class="step-title">{% trans "اتفاق المشتري والبائع" %}</h3>
+      <p class="step-desc">{% trans "يتفقان على الصفقة وتفاصيلها" %}</p>
+    </div>
+    <div class="step-item">
+      <span class="step-number">2</span>
+      <span class="step-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
+      <h3 class="step-title">{% trans "دفع آمن للوسيط" %}</h3>
+      <p class="step-desc">{% trans "المشتري يودع المبلغ في أمان باي" %}</p>
+    </div>
+    <div class="step-item">
+      <span class="step-number">3</span>
+      <span class="step-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
+      <h3 class="step-title">{% trans "البائع يشحن المنتج" %}</h3>
+      <p class="step-desc">{% trans "بعد تأكيد حجز المبلغ" %}</p>
+    </div>
+    <div class="step-item">
+      <span class="step-number">4</span>
+      <span class="step-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
+      <h3 class="step-title">{% trans "المشتري يؤكد الاستلام" %}</h3>
+      <p class="step-desc">{% trans "بعد فحص المنتج" %}</p>
+    </div>
+    <div class="step-item">
+      <span class="step-number">5</span>
+      <span class="step-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+      <h3 class="step-title">{% trans "تحرير الأموال بأمان" %}</h3>
+      <p class="step-desc">{% trans "المبلغ يُحوَّل للبائع" %}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Why AmanPay (4 features) ── -->
+<section class="landing-section">
+  <h2 class="section-heading">{% trans "لماذا أمان باي" %}</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span>
+      <h3 class="feature-title">{% trans "أمان مالي للطرفين" %}</h3>
+      <p class="feature-desc">{% trans "حماية الأموال حتى يكتمل التسليم بنجاح" %}</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></span>
+      <h3 class="feature-title">{% trans "حماية من الاحتيال" %}</h3>
+      <p class="feature-desc">{% trans "لا أحد يستلم ماله إلا بعد إتمام الصفقة" %}</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+      <h3 class="feature-title">{% trans "شفافية كاملة" %}</h3>
+      <p class="feature-desc">{% trans "كل خطوة موثّقة ومرئية لجميع الأطراف" %}</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></span>
+      <h3 class="feature-title">{% trans "عمولة منخفضة" %}</h3>
+      <p class="feature-desc">{% trans "ابتداءً من 1% فقط حسب حجم الصفقة" %}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── For whom (3 audience cards) ── -->
+<section class="landing-section">
+  <h2 class="section-heading">{% trans "لمن أمان باي" %}</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+      <h3 class="feature-title">{% trans "التجار الإلكترونيون" %}</h3>
+      <p class="feature-desc">{% trans "متاجر إنستغرام وفيسبوك التي تبيع للمشترين عن بعد" %}</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21h20"/><path d="M5 21V8.5L12 4l7 4.5V21"/><path d="M8 21v-6h8v6"/></svg></span>
+      <h3 class="feature-title">{% trans "التجار التقليديون" %}</h3>
+      <p class="feature-desc">{% trans "أصحاب المحلات الذين بدؤوا البيع أونلاين" %}</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+      <h3 class="feature-title">{% trans "أصحاب الخدمات" %}</h3>
+      <p class="feature-desc">{% trans "المستقلون والمصممون والمطورون وغيرهم" %}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Social proof (حقائق النظام — بلا أرقام مخترعة) ── -->
+<section class="landing-section">
+  <h2 class="section-heading">{% trans "لماذا تثق بأمان باي" %}</h2>
+  <div class="features-grid">
+    <div class="stat-card proof-card">
+      <span class="proof-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
+      <p class="proof-text">{% trans "المال محجوز بأمان حتى تأكيد الاستلام" %}</p>
+    </div>
+    <div class="stat-card proof-card">
+      <span class="proof-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></span>
+      <p class="proof-text">{% trans "عمولة منخفضة تبدأ من" %} 1%</p>
+    </div>
+    <div class="stat-card proof-card">
+      <span class="proof-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span>
+      <p class="proof-text">{% trans "وسيط محايد" %} 100%</p>
+    </div>
+    <div class="stat-card proof-card">
+      <span class="proof-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+      <p class="proof-text">{% trans "تتبّع فوري لحالة كل صفقة" %}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Trust strip ── -->
+<div class="trust-strip">
+  <div class="trust-item">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+    {% trans "وسيط محايد" %}
+  </div>
+  <div class="trust-item">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+    {% trans "حماية مضمونة" %}
+  </div>
+  <div class="trust-item">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    {% trans "معاملات آمنة" %}
+  </div>
+</div>
+
+<!-- ── Final CTA ── -->
+<section class="cta-card">
+  <h2 class="cta-title">{% trans "ابدأ أول صفقة آمنة اليوم" %}</h2>
+  <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+    {% trans "ابدأ الآن" %}
+  </a>
+  <p style="margin-top:16px; font-size:14px; color:var(--text-secondary);">
+    <a href="{% url 'accounts:login' %}" style="color:var(--blue-primary); font-weight:600; text-decoration:none;">{% trans "أو سجّل الدخول" %}</a>
   </p>
-  <div class="hero-actions">
-    <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-lg">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-      {% trans "تسجيل الدخول" %}
-    </a>
-    <a href="{% url 'accounts:register' %}" class="btn btn-ghost btn-lg">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-      {% trans "حساب جديد" %}
-    </a>
-  </div>
 </section>
 
-<section style="margin-bottom:3rem;">
-  <p class="section-label">{% trans "من يستخدم AmanPay؟" %}<strong>{% trans "ثلاثة أطراف، حماية واحدة" %}</strong></p>
+<!-- ── Footer ── -->
+<footer class="site-footer">
+  <div class="site-footer-brand">AmanPay</div>
+  <p class="site-footer-tagline">{% trans "وسيط مالي آمن للتجارة الإلكترونية في الجزائر" %}</p>
+  <p class="site-footer-meta">© 2026 · {% trans "جامعة العربي بن مهيدي — أم البواقي" %}</p>
+</footer>
 
-  <div class="roles-grid">
-    <div class="role-card">
-      <div class="role-icon-wrap green">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      </div>
-      <div class="role-title">{% trans "مشتري" %}</div>
-      <div class="role-sub">Acheteur</div>
-      <div class="role-desc">{% trans "ادفع بأمان وأطلق المبلغ فقط بعد استلام منتجك." %}</div>
-    </div>
-
-    <div class="role-card">
-      <div class="role-icon-wrap">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      </div>
-      <div class="role-title">{% trans "بائع" %}</div>
-      <div class="role-sub">Vendeur</div>
-      <div class="role-desc">{% trans "أنشئ صفقاتك واستلم مدفوعاتك بعد تأكيد التسليم." %}</div>
-    </div>
-
-    <div class="role-card">
-      <div class="role-icon-wrap yellow">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-      </div>
-      <div class="role-title">{% trans "شركة توصيل" %}</div>
-      <div class="role-sub">Livraison</div>
-      <div class="role-desc">{% trans "تتبّع شحناتك وأكّد التسليم مباشرةً من لوحتك." %}</div>
-    </div>
-  </div>
-
-  <div class="glass trust-bar">
-    <div class="trust-item">
-      <div class="trust-num">100%</div>
-      <div class="trust-lbl">{% trans "مدفوعات مؤمّنة" %}</div>
-    </div>
-    <div class="trust-item">
-      <div class="trust-num">3</div>
-      <div class="trust-lbl">{% trans "أطراف محمية" %}</div>
-    </div>
-    <div class="trust-item">
-      <div class="trust-num">0</div>
-      <div class="trust-lbl">{% trans "رسوم خفية" %}</div>
-    </div>
-  </div>
-</section>
 {% endblock %}

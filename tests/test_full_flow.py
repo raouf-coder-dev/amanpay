@@ -17,9 +17,17 @@ class FullFlowTest(TestCase):
         self.delivery = User.objects.create_user(
             username='delivery_test', password='test123', role='DELIVERY'
         )
-        Wallet.objects.create(user=self.buyer, balance=50000)
-        Wallet.objects.create(user=self.seller, balance=50000)
-        Wallet.objects.create(user=self.delivery, balance=0)
+        # post_save signal already created wallets for each user above —
+        # override their balances to match the expected test fixture state.
+        Wallet.objects.update_or_create(
+            user=self.buyer,   defaults={'balance': 50000, 'frozen_balance': 0}
+        )
+        Wallet.objects.update_or_create(
+            user=self.seller,  defaults={'balance': 50000, 'frozen_balance': 0}
+        )
+        Wallet.objects.update_or_create(
+            user=self.delivery, defaults={'balance': 0, 'frozen_balance': 0}
+        )
 
         self.buyer_client = Client()
         self.seller_client = Client()

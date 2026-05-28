@@ -132,7 +132,10 @@ def preview_transaction(request, pk):
 def fund_transaction(request, pk):
     tx = get_object_or_404(Transaction, pk=pk, buyer=request.user, status=Transaction.Status.PENDING)
     if request.method == 'POST':
-        wallet = request.user.wallet
+        wallet, _created = Wallet.objects.get_or_create(
+            user=request.user,
+            defaults={'balance': 50000, 'frozen_balance': 0},
+        )
         if wallet.available_balance >= tx.amount:
             bal_before = wallet.available_balance
             wallet.frozen_balance += tx.amount
@@ -156,7 +159,10 @@ def withdraw_transaction(request, pk):
     tx = get_object_or_404(Transaction, pk=pk, buyer=request.user)
     if request.method == 'POST':
         if tx.status == Transaction.Status.FUNDED:
-            wallet = request.user.wallet
+            wallet, _created = Wallet.objects.get_or_create(
+                user=request.user,
+                defaults={'balance': 50000, 'frozen_balance': 0},
+            )
             bal_before = wallet.available_balance
             wallet.frozen_balance -= tx.amount
             wallet.save()
@@ -306,7 +312,8 @@ def review_transaction(request, pk):
 @login_required
 def transaction_detail(request, pk):
     tx = get_object_or_404(Transaction, pk=pk)
-    if request.user not in (tx.seller, tx.buyer, tx.delivery_company):
+    # الأدمن (is_staff) يقرأ كل الصفقات؛ غيره يجب أن يكون طرفاً فيها.
+    if not request.user.is_staff and request.user not in (tx.seller, tx.buyer, tx.delivery_company):
         messages.error(request, _('ليس لديك صلاحية لعرض هذه الصفقة'))
         return redirect('accounts:dashboard')
 
@@ -321,5 +328,9 @@ def transaction_detail(request, pk):
 
 @login_required
 def wallet_history(request):
-    logs = request.user.wallet.transactions_log.select_related('transaction').all()
+    wallet, _created = Wallet.objects.get_or_create(
+        user=request.user,
+        defaults={'balance': 50000, 'frozen_balance': 0},
+    )
+    logs = wallet.transactions_log.select_related('transaction').all()
     return render(request, 'accounts/wallet_history.html', {'logs': logs})

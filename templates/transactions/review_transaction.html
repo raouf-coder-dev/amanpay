@@ -45,7 +45,7 @@
         <div class="stars-select" id="starsRow">
           {% for i in "12345" %}
           <button type="button" class="star-btn" data-value="{{ forloop.counter }}" onclick="setRating({{ forloop.counter }})">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           </button>
           {% endfor %}
         </div>
@@ -59,7 +59,7 @@
       </div>
 
       <button type="submit" class="btn btn-primary" style="width:100%; margin-top:1rem;">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         {% trans "إرسال التقييم" %}
       </button>
       <button onclick="goBack()" class="btn btn-ghost" style="width:100%; margin-top:0.5rem; justify-content:center;">
