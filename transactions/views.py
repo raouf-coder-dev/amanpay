@@ -279,11 +279,28 @@ def dispute_transaction(request, pk):
         request.user == tx.delivery_company and
         tx.status in (Transaction.Status.DELIVERED,)
     )
-    if request.method == 'POST' and allowed:
+    if not allowed:
+        messages.error(request, _('لا يمكنك فتح نزاع على هذه الصفقة'))
+        return redirect('transactions:detail', pk=pk)
+
+    if request.method == 'POST':
+        reason = (request.POST.get('dispute_reason') or '').strip()
+        if len(reason) < 20:
+            messages.error(request, _('يجب أن يكون وصف المشكلة 20 حرفاً على الأقل'))
+            return render(request, 'transactions/open_dispute.html', {
+                'transaction': tx,
+                'dispute_reason': reason,
+            })
+        tx.dispute_reason = reason
+        tx.dispute_opened_by = request.user
+        tx.dispute_opened_at = timezone.now()
         tx.status = Transaction.Status.DISPUTED
         tx.save()
         messages.warning(request, _('تم رفع الإشكال — سيراجعه الفريق'))
-    return redirect('transactions:detail', pk=pk)
+        return redirect('transactions:detail', pk=pk)
+
+    # GET — اعرض نموذج وصف المشكلة
+    return render(request, 'transactions/open_dispute.html', {'transaction': tx})
 
 
 # ── buyer: review ───────────────────────────────────────────────────────────

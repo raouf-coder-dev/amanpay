@@ -7,12 +7,19 @@
 {% block content %}
 
 <!-- Header -->
-<div style="margin-bottom:24px;">
-  <h1 style="font-size:1.55rem; font-weight:900; display:flex; align-items:center; gap:0.6rem;">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue-primary);"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    {% trans "لوحة الأدمن" %}
-  </h1>
-  <p style="color:var(--text-secondary); font-size:0.87rem; margin-top:0.3rem;">{% trans "إحصائيات سلة AmanPay والعمولات" %}</p>
+<div style="margin-bottom:24px; display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+  <div>
+    <h1 style="font-size:1.55rem; font-weight:900; display:flex; align-items:center; gap:0.6rem;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue-primary);"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      {% trans "لوحة الأدمن" %}
+    </h1>
+    <p style="color:var(--text-secondary); font-size:0.87rem; margin-top:0.3rem;">{% trans "إحصائيات سلة AmanPay والعمولات" %}</p>
+  </div>
+  <a href="{% url 'accounts:admin_disputes' %}" class="btn btn-ghost" style="display:inline-flex; align-items:center; gap:0.5rem;">
+    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    {% trans "النزاعات" %}
+    {% if open_disputes_count > 0 %}<span class="badge badge-disputed">{{ open_disputes_count }}</span>{% endif %}
+  </a>
 </div>
 
 <!-- ── Section 1: User Stats ── -->

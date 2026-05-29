@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "فتح نزاع" %} #{{ transaction.code }} — AmanPay{% endblock %}
+
+{% block content %}
+
+<div style="max-width:640px; margin:0 auto;">
+  <div style="margin-bottom:24px;">
+    <h1 style="font-size:1.45rem; font-weight:900; display:flex; align-items:center; gap:0.6rem;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--red);"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      {% trans "فتح نزاع" %}
+    </h1>
+    <p style="color:var(--text-secondary); font-size:0.87rem; margin-top:0.3rem;">
+      {% trans "الصفقة" %} <span style="font-family:monospace; color:var(--blue-primary); font-weight:700;">#{{ transaction.code }}</span> — {{ transaction.product_name }}
+    </p>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">{% trans "وصف المشكلة" %}</div>
+    <form method="post" action="{% url 'transactions:dispute' transaction.pk %}">
+      {% csrf_token %}
+      <div class="form-group" style="margin-bottom:16px;">
+        <textarea class="form-input" name="dispute_reason" rows="5" minlength="20" required
+          placeholder="{% trans 'اشرح المشكلة بالتفصيل (الحدّ الأدنى 20 حرفاً)' %}">{{ dispute_reason|default:'' }}</textarea>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button type="submit" class="btn btn-danger">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          {% trans "إرسال النزاع" %}
+        </button>
+        <a href="{% url 'transactions:detail' transaction.pk %}" class="btn btn-ghost">{% trans "إلغاء" %}</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

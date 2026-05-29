@@ -82,6 +82,39 @@ class Transaction(models.Model):
         verbose_name=_('تاريخ الإفراج عن المبلغ'),
     )
 
+    # ── النزاعات ──────────────────────────────────────────────────────────
+    dispute_reason = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name=_('وصف النزاع'),
+    )
+    dispute_opened_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='disputes_opened',
+        verbose_name=_('فاتح النزاع'),
+    )
+    dispute_opened_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('تاريخ فتح النزاع'),
+    )
+    dispute_acknowledged_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('تاريخ الاطلاع على النزاع'),
+    )
+    dispute_acknowledged_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='disputes_acknowledged',
+        verbose_name=_('من اطّلع على النزاع'),
+    )
+
     class Meta:
         verbose_name = _('معاملة')
         verbose_name_plural = _('المعاملات')

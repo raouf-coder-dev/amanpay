@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "النزاعات" %} — AmanPay{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+  <div>
+    <h1 style="font-size:1.55rem; font-weight:900; display:flex; align-items:center; gap:0.6rem;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--red);"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      {% trans "النزاعات" %}
+    </h1>
+    <p style="color:var(--text-secondary); font-size:0.87rem; margin-top:0.3rem;">{% trans "مراجعة النزاعات المرفوعة على الصفقات" %}</p>
+  </div>
+  <a href="{% url 'accounts:admin_dashboard' %}" class="btn btn-ghost">{% trans "← العودة للوحة الأدمن" %}</a>
+</div>
+
+<!-- KPIs -->
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-bottom:16px;">
+  <div class="stat-card">
+    <div class="stat-value red">{{ open_count }}</div>
+    <div class="stat-label">{% trans "نزاعات مفتوحة" %}</div>
+    <div class="stat-sublabel">{% trans "لم يُطلَع عليها" %}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value green">{{ acknowledged_count }}</div>
+    <div class="stat-label">{% trans "تم الاطلاع عليها" %}</div>
+    <div class="stat-sublabel">{% trans "قيد المعالجة" %}</div>
+  </div>
+</div>
+
+{% if disputes %}
+  {% for tx in disputes %}
+  <div class="info-card">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+      <div>
+        <a href="{% url 'transactions:detail' tx.pk %}" style="font-family:monospace; font-weight:700; letter-spacing:.08em; color:var(--blue-primary); text-decoration:none; font-size:1.05rem;">#{{ tx.code }}</a>
+        <div style="color:var(--text-secondary); font-size:0.85rem; margin-top:0.25rem;">{{ tx.product_name }}</div>
+      </div>
+      {% if tx.dispute_acknowledged_at %}
+        <span class="badge badge-completed">{% trans "تم الاطلاع في" %} {{ tx.dispute_acknowledged_at|date:"Y-m-d H:i" }}</span>
+      {% else %}
+        <span class="badge badge-pending">{% trans "جديد — لم يُطلَع عليه" %}</span>
+      {% endif %}
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">{% trans "فتح النزاع" %}</span>
+      <span class="info-value">{{ tx.dispute_opened_by.username|default:"—" }}{% if tx.dispute_opened_by %} <span class="text-muted">({{ tx.dispute_opened_by.get_role_display }})</span>{% endif %}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">{% trans "تاريخ الفتح" %}</span>
+      <span class="info-value">{{ tx.dispute_opened_at|date:"Y-m-d H:i"|default:"—" }}</span>
+    </div>
+
+    <div style="margin-top:14px; padding:14px 16px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-md);">
+      <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:6px;">{% trans "وصف المشكلة" %}</div>
+      <div style="color:var(--text-primary); line-height:1.6; white-space:pre-wrap;">{{ tx.dispute_reason|default:"—" }}</div>
+    </div>
+
+    {% if not tx.dispute_acknowledged_at %}
+    <div style="margin-top:14px;">
+      <form method="post" action="{% url 'accounts:admin_acknowledge_dispute' tx.pk %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-sm">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          {% trans "تم الاطلاع" %}
+        </button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="info-card">
+    <div class="empty-state">
+      <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <div class="empty-state-title">{% trans "لا توجد نزاعات حالياً" %}</div>
+    </div>
+  </div>
+{% endif %}
+
+{% endblock %}

@@ -186,6 +186,9 @@ def admin_dashboard_view(request):
     pending   = Transaction.objects.filter(status='PENDING').count()
     funded    = Transaction.objects.filter(status='FUNDED').count()
     disputed  = Transaction.objects.filter(status='DISPUTED').count()
+    open_disputes_count = Transaction.objects.filter(
+        status='DISPUTED', dispute_acknowledged_at__isnull=True
+    ).count()
 
     platform     = PlatformWallet.get_instance()
     total_volume = Transaction.objects.filter(
@@ -362,6 +365,7 @@ def admin_dashboard_view(request):
         'pending':   pending,
         'funded':    funded,
         'disputed':  disputed,
+        'open_disputes_count': open_disputes_count,
         'platform':      platform,
         'total_volume':  total_volume,
         'monthly':       monthly,
@@ -405,6 +409,41 @@ def admin_platform_wallet(request):
         'avg_commission':   avg_commission,
         'commissions':      commissions,
     })
+
+
+@staff_member_required(login_url='accounts:login')
+def admin_disputes_view(request):
+    """قائمة النزاعات للأدمن (قراءة + إجراء الاطلاع فقط)."""
+    from transactions.models import Transaction
+
+    disputes = Transaction.objects.filter(
+        status=Transaction.Status.DISPUTED
+    ).select_related(
+        'seller', 'buyer', 'delivery_company', 'dispute_opened_by'
+    ).order_by('-dispute_opened_at')
+
+    open_count = disputes.filter(dispute_acknowledged_at__isnull=True).count()
+    acknowledged_count = disputes.filter(dispute_acknowledged_at__isnull=False).count()
+
+    return render(request, 'accounts/admin_disputes.html', {
+        'disputes':           disputes,
+        'open_count':         open_count,
+        'acknowledged_count': acknowledged_count,
+    })
+
+
+@staff_member_required(login_url='accounts:login')
+def admin_acknowledge_dispute_view(request, pk):
+    """تسجيل اطّلاع الأدمن على نزاع (POST فقط) — لا يغيّر حالة الصفقة."""
+    from transactions.models import Transaction
+
+    tx = get_object_or_404(Transaction, pk=pk, status=Transaction.Status.DISPUTED)
+    if request.method == 'POST' and tx.dispute_acknowledged_at is None:
+        tx.dispute_acknowledged_at = timezone.now()
+        tx.dispute_acknowledged_by = request.user
+        tx.save(update_fields=['dispute_acknowledged_at', 'dispute_acknowledged_by'])
+        messages.success(request, _('تم تسجيل الاطلاع على النزاع'))
+    return redirect('accounts:admin_disputes')
 
 
 @staff_member_required(login_url='accounts:login')
