@@ -16,6 +16,7 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
+    'raouf.pythonanywhere.com',
     'amanpay.pythonanywhere.com',
     '.pythonanywhere.com',
     '127.0.0.1',
@@ -23,6 +24,7 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://raouf.pythonanywhere.com',
     'https://amanpay.pythonanywhere.com',
     'https://*.pythonanywhere.com',
 ]
