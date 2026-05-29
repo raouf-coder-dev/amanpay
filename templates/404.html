@@ -1,0 +1,52 @@
+{% load i18n static %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'ar' }}" dir="{% if LANGUAGE_CODE == 'fr' %}ltr{% else %}rtl{% endif %}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% trans "الصفحة غير موجودة" %} — AmanPay</title>
+  <link rel="stylesheet" href="{% static 'css/design-system.css' %}">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; text-align: center;
+    }
+    .err-card {
+      max-width: 460px; width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 40px 28px;
+    }
+    .err-brand {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 1.1rem; font-weight: 800; color: var(--text-primary);
+      margin-bottom: 24px;
+    }
+    .err-brand svg { color: var(--blue-primary); }
+    .err-code {
+      font-size: 4.5rem; font-weight: 900; line-height: 1;
+      color: var(--blue-primary); margin-bottom: 8px;
+    }
+    .err-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
+    .err-text { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 28px; }
+  </style>
+</head>
+<body>
+  <div class="err-card">
+    <div class="err-brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      AmanPay
+    </div>
+    <div class="err-code">404</div>
+    <h1 class="err-title">{% trans "الصفحة غير موجودة" %}</h1>
+    <p class="err-text">{% trans "عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها." %}</p>
+    <a href="/" class="btn btn-primary">{% trans "العودة للصفحة الرئيسية" %}</a>
+  </div>
+</body>
+</html>

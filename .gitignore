@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+
+# Environment / secrets
+.env
+
+# ملاحظة: لا نتجاهل *.mo — تُجمَّع الترجمات عبر polib وتُرفَع مع المستودع
+# لأن gettext قد لا يتوفّر على خادم الإنتاج (PythonAnywhere)، فيعمل الفرنسي مباشرةً.
+
+# Tooling
+.claude/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
