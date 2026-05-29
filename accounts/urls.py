@@ -14,5 +14,6 @@ urlpatterns = [
     path('dashboard/delivery/', views.delivery_dashboard_view, name='delivery_dashboard'),
     path('settings/', views.settings_view, name='settings'),
     path('admin-dashboard/', views.admin_dashboard_view, name='admin_dashboard'),
+    path('admin-dashboard/platform/', views.admin_platform_wallet, name='admin_platform_wallet'),
     path('admin-dashboard/user/<int:user_id>/', views.admin_user_detail, name='admin_user_detail'),
 ]

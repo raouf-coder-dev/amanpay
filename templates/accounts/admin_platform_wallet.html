@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "سلة AmanPay" %} — AmanPay{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+  <div>
+    <h1 style="font-size:1.55rem; font-weight:900; display:flex; align-items:center; gap:0.6rem;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue-primary);"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      {% trans "سلة AmanPay" %}
+    </h1>
+    <p style="color:var(--text-secondary); font-size:0.87rem; margin-top:0.3rem;">{% trans "أرباح المنصة وتفصيل العمولات — عرض القراءة فقط" %}</p>
+  </div>
+  <a href="{% url 'accounts:admin_dashboard' %}" class="btn btn-ghost">{% trans "← العودة للوحة الأدمن" %}</a>
+</div>
+
+<!-- ── Section 1: KPIs ── -->
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-bottom:16px;">
+  <div class="stat-card">
+    <div class="stat-value green">{{ platform.balance|floatformat:2 }}</div>
+    <div class="stat-label">{% trans "إجمالي أرباح المنصة" %}</div>
+    <div class="stat-sublabel">{% trans "دج" %}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value blue">{{ commission_count }}</div>
+    <div class="stat-label">{% trans "صفقات ولّدت عمولة" %}</div>
+    <div class="stat-sublabel">{% trans "سجل عمولة" %}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value yellow">{{ avg_commission|floatformat:2 }}</div>
+    <div class="stat-label">{% trans "متوسط العمولة لكل صفقة" %}</div>
+    <div class="stat-sublabel">{% trans "دج" %}</div>
+  </div>
+</div>
+
+<!-- ── Section 2: Commission log ── -->
+<div class="info-card">
+  <div class="info-card-title">{% trans "سجل العمولات" %}</div>
+  {% if commissions %}
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{% trans "الصفقة" %}</th>
+          <th>{% trans "مبلغ الصفقة" %}</th>
+          <th>{% trans "نسبة العمولة" %}</th>
+          <th>{% trans "العمولة المخصومة" %}</th>
+          <th>{% trans "التاريخ" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in commissions %}
+        <tr>
+          <td><a href="{% url 'transactions:detail' log.transaction.pk %}" class="btn btn-ghost btn-sm" style="font-family:monospace;letter-spacing:.08em;">#{{ log.transaction.code }}</a></td>
+          <td style="font-weight:600;">{{ log.original_amount|floatformat:2 }} {% trans "دج" %}</td>
+          <td>
+            {% if log.commission_rate == 2.0 %}<span class="badge badge-completed">2%</span>
+            {% elif log.commission_rate == 1.5 %}<span class="badge badge-pending">1.5%</span>
+            {% else %}<span class="badge badge-funded">1%</span>{% endif %}
+          </td>
+          <td style="font-weight:700;color:var(--yellow);">{{ log.commission_amount|floatformat:2 }} {% trans "دج" %}</td>
+          <td class="text-muted text-sm">{{ log.created_at|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    <div class="empty-state-title">{% trans "لا عمولات بعد." %}</div>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

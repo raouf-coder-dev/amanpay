@@ -209,6 +209,7 @@ def complete_transaction(request, pk):
         buyer_wallet = Wallet.objects.select_for_update().get(
             user=transaction.buyer
         )
+        buyer_balance_before = buyer_wallet.balance   # اقرأ القيمة الفعلية قبل أي تعديل
         buyer_wallet.balance -= amount
         buyer_wallet.frozen_balance -= amount
         buyer_wallet.save()
@@ -219,6 +220,7 @@ def complete_transaction(request, pk):
             transaction=transaction,
             type='DEBIT',
             amount=amount,
+            balance_before=buyer_balance_before,
             balance_after=buyer_wallet.balance,
             description=f'خصم صفقة {transaction.code} — عمولة {rate}%'
         )
@@ -227,6 +229,7 @@ def complete_transaction(request, pk):
         seller_wallet = Wallet.objects.select_for_update().get(
             user=transaction.seller
         )
+        seller_balance_before = seller_wallet.balance   # اقرأ القيمة الفعلية قبل أي تعديل
         seller_wallet.balance += seller_receives
         seller_wallet.save()
         seller_wallet.refresh_from_db()
@@ -236,6 +239,7 @@ def complete_transaction(request, pk):
             transaction=transaction,
             type='CREDIT',
             amount=seller_receives,
+            balance_before=seller_balance_before,
             balance_after=seller_wallet.balance,
             description=f'تحويل صفقة {transaction.code} بعد عمولة {rate}%'
         )

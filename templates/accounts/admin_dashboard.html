@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}{% trans "لوحة الأدمن" %} — AmanPay{% endblock %}
 
@@ -159,15 +160,37 @@
   </div>
 </div>
 
-<!-- ── Section: Monthly Commissions Chart ── -->
-{% if monthly_chart %}
+<!-- ── Section: Commission trend (Line) ── -->
 <div class="chart-container">
-  <div style="font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:12px;">{% trans "العمولات الشهرية" %}</div>
-  <div style="position:relative; height:240px;">
-    <canvas id="commissionsChart"></canvas>
-  </div>
+  <div style="font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:12px;">{% trans "تطوّر عمولات المنصة" %}</div>
+  {% if commission_trend %}
+    {{ commission_trend|json_script:"commission-trend-data" }}
+    <div style="position:relative; height:280px;">
+      <canvas id="commissionTrendChart"></canvas>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      <div class="empty-state-title">{% trans "لا عمولات مسجّلة بعد" %}</div>
+    </div>
+  {% endif %}
 </div>
-{% endif %}
+
+<!-- ── Section: Platform activity — last 7 days (Bar) ── -->
+<div class="chart-container">
+  <div style="font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:12px;">{% trans "نشاط المنصة — آخر 7 أيام" %}</div>
+  {% if daily_transactions %}
+    {{ daily_transactions|json_script:"daily-tx-data" }}
+    <div style="position:relative; height:280px;">
+      <canvas id="dailyTxChart"></canvas>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+      <div class="empty-state-title">{% trans "لا نشاط مسجّل بعد" %}</div>
+    </div>
+  {% endif %}
+</div>
 
 <!-- ── Section 4: Last 10 Transactions (+ Feature 2: filter) ── -->
 <div class="info-card">
@@ -389,37 +412,95 @@
 {% endblock %}
 
 {% block extra_js %}
-{% if monthly_chart %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+{% if commission_trend or daily_transactions %}
+<script src="{% static 'js/chart.umd.min.js' %}"></script>
 <script>
   (function() {
-    var canvas = document.getElementById('commissionsChart');
-    if (!canvas || typeof Chart === 'undefined') return;
-
-    var labels = [{% for row in monthly_chart %}"{{ row.label|escapejs }}"{% if not forloop.last %},{% endif %}{% endfor %}];
-    var values = [{% for row in monthly_chart %}{{ row.total|stringformat:".2f" }}{% if not forloop.last %},{% endif %}{% endfor %}];
+    if (typeof Chart === 'undefined') return;
 
     var cs = getComputedStyle(document.documentElement);
-    var blue   = cs.getPropertyValue('--blue-primary').trim() || '#2563EB';
-    var border = cs.getPropertyValue('--border').trim() || 'rgba(255,255,255,0.06)';
-    var muted  = cs.getPropertyValue('--text-muted').trim() || '#9CA3AF';
-
-    new Chart(canvas, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{ data: values, backgroundColor: blue, borderRadius: 6, maxBarThickness: 60 }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          y: { beginAtZero: true, grid: { color: border }, ticks: { color: muted } },
-          x: { grid: { display: false }, ticks: { color: muted } }
-        }
+    function cssVar(name, fallback) {
+      return (cs.getPropertyValue(name) || '').trim() || fallback;
+    }
+    // تحويل لون متغيّر إلى rgba بشفافية (لتعبئة منطقة الخط)
+    function withAlpha(color, alpha) {
+      var c = color.trim();
+      if (c.charAt(0) === '#') {
+        var h = c.slice(1);
+        if (h.length === 3) { h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2]; }
+        var n = parseInt(h, 16);
+        return 'rgba(' + ((n>>16)&255) + ',' + ((n>>8)&255) + ',' + (n&255) + ',' + alpha + ')';
       }
-    });
+      if (c.indexOf('rgb(') === 0) {
+        return c.replace('rgb(', 'rgba(').replace(')', ',' + alpha + ')');
+      }
+      return c;
+    }
+
+    var gridColor = cssVar('--border', 'rgba(255,255,255,0.06)');
+    var tickColor = cssVar('--text-secondary', '#9CA3AF');
+    var commonScales = {
+      y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor } },
+      x: { grid: { display: false }, ticks: { color: tickColor } }
+    };
+
+    // ── الرسم 1: تطوّر العمولات (Line) ──
+    var trendEl = document.getElementById('commission-trend-data');
+    var trendCanvas = document.getElementById('commissionTrendChart');
+    if (trendEl && trendCanvas) {
+      var trend = JSON.parse(trendEl.textContent);
+      var blue = cssVar('--blue-primary', '#2563EB');
+      new Chart(trendCanvas, {
+        type: 'line',
+        data: {
+          labels: trend.labels,
+          datasets: [{
+            data: trend.values,
+            borderColor: blue,
+            backgroundColor: withAlpha(blue, 0.15),
+            tension: 0.3,
+            fill: true,
+            pointRadius: 4,
+            pointBackgroundColor: blue
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: commonScales
+        }
+      });
+    }
+
+    // ── الرسم 2: نشاط المنصة (Bar) ──
+    var txEl = document.getElementById('daily-tx-data');
+    var txCanvas = document.getElementById('dailyTxChart');
+    if (txEl && txCanvas) {
+      var tx = JSON.parse(txEl.textContent);
+      var accent = cssVar('--accent-secondary', '#60A5FA');
+      new Chart(txCanvas, {
+        type: 'bar',
+        data: {
+          labels: tx.labels,
+          datasets: [{
+            data: tx.values,
+            backgroundColor: accent,
+            borderRadius: 6,
+            maxBarThickness: 48
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor, precision: 0 } },
+            x: { grid: { display: false }, ticks: { color: tickColor } }
+          }
+        }
+      });
+    }
   })();
 </script>
 {% endif %}

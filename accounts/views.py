@@ -173,8 +173,6 @@ def settings_view(request):
 @staff_member_required(login_url='accounts:login')
 def admin_dashboard_view(request):
     from transactions.models import Transaction
-    from django.db.models.functions import TruncMonth
-    from datetime import timedelta
 
     now = timezone.now()
 
@@ -269,24 +267,87 @@ def admin_dashboard_view(request):
     # ── All users (latest 50, with wallet prefetched) ──────────────────────
     all_users = User.objects.select_related('wallet').order_by('-id')[:50]
 
-    # ── Feature 3: monthly commissions chart — last 6 months ────────────────
-    six_months_ago = (now - timedelta(days=183)).replace(day=1)
-    monthly_qs = (
-        CommissionLog.objects
-        .filter(created_at__gte=six_months_ago)
-        .annotate(month=TruncMonth('created_at'))
-        .values('month')
-        .annotate(total=Sum('commission_amount'), count=Count('id'))
-        .order_by('month')
-    )
-    monthly_chart = [
-        {
-            'label': row['month'].strftime('%Y-%m'),
-            'total': float(row['total'] or 0),
-            'count': row['count'],
-        }
-        for row in monthly_qs
-    ]
+    # ── Charts: تطوّر العمولات + نشاط المنصة ─────────────────────────────────
+    from django.db.models.functions import TruncMonth, TruncDate
+    from datetime import timedelta, date
+
+    # خرائط عربية ثابتة (لا تعتمد على locale النظام) — أسماء جزائرية للأشهر
+    AR_MONTHS = {
+        1: 'جانفي', 2: 'فيفري', 3: 'مارس', 4: 'أفريل', 5: 'ماي', 6: 'جوان',
+        7: 'جويلية', 8: 'أوت', 9: 'سبتمبر', 10: 'أكتوبر', 11: 'نوفمبر', 12: 'ديسمبر',
+    }
+    AR_DAYS = {
+        0: 'الإثنين', 1: 'الثلاثاء', 2: 'الأربعاء', 3: 'الخميس',
+        4: 'الجمعة', 5: 'السبت', 6: 'الأحد',
+    }
+
+    today = timezone.localdate()
+
+    # ── الرسم 1: تطوّر العمولات (يومي إن كانت كلها في شهر واحد، وإلا شهري) ────
+    commission_trend = None
+    if CommissionLog.objects.exists():
+        distinct_months = (
+            CommissionLog.objects
+            .annotate(mn=TruncMonth('created_at'))
+            .values('mn').distinct().count()
+        )
+        if distinct_months <= 1:
+            # daily — آخر 14 يوماً
+            start = today - timedelta(days=13)
+            rows = (
+                CommissionLog.objects
+                .filter(created_at__date__gte=start)
+                .annotate(d=TruncDate('created_at'))
+                .values('d')
+                .annotate(total=Sum('commission_amount'))
+            )
+            by_day = {r['d']: float(r['total'] or 0) for r in rows}
+            labels, values = [], []
+            for i in range(14):
+                day = start + timedelta(days=i)
+                labels.append(f"{day.day} {AR_MONTHS[day.month]}")
+                values.append(by_day.get(day, 0.0))
+            commission_trend = {'mode': 'daily', 'labels': labels, 'values': values}
+        else:
+            # monthly — آخر 6 أشهر
+            buckets = []
+            y, m = today.year, today.month
+            for _ in range(6):
+                buckets.append((y, m))
+                m -= 1
+                if m == 0:
+                    m, y = 12, y - 1
+            buckets.reverse()
+            rows = (
+                CommissionLog.objects
+                .filter(created_at__date__gte=date(buckets[0][0], buckets[0][1], 1))
+                .annotate(mn=TruncMonth('created_at'))
+                .values('mn')
+                .annotate(total=Sum('commission_amount'))
+            )
+            by_month = {(r['mn'].year, r['mn'].month): float(r['total'] or 0) for r in rows}
+            labels = [f"{AR_MONTHS[mm]} {yy}" for (yy, mm) in buckets]
+            values = [by_month.get((yy, mm), 0.0) for (yy, mm) in buckets]
+            commission_trend = {'mode': 'monthly', 'labels': labels, 'values': values}
+
+    # ── الرسم 2: حجم المعاملات يومياً — آخر 7 أيام ───────────────────────────
+    daily_transactions = None
+    if total_transactions:
+        start7 = today - timedelta(days=6)
+        tx_rows = (
+            Transaction.objects
+            .filter(created_at__date__gte=start7)
+            .annotate(d=TruncDate('created_at'))
+            .values('d')
+            .annotate(c=Count('id'))
+        )
+        tx_by_day = {r['d']: r['c'] for r in tx_rows}
+        labels, values = [], []
+        for i in range(7):
+            day = start7 + timedelta(days=i)
+            labels.append(AR_DAYS[day.weekday()])
+            values.append(tx_by_day.get(day, 0))
+        daily_transactions = {'labels': labels, 'values': values}
 
     # خيارات حالات الصفقة لـ select الفلتر (نمرّر الـ choices الكاملة)
     status_choices = Transaction.Status.choices
@@ -318,8 +379,31 @@ def admin_dashboard_view(request):
         'status_filter':  status_filter,
         'status_choices': status_choices,
         'filter_active':  filter_active,
-        # chart
-        'monthly_chart':  monthly_chart,
+        # charts
+        'commission_trend':   commission_trend,
+        'daily_transactions': daily_transactions,
+    })
+
+
+@staff_member_required(login_url='accounts:login')
+def admin_platform_wallet(request):
+    """سلة AmanPay — أرباح المنصة وتفصيل العمولات (قراءة فقط)."""
+    platform = PlatformWallet.get_instance()
+
+    commissions = CommissionLog.objects.select_related(
+        'transaction', 'transaction__seller', 'transaction__buyer'
+    ).order_by('-created_at')
+
+    agg = commissions.aggregate(total=Sum('commission_amount'), count=Count('id'))
+    commission_count = agg['count'] or 0
+    total_commission = agg['total'] or 0
+    avg_commission = (total_commission / commission_count) if commission_count else 0
+
+    return render(request, 'accounts/admin_platform_wallet.html', {
+        'platform':         platform,
+        'commission_count': commission_count,
+        'avg_commission':   avg_commission,
+        'commissions':      commissions,
     })
 
 
