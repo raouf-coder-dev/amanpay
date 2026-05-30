@@ -125,6 +125,20 @@ html.light {
 }
 
 /* ===================================================================
+   حماية عامة من horizontal overflow (موبايل) + ضبط الوسائط
+   لا تكسر Desktop — تنطبق على كل المقاسات.
+   =================================================================== */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===================================================================
    الأزرار الموحّدة
    كل الأزرار: padding 10px 20px، خط 14px، وزن 600،
    زوايا --radius-sm، transition، cursor pointer.
@@ -1420,3 +1434,51 @@ html[dir="rtl"] .form-select {
 .icon-sm { width: 16px; height: 16px; }
 .icon-lg { width: 32px; height: 32px; }
 .icon-xl { width: 48px; height: 48px; }
+
+/* ===================================================================
+   إصلاحات الموبايل — تنطبق فقط على المقاسات الصغيرة
+   نقطة الفصل: ≤899px للموبايل، Desktop ≥900px (لا يُمَسّ تصميم Desktop)
+   =================================================================== */
+
+/* ≤899px — يطابق نقطة الفصل المعتمدة للـHero (.hero-grid يصبح عموداً واحداً) */
+@media (max-width: 899px) {
+  /* تعطيل الـ3D transform لبطاقة الـmockup على الموبايل (احتياط — مطبَّق فقط ≥900px أصلاً) */
+  .hero-mockup {
+    transform: none !important;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ضمان عمود واحد للـHero — قد تكون قاعدة تفصيلية مطلوبة لو تجاوز عنصر داخلي */
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ≤768px — الـnavbar يحتاج padding أصغر + التفاف الأزرار حتى لا يكسر السطر */
+@media (max-width: 768px) {
+  .navbar {
+    padding-inline: 12px;
+  }
+  .navbar-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .navbar-start {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* زر «سلة AmanPay» للأدمن: لا يكسر التخطيط ولا يفيض */
+  .btn-admin {
+    flex-shrink: 0;
+  }
+}
+
+/* ≤480px — هواتف صغيرة جداً: إلغاء min-width على حقول الفلاتر لمنع تجاوز عرض الفيوبورت */
+@media (max-width: 480px) {
+  .form-group .form-input,
+  .form-group .form-select {
+    min-width: 0 !important;
+    width: 100%;
+  }
+}
