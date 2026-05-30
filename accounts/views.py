@@ -35,6 +35,22 @@ def landing_view(request):
     return render(request, 'accounts/landing.html')
 
 
+def home_redirect_view(request):
+    """لوغو الـnavbar: يقود لوجهة مناسبة حسب دور المستخدم."""
+    if not request.user.is_authenticated:
+        return redirect('accounts:landing')
+    if request.user.is_staff:
+        return redirect('accounts:admin_dashboard')
+    role = getattr(request.user, 'role', None)
+    if role == User.Role.SELLER:
+        return redirect('accounts:seller_dashboard')
+    if role == User.Role.BUYER:
+        return redirect('accounts:buyer_dashboard')
+    if role == User.Role.DELIVERY:
+        return redirect('accounts:delivery_dashboard')
+    return redirect('accounts:landing')
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('accounts:dashboard')
