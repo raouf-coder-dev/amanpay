@@ -217,25 +217,37 @@
 
   <div class="navbar-actions">
     {% if user.is_authenticated %}
-      {% if CURRENT_LANG == 'fr' %}
-        <a href="{% if user.is_staff %}/fr/admin-dashboard/{% elif user.role == 'BUYER' %}/fr/dashboard/buyer/{% elif user.role == 'SELLER' %}/fr/dashboard/seller/{% elif user.role == 'DELIVERY' %}/fr/dashboard/delivery/{% else %}/fr/dashboard/{% endif %}"
-           class="navbar-btn" title="{% trans 'الرئيسية' %}">
-      {% else %}
-        <a href="{% if user.is_staff %}{% url 'accounts:admin_dashboard' %}{% elif user.role == 'BUYER' %}{% url 'accounts:buyer_dashboard' %}{% elif user.role == 'SELLER' %}{% url 'accounts:seller_dashboard' %}{% elif user.role == 'DELIVERY' %}{% url 'accounts:delivery_dashboard' %}{% else %}{% url 'accounts:dashboard' %}{% endif %}"
-           class="navbar-btn" title="{% trans 'الرئيسية' %}">
-      {% endif %}
-        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      </a>
       {% if user.is_staff %}
         <a href="{% url 'accounts:admin_platform_wallet' %}" class="btn-admin">
           <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
           {% trans "سلة AmanPay" %}
         </a>
       {% endif %}
-      <a href="{% url 'accounts:settings' %}" class="navbar-user">
-        <span class="navbar-avatar">{{ user.username|first|upper }}</span>
-        <span class="navbar-user-name">{{ user.username }}</span>
-      </a>
+      <div class="user-dropdown" id="userDropdown">
+        <button type="button" class="user-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          <span class="navbar-avatar">{{ user.username|first|upper }}</span>
+          <span class="navbar-user-name">{{ user.username }}</span>
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="user-dropdown-menu" role="menu">
+          <div class="menu-header">
+            <div class="menu-header-name">{{ user.username }}</div>
+            <div class="menu-header-role">{{ user.get_role_display|default:"—" }}</div>
+          </div>
+          <div class="menu-divider"></div>
+          <a href="{% url 'accounts:settings' %}" class="menu-item" role="menuitem">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            {% trans "حسابي" %}
+          </a>
+          <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="menu-item danger" role="menuitem">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              {% trans "تسجيل الخروج" %}
+            </button>
+          </form>
+        </div>
+      </div>
     {% endif %}
 
     {# ── Theme toggle ── #}
@@ -262,12 +274,7 @@
       </form>
     {% endif %}
 
-    {% if user.is_authenticated %}
-      <a href="{% url 'accounts:logout' %}" class="btn-logout">
-        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        {% trans "خروج" %}
-      </a>
-    {% else %}
+    {% if not user.is_authenticated %}
       <a href="{% url 'accounts:login' %}" class="btn btn-ghost">
         {% trans "تسجيل الدخول" %}
       </a>
@@ -300,6 +307,34 @@
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+  })();
+
+  // قائمة المستخدم المنسدلة (vanilla — toggle + outside click + Escape)
+  (function() {
+    var dd = document.getElementById('userDropdown');
+    if (!dd) return;
+    var toggle = dd.querySelector('.user-dropdown-toggle');
+    if (!toggle) return;
+
+    function close() {
+      dd.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+    function open() {
+      dd.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (dd.classList.contains('is-open')) close(); else open();
+    });
+    document.addEventListener('click', function(e) {
+      if (!dd.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') close();
+    });
   })();
 </script>
 

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-29 12:24+0100\n"
+"POT-Creation-Date: 2026-06-01 17:52+0100\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -238,7 +238,7 @@ msgstr "Dernière mise à jour"
 #: .\accounts\models.py:209 .\templates\accounts\admin_dashboard.html:150
 #: .\templates\accounts\admin_platform_wallet.html:4
 #: .\templates\accounts\admin_platform_wallet.html:13
-#: .\templates\base.html:232
+#: .\templates\base.html:223
 msgid "سلة AmanPay"
 msgstr "Caisse AmanPay"
 
@@ -270,31 +270,57 @@ msgstr "Journal de commission"
 msgid "سجلات العمولات"
 msgstr "Journaux des commissions"
 
-#: .\accounts\views.py:57
+#: .\accounts\views.py:73
 msgid "اسم المستخدم أو كلمة المرور غير صحيحة"
 msgstr "Nom d'utilisateur ou mot de passe incorrect"
 
-#: .\accounts\views.py:81
+#: .\accounts\views.py:97
 msgid "تم إنشاء حسابك بنجاح!"
 msgstr "Votre compte a été créé avec succès !"
 
-#: .\accounts\views.py:168
+#: .\accounts\views.py:184
 msgid "تم حفظ التغييرات بنجاح"
 msgstr "Modifications enregistrées avec succès"
 
-#: .\accounts\views.py:445
-#| msgid "تم تأكيد استلام الطرد"
+#: .\accounts\views.py:461
 msgid "تم تسجيل الاطلاع على النزاع"
 msgstr "Litige marqué comme consulté"
 
 # ── Languages ──
-#: .\core\settings.py:82
+#: .\core\settings.py:100
 msgid "العربية"
 msgstr "Arabe"
 
-#: .\core\settings.py:83
+#: .\core\settings.py:101
 msgid "Français"
 msgstr "Français"
+
+#: .\templates\404.html:6 .\templates\404.html:47
+#| msgid "الصفقات المكتملة"
+msgid "الصفحة غير موجودة"
+msgstr "Page introuvable"
+
+#: .\templates\404.html:48
+msgid "عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها."
+msgstr ""
+"Désolé, la page que vous recherchez est introuvable ou a été déplacée."
+
+# ── Admin Dashboard ──
+#: .\templates\404.html:49 .\templates\500.html:49
+#| msgid "← العودة للوحة الأدمن"
+msgid "العودة للصفحة الرئيسية"
+msgstr "Retour à l'accueil"
+
+#: .\templates\500.html:6 .\templates\500.html:47
+#| msgid "في النظام"
+msgid "خطأ في الخادم"
+msgstr "Erreur serveur"
+
+#: .\templates\500.html:48
+msgid "حدث خطأ غير متوقّع. نعمل على إصلاحه — حاول مرة أخرى لاحقاً."
+msgstr ""
+"Une erreur inattendue s'est produite. Nous y travaillons — réessayez plus "
+"tard."
 
 # ── Admin Dashboard ──
 #: .\templates\accounts\admin_dashboard.html:5
@@ -650,7 +676,6 @@ msgid "لا يوجد بائعون بعد."
 msgstr "Aucun vendeur pour le moment."
 
 #: .\templates\accounts\admin_disputes.html:15
-#| msgid "جميع العمليات المالية على محفظتك"
 msgid "مراجعة النزاعات المرفوعة على الصفقات"
 msgstr "Examen des litiges signalés sur les transactions"
 
@@ -666,22 +691,18 @@ msgid "نزاعات مفتوحة"
 msgstr "Litiges ouverts"
 
 #: .\templates\accounts\admin_disputes.html:25
-#| msgid "متنازع عليها"
 msgid "لم يُطلَع عليها"
 msgstr "Non consultés"
 
 #: .\templates\accounts\admin_disputes.html:29
-#| msgid "متنازع عليها"
 msgid "تم الاطلاع عليها"
 msgstr "Consultés"
 
 #: .\templates\accounts\admin_disputes.html:30
-#| msgid "كود المعاملة"
 msgid "قيد المعالجة"
 msgstr "En cours de traitement"
 
 #: .\templates\accounts\admin_disputes.html:43
-#| msgid "تم التسليم"
 msgid "تم الاطلاع في"
 msgstr "Consulté le"
 
@@ -690,28 +711,23 @@ msgid "جديد — لم يُطلَع عليه"
 msgstr "Nouveau — non consulté"
 
 #: .\templates\accounts\admin_disputes.html:50
-#| msgid "فتح نزاع"
 msgid "فتح النزاع"
 msgstr "Ouvert par"
 
 #: .\templates\accounts\admin_disputes.html:54
-#| msgid "تاريخ الإفراج"
 msgid "تاريخ الفتح"
 msgstr "Date d'ouverture"
 
 #: .\templates\accounts\admin_disputes.html:59
 #: .\templates\transactions\open_dispute.html:20
-#| msgid "وصف المتجر"
 msgid "وصف المشكلة"
 msgstr "Description du problème"
 
 #: .\templates\accounts\admin_disputes.html:69
-#| msgid "تم الشحن"
 msgid "تم الاطلاع"
 msgstr "Marquer comme consulté"
 
 #: .\templates\accounts\admin_disputes.html:80
-#| msgid "لا توجد إجراءات متاحة حالياً."
 msgid "لا توجد نزاعات حالياً"
 msgstr "Aucun litige pour le moment"
 
@@ -983,7 +999,7 @@ msgstr "Vous avez déjà un compte ?"
 
 #: .\templates\accounts\landing.html:42 .\templates\accounts\login.html:4
 #: .\templates\accounts\login.html:9 .\templates\accounts\register.html:192
-#: .\templates\base.html:272
+#: .\templates\base.html:279
 msgid "تسجيل الدخول"
 msgstr "Connexion"
 
@@ -1167,7 +1183,7 @@ msgid "سجّل الآن"
 msgstr "Inscrivez-vous"
 
 #: .\templates\accounts\register.html:4 .\templates\accounts\register.html:65
-#: .\templates\base.html:275
+#: .\templates\base.html:282
 msgid "حساب جديد"
 msgstr "Nouveau compte"
 
@@ -1346,24 +1362,25 @@ msgstr "Nouveau solde"
 msgid "لا توجد عمليات مالية بعد."
 msgstr "Aucune opération financière pour le moment."
 
-#: .\templates\base.html:222 .\templates\base.html:225
-msgid "الرئيسية"
-msgstr "Accueil"
+#: .\templates\base.html:240
+#| msgid "حساب جديد"
+msgid "حسابي"
+msgstr "Mon compte"
 
-#: .\templates\base.html:243
+# ── Base ──
+#: .\templates\base.html:246
+msgid "تسجيل الخروج"
+msgstr "Déconnexion"
+
+#: .\templates\base.html:255
 msgid "تبديل المظهر"
 msgstr "Changer le thème"
-
-#: .\templates\base.html:268
-msgid "خروج"
-msgstr "Déconnexion"
 
 #: .\templates\transactions\open_dispute.html:25
 msgid "اشرح المشكلة بالتفصيل (الحدّ الأدنى 20 حرفاً)"
 msgstr "Décrivez le problème en détail (20 caractères minimum)"
 
 #: .\templates\transactions\open_dispute.html:30
-#| msgid "إرسال الإشكال"
 msgid "إرسال النزاع"
 msgstr "Envoyer le litige"
 
@@ -1667,27 +1684,22 @@ msgid "تاريخ الإفراج عن المبلغ"
 msgstr "Date de libération du montant"
 
 #: .\transactions\models.py:89
-#| msgid "وصف المتجر"
 msgid "وصف النزاع"
 msgstr "Description du litige"
 
 #: .\transactions\models.py:97
-#| msgid "فتح نزاع"
 msgid "فاتح النزاع"
 msgstr "Auteur du litige"
 
 #: .\transactions\models.py:102
-#| msgid "تاريخ الإنشاء"
 msgid "تاريخ فتح النزاع"
 msgstr "Date d'ouverture du litige"
 
 #: .\transactions\models.py:107
-#| msgid "تاريخ الإفراج عن المبلغ"
 msgid "تاريخ الاطلاع على النزاع"
 msgstr "Date de consultation du litige"
 
 #: .\transactions\models.py:115
-#| msgid "الصفقة قيد النزاع"
 msgid "من اطّلع على النزاع"
 msgstr "Consulté par"
 
@@ -1765,7 +1777,6 @@ msgid "تم تأكيد استلام الطرد"
 msgstr "Réception du colis confirmée"
 
 #: .\transactions\views.py:283
-#| msgid "لا يمكن الانسحاب في هذه المرحلة"
 msgid "لا يمكنك فتح نزاع على هذه الصفقة"
 msgstr "Vous ne pouvez pas ouvrir de litige sur cette transaction"
 
@@ -1788,6 +1799,12 @@ msgstr "Votre avis a été envoyé avec succès"
 #: .\transactions\views.py:338
 msgid "ليس لديك صلاحية لعرض هذه الصفقة"
 msgstr "Vous n'avez pas accès à cette transaction"
+
+#~ msgid "الرئيسية"
+#~ msgstr "Accueil"
+
+#~ msgid "خروج"
+#~ msgstr "Déconnexion"
 
 #~ msgid "هل تريد رفع إشكال لهذه الصفقة؟"
 #~ msgstr "Voulez-vous signaler un litige pour cette transaction ?"
@@ -1842,10 +1859,6 @@ msgstr "Vous n'avez pas accès à cette transaction"
 
 #~ msgid "رسوم خفية"
 #~ msgstr "Frais cachés"
-
-# ── Base ──
-#~ msgid "تسجيل الخروج"
-#~ msgstr "Déconnexion"
 
 #~ msgid "الرجوع"
 #~ msgstr "Retour"
