@@ -560,28 +560,40 @@ img, svg {
   margin: 4px 0;
 }
 
-.user-dropdown-menu .menu-item {
+/* قواعد reset قويّة لـ<a>/<button> داخل القائمة (تتغلّب على أنماط المتصفّح الافتراضية) */
+.user-dropdown-menu .menu-item,
+.user-dropdown-menu a.menu-item,
+.user-dropdown-menu button.menu-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
-  color: var(--text-primary);
+  color: var(--text-primary) !important;    /* يبطل لون link الافتراضي (visited/active) */
+  text-decoration: none !important;          /* يبطل underline على <a> */
   text-align: start;
   background: transparent;
-  border: none;
+  border: none !important;                   /* يبطل border زر افتراضي */
   cursor: pointer;
   font-family: inherit;
   font-size: var(--fs-body);
-  text-decoration: none;
-  transition: background 0.15s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
-.user-dropdown-menu .menu-item:hover {
+.user-dropdown-menu .menu-item:hover,
+.user-dropdown-menu a.menu-item:hover,
+.user-dropdown-menu button.menu-item:hover {
   background: var(--bg-secondary);
+  color: var(--text-primary) !important;
 }
-.user-dropdown-menu .menu-item.danger {
-  color: var(--red);
+.user-dropdown-menu .menu-item.danger,
+.user-dropdown-menu button.menu-item.danger {
+  color: var(--red) !important;
+}
+.user-dropdown-menu .menu-item.danger:hover,
+.user-dropdown-menu button.menu-item.danger:hover {
+  background: var(--red-bg);                 /* خلفية حمراء خفيفة من المتغيرات */
+  color: var(--red) !important;
 }
 
 .logout-form { margin: 0; }
@@ -1582,66 +1594,87 @@ html[dir="rtl"] .form-select {
    =================================================================== */
 .demo-accounts {
   margin-top: 24px;
-  padding: 16px;
+  padding: 20px;
   background: var(--bg-secondary);
   border: 1px dashed var(--border);
   border-radius: var(--radius-md);
 }
 .demo-accounts-header {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 10px;
   font-size: var(--fs-body); font-weight: 600;
-  color: var(--text-secondary); margin-bottom: 12px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
 }
 .demo-accounts-list {
-  display: flex; flex-direction: column; gap: 8px;
-  margin-bottom: 12px;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 .demo-account {
   display: grid;
-  grid-template-columns: 100px 1fr auto;
-  gap: 8px; align-items: center;
-  padding: 8px 12px;
+  grid-template-columns: 90px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+.demo-account:hover {
+  border-color: var(--accent-secondary);
+}
+.demo-role {
+  color: var(--blue-primary);
+  font-weight: 700;
   font-size: 0.9rem;
 }
-.demo-role { color: var(--blue-primary); font-weight: 600; }
 .demo-credentials {
   font-family: 'Courier New', monospace;
   color: var(--text-primary);
   font-size: 0.85rem;
+  letter-spacing: 0.3px;
   overflow-wrap: anywhere;
 }
 .demo-fill {
-  background: transparent;
+  background: var(--blue-primary);
   border: 1px solid var(--blue-primary);
-  padding: 4px 12px;
+  padding: 6px 16px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 0.8rem;
-  color: var(--blue-primary);
+  font-size: 0.85rem;
+  color: #FFFFFF;
   font-family: inherit;
+  font-weight: 600;
   transition: all 0.2s ease;
 }
 .demo-fill:hover {
-  background: var(--blue-primary);
-  color: #FFFFFF;
+  background: var(--accent-secondary);
+  border-color: var(--accent-secondary);
 }
 .demo-note {
   font-size: 0.85rem;
   color: var(--text-secondary);
   text-align: center;
   margin: 0;
+  padding-top: 4px;
 }
 .demo-note strong {
   font-family: 'Courier New', monospace;
-  color: var(--text-primary);
+  color: var(--blue-primary);
+  background: var(--bg-card);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
 }
 @media (max-width: 600px) {
   .demo-account {
     grid-template-columns: 1fr;
-    gap: 6px;
+    gap: 8px;
     text-align: center;
   }
+  .demo-fill { width: 100%; }
 }
