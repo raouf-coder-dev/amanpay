@@ -35,10 +35,62 @@
       </button>
     </form>
 
+    <!-- ── حسابات تجريبية للاختبار (لجنة الحاضنة) ────────────────────── -->
+    <div class="demo-accounts">
+      <div class="demo-accounts-header">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue-primary);"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        {% trans "حسابات تجريبية للاختبار" %}
+      </div>
+      <div class="demo-accounts-list">
+        <div class="demo-account">
+          <span class="demo-role">{% trans "مشتري" %}</span>
+          <span class="demo-credentials">demo_buyer / demo1234</span>
+          <button type="button" class="demo-fill" data-user="demo_buyer" data-pass="demo1234">{% trans "استخدام" %}</button>
+        </div>
+        <div class="demo-account">
+          <span class="demo-role">{% trans "بائع" %}</span>
+          <span class="demo-credentials">demo_seller / demo1234</span>
+          <button type="button" class="demo-fill" data-user="demo_seller" data-pass="demo1234">{% trans "استخدام" %}</button>
+        </div>
+        <div class="demo-account">
+          <span class="demo-role">{% trans "توصيل" %}</span>
+          <span class="demo-credentials">demo_delivery / demo1234</span>
+          <button type="button" class="demo-fill" data-user="demo_delivery" data-pass="demo1234">{% trans "استخدام" %}</button>
+        </div>
+        <div class="demo-account">
+          <span class="demo-role">{% trans "أدمن" %}</span>
+          <span class="demo-credentials">demo_admin / demo1234</span>
+          <button type="button" class="demo-fill" data-user="demo_admin" data-pass="demo1234">{% trans "استخدام" %}</button>
+        </div>
+      </div>
+      <p class="demo-note">
+        {% trans "كلمة المرور لكل الحسابات:" %} <strong>demo1234</strong>
+      </p>
+    </div>
+
     <div class="auth-footer">
       {% trans "ليس لديك حساب؟" %}
       <a href="{% url 'accounts:register' %}">{% trans "سجّل الآن" %}</a>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.querySelectorAll('.demo-fill').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var userInput = document.querySelector('input[name="username"]');
+      var passInput = document.querySelector('input[name="password"]');
+      if (userInput && passInput) {
+        userInput.value = btn.dataset.user;
+        passInput.value = btn.dataset.pass;
+        var originalText = btn.textContent;
+        btn.textContent = '✓';  // ✓
+        setTimeout(function() { btn.textContent = originalText; }, 1200);
+      }
+    });
+  });
+</script>
 {% endblock %}

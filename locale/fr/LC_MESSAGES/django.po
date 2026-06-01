@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-01 17:52+0100\n"
+"POT-Creation-Date: 2026-06-01 18:29+0100\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -48,13 +48,15 @@ msgstr "Les mots de passe ne correspondent pas"
 
 # ── Roles ──
 #: .\accounts\models.py:8 .\templates\accounts\admin_user_detail.html:116
-#: .\templates\accounts\register.html:77 .\templates\accounts\settings.html:46
+#: .\templates\accounts\login.html:46 .\templates\accounts\register.html:77
+#: .\templates\accounts\settings.html:46
 #: .\templates\transactions\transaction_detail.html:208
 msgid "مشتري"
 msgstr "Acheteur"
 
 #: .\accounts\models.py:9 .\templates\accounts\admin_user_detail.html:115
-#: .\templates\accounts\register.html:84 .\templates\accounts\settings.html:49
+#: .\templates\accounts\login.html:51 .\templates\accounts\register.html:84
+#: .\templates\accounts\settings.html:49
 #: .\templates\transactions\transaction_detail.html:203
 msgid "بائع"
 msgstr "Vendeur"
@@ -238,7 +240,7 @@ msgstr "Dernière mise à jour"
 #: .\accounts\models.py:209 .\templates\accounts\admin_dashboard.html:150
 #: .\templates\accounts\admin_platform_wallet.html:4
 #: .\templates\accounts\admin_platform_wallet.html:13
-#: .\templates\base.html:223
+#: .\templates\base.html:225
 msgid "سلة AmanPay"
 msgstr "Caisse AmanPay"
 
@@ -296,7 +298,6 @@ msgid "Français"
 msgstr "Français"
 
 #: .\templates\404.html:6 .\templates\404.html:47
-#| msgid "الصفقات المكتملة"
 msgid "الصفحة غير موجودة"
 msgstr "Page introuvable"
 
@@ -307,12 +308,10 @@ msgstr ""
 
 # ── Admin Dashboard ──
 #: .\templates\404.html:49 .\templates\500.html:49
-#| msgid "← العودة للوحة الأدمن"
 msgid "العودة للصفحة الرئيسية"
 msgstr "Retour à l'accueil"
 
 #: .\templates\500.html:6 .\templates\500.html:47
-#| msgid "في النظام"
 msgid "خطأ في الخادم"
 msgstr "Erreur serveur"
 
@@ -827,6 +826,7 @@ msgid "صفقات المستخدم"
 msgstr "Transactions de l'utilisateur"
 
 #: .\templates\accounts\admin_user_detail.html:117
+#: .\templates\accounts\login.html:56
 msgid "توصيل"
 msgstr "Livraison"
 
@@ -999,7 +999,7 @@ msgstr "Vous avez déjà un compte ?"
 
 #: .\templates\accounts\landing.html:42 .\templates\accounts\login.html:4
 #: .\templates\accounts\login.html:9 .\templates\accounts\register.html:192
-#: .\templates\base.html:279
+#: .\templates\base.html:281
 msgid "تسجيل الدخول"
 msgstr "Connexion"
 
@@ -1174,16 +1174,35 @@ msgstr "Bon retour"
 msgid "دخول"
 msgstr "Se connecter"
 
-#: .\templates\accounts\login.html:39
+#: .\templates\accounts\login.html:42
+msgid "حسابات تجريبية للاختبار"
+msgstr "Comptes de démonstration"
+
+#: .\templates\accounts\login.html:48 .\templates\accounts\login.html:53
+#: .\templates\accounts\login.html:58 .\templates\accounts\login.html:63
+#| msgid "المستخدم"
+msgid "استخدام"
+msgstr "Utiliser"
+
+#: .\templates\accounts\login.html:61
+msgid "أدمن"
+msgstr "Administrateur"
+
+#: .\templates\accounts\login.html:67
+#| msgid "كلمتا المرور غير متطابقتين"
+msgid "كلمة المرور لكل الحسابات:"
+msgstr "Mot de passe pour tous les comptes :"
+
+#: .\templates\accounts\login.html:72
 msgid "ليس لديك حساب؟"
 msgstr "Vous n'avez pas de compte ?"
 
-#: .\templates\accounts\login.html:40
+#: .\templates\accounts\login.html:73
 msgid "سجّل الآن"
 msgstr "Inscrivez-vous"
 
 #: .\templates\accounts\register.html:4 .\templates\accounts\register.html:65
-#: .\templates\base.html:282
+#: .\templates\base.html:284
 msgid "حساب جديد"
 msgstr "Nouveau compte"
 
@@ -1340,7 +1359,7 @@ msgstr "Retour à l'accueil"
 msgid "جميع العمليات المالية على محفظتك"
 msgstr "Toutes les opérations financières de votre portefeuille"
 
-#: .\templates\accounts\wallet_history.html:69 .\templates\base.html:210
+#: .\templates\accounts\wallet_history.html:69 .\templates\base.html:212
 #: .\templates\transactions\review_transaction.html:66
 #: .\templates\transactions\transaction_detail.html:58
 msgid "رجوع"
@@ -1362,17 +1381,16 @@ msgstr "Nouveau solde"
 msgid "لا توجد عمليات مالية بعد."
 msgstr "Aucune opération financière pour le moment."
 
-#: .\templates\base.html:240
-#| msgid "حساب جديد"
+#: .\templates\base.html:242
 msgid "حسابي"
 msgstr "Mon compte"
 
 # ── Base ──
-#: .\templates\base.html:246
+#: .\templates\base.html:248
 msgid "تسجيل الخروج"
 msgstr "Déconnexion"
 
-#: .\templates\base.html:255
+#: .\templates\base.html:257
 msgid "تبديل المظهر"
 msgstr "Changer le thème"
 

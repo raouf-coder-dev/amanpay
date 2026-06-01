@@ -1575,3 +1575,73 @@ html[dir="rtl"] .form-select {
     width: 100%;
   }
 }
+
+/* ===================================================================
+   حسابات تجريبية في صفحة تسجيل الدخول — Demo accounts panel
+   تستخدم متغيرات النظام فقط، تعمل في الوضعين.
+   =================================================================== */
+.demo-accounts {
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+}
+.demo-accounts-header {
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--fs-body); font-weight: 600;
+  color: var(--text-secondary); margin-bottom: 12px;
+}
+.demo-accounts-list {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 12px;
+}
+.demo-account {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 8px; align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+.demo-role { color: var(--blue-primary); font-weight: 600; }
+.demo-credentials {
+  font-family: 'Courier New', monospace;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+.demo-fill {
+  background: transparent;
+  border: 1px solid var(--blue-primary);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--blue-primary);
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+.demo-fill:hover {
+  background: var(--blue-primary);
+  color: #FFFFFF;
+}
+.demo-note {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0;
+}
+.demo-note strong {
+  font-family: 'Courier New', monospace;
+  color: var(--text-primary);
+}
+@media (max-width: 600px) {
+  .demo-account {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    text-align: center;
+  }
+}

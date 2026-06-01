@@ -493,6 +493,99 @@ img, svg {
   white-space: nowrap;
 }
 
+/* ===================================================================
+   قائمة المستخدم المنسدلة — User dropdown
+   تعمل في الوضعين، تستخدم متغيرات النظام فقط.
+   =================================================================== */
+.user-dropdown { position: relative; }
+
+.user-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--fs-body);
+  transition: all 0.2s ease;
+}
+.user-dropdown-toggle:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-active);
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  inset-inline-start: 0;
+  min-width: 220px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 200;
+}
+.user-dropdown.is-open .user-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-dropdown-menu .menu-header {
+  padding: 8px 12px 10px;
+}
+.user-dropdown-menu .menu-header-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+}
+.user-dropdown-menu .menu-header-role {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.user-dropdown-menu .menu-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+.user-dropdown-menu .menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  text-align: start;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--fs-body);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.user-dropdown-menu .menu-item:hover {
+  background: var(--bg-secondary);
+}
+.user-dropdown-menu .menu-item.danger {
+  color: var(--red);
+}
+
+.logout-form { margin: 0; }
+
 /* زر تبديل المظهر — إظهار الشمس في الوضع الداكن والقمر في الفاتح */
 #themeToggle .icon-moon { display: none; }
 html.light #themeToggle .icon-sun  { display: none; }
