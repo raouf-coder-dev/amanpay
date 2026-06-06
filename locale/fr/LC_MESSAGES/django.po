@@ -962,9 +962,13 @@ msgstr "Aucune expédition ne vous est assignée actuellement."
 msgid "وسيط مالي آمن للتجارة الإلكترونية"
 msgstr "Intermédiaire financier sécurisé pour le e-commerce"
 
-#: .\templates\accounts\landing.html:12
-msgid "لا تبِع ولا تشترِ عبر الإنترنت دون وسيط آمن"
-msgstr "Ne vendez ni n'achetez en ligne sans un intermédiaire sûr"
+#: .\templates\accounts\landing.html:13
+msgid ""
+"<span class=\"hero-title-accent\">أمان</span> لكلّ صفقة، <span class=\"hero-"
+"title-accent\">ثقة</span> لكلّ طرف"
+msgstr ""
+"<span class=\"hero-title-accent\">Sécurité</span> à chaque transaction, "
+"<span class=\"hero-title-accent\">confiance</span> entre les parties"
 
 #: .\templates\accounts\landing.html:13
 msgid "أمان باي وسيط مالي محايد يحمي البائع والمشتري في كل صفقة عبر الإنترنت."

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}AmanPay — {% trans "وسيط مالي آمن للتجارة الإلكترونية" %}{% endblock %}
 
@@ -9,7 +10,7 @@
 <section class="landing-hero">
   <div class="hero-grid">
     <div class="hero-content">
-      <h1 class="hero-title">{% trans "لا تبِع ولا تشترِ عبر الإنترنت دون وسيط آمن" %}</h1>
+      <h1 class="hero-title">{% blocktrans %}<span class="hero-title-accent">أمان</span> لكلّ صفقة، <span class="hero-title-accent">ثقة</span> لكلّ طرف{% endblocktrans %}</h1>
       <p class="hero-sub">{% trans "أمان باي وسيط مالي محايد يحمي البائع والمشتري في كل صفقة عبر الإنترنت." %}</p>
       <div class="hero-actions">
         <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg">
@@ -43,23 +44,12 @@
       </p>
     </div>
 
-    <!-- بطاقة لوحة تحكم وهمية — عرض بصري فقط -->
-    <div class="hero-mockup" aria-hidden="true">
-      <div class="mockup-head">
-        <span class="mockup-dot"></span>
-        <span class="mockup-label">{% trans "لوحة التحكم" %}</span>
-      </div>
-      <div class="mockup-balance">
-        <span class="mockup-balance-label">{% trans "الرصيد" %}</span>
-        <span class="mockup-balance-value">50,000 {% trans "دج" %}</span>
-      </div>
-      <div class="mockup-status">
-        <span class="badge badge-funded">{% trans "صفقة قيد التنفيذ" %}</span>
-      </div>
-      <div class="mockup-tx">
-        <span class="mockup-tx-code">#834192</span>
-        <span class="mockup-tx-amount">12,500 {% trans "دج" %}</span>
-      </div>
+    <!-- صورة Hero ثلاثية الأبعاد — درع + متجر + توصيل + زبون -->
+    <div class="hero-image-container">
+      <img src="{% static 'images/hero-3d.png' %}"
+           alt="{% trans 'AmanPay - منصة الوساطة المالية' %}"
+           class="hero-3d-image"
+           loading="eager">
     </div>
   </div>
 </section>

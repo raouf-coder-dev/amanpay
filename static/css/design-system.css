@@ -1102,38 +1102,15 @@ html[dir="rtl"] .form-select {
    كل الألوان من المتغيرات، يدعم RTL والوضعين.
    =================================================================== */
 
-/* Hero */
+/* Hero — خلفية بسيطة من متغيّرات النظام، بدون gradients ملوّنة أو بقع إضاءة */
 .landing-hero {
   position: relative;
   padding: 72px 24px 64px;
   margin-bottom: 24px;
-  background: linear-gradient(155deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-}
-/* بقع إضاءة خفيفة — من المتغيرات، تعمل في الوضعين */
-.landing-hero::before,
-.landing-hero::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(90px);
-  opacity: 0.45;
-  z-index: 0;
-}
-.landing-hero::before {
-  width: 340px; height: 340px;
-  top: -130px;
-  inset-inline-start: -110px;
-  background: color-mix(in srgb, var(--blue-primary) 40%, transparent);
-}
-.landing-hero::after {
-  width: 300px; height: 300px;
-  bottom: -120px;
-  inset-inline-end: -90px;
-  background: color-mix(in srgb, var(--accent-secondary) 38%, transparent);
 }
 
 /* تخطيط عمودين على الشاشات الكبيرة */
@@ -1159,6 +1136,10 @@ html[dir="rtl"] .form-select {
   color: var(--text-primary);
   letter-spacing: -0.02em;
   margin-bottom: 20px;
+}
+/* الكلمات المميّزة داخل عنوان Hero — تظهر بلون التركيز الأزرق في الوضعين */
+.hero-title-accent {
+  color: var(--blue-primary);
 }
 .hero-sub {
   font-size: 18px;
@@ -1196,80 +1177,39 @@ html[dir="rtl"] .form-select {
   color: var(--blue-primary);
 }
 
-/* بطاقة لوحة التحكم العائمة — CSS فقط */
-.hero-mockup {
+/* حاوية صورة Hero ثلاثية الأبعاد — شفافة بالكامل، لا خلفية ولا حواف ولا ظلال */
+.hero-image-container {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 360px;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-}
-.mockup-head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 18px;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }
-.mockup-dot {
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 0 3px var(--green-bg);
-}
-.mockup-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-.mockup-balance {
-  padding: 14px 16px;
-  margin-bottom: 14px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-}
-.mockup-balance-label {
+
+.hero-3d-image {
+  width: 100%;
+  height: auto;
+  max-width: 600px;
   display: block;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  margin-bottom: 4px;
+  /* صورة PNG شفّافة — تظهر كما هي في الوضعين بدون أي filter */
+  animation: heroFloat 6s ease-in-out infinite;
 }
-.mockup-balance-value {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-.mockup-status {
-  margin-bottom: 14px;
-}
-.mockup-tx {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-}
-.mockup-tx-code {
-  font-family: monospace;
-  font-weight: 700;
-  letter-spacing: .08em;
-  color: var(--blue-primary);
-}
-.mockup-tx-amount {
-  font-weight: 700;
-  color: var(--text-primary);
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-12px); }
 }
 
 @media (min-width: 900px) {
   .hero-grid {
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 1fr 1fr;
     gap: 48px;
   }
   .hero-content {
@@ -1279,10 +1219,8 @@ html[dir="rtl"] .form-select {
   .hero-sub { margin-inline: 0; }
   .hero-actions,
   .hero-trust { justify-content: flex-start; }
-  .hero-mockup {
+  .hero-image-container {
     margin: 0;
-    transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
-    transform-style: preserve-3d;
   }
 }
 
@@ -1547,16 +1485,28 @@ html[dir="rtl"] .form-select {
 
 /* ≤899px — يطابق نقطة الفصل المعتمدة للـHero (.hero-grid يصبح عموداً واحداً) */
 @media (max-width: 899px) {
-  /* تعطيل الـ3D transform لبطاقة الـmockup على الموبايل (احتياط — مطبَّق فقط ≥900px أصلاً) */
-  .hero-mockup {
-    transform: none !important;
-    max-width: 100%;
-    margin: 0 auto;
-  }
-
-  /* ضمان عمود واحد للـHero — قد تكون قاعدة تفصيلية مطلوبة لو تجاوز عنصر داخلي */
+  /* ضمان عمود واحد للـHero */
   .hero-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* تصغير صورة Hero على الموبايل + إبعادها قليلاً عن النصّ */
+  .hero-image-container {
+    max-width: 400px;
+    margin-top: 40px;
+  }
+  .hero-3d-image {
+    max-width: 400px;
+  }
+}
+
+/* ≤480px — هواتف صغيرة جداً: تقليص الصورة أكثر */
+@media (max-width: 480px) {
+  .hero-image-container {
+    max-width: 320px;
+  }
+  .hero-3d-image {
+    max-width: 320px;
   }
 }
 
