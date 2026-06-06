@@ -304,8 +304,14 @@
   (function() {
     var nav = document.querySelector('.navbar');
     if (!nav) return;
+    var ticking = false;
     function onScroll() {
-      nav.classList.toggle('scrolled', window.scrollY > 10);
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function() {
+        nav.classList.toggle('scrolled', window.scrollY > 20);
+        ticking = false;
+      });
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();

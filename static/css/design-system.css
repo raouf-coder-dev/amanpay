@@ -389,8 +389,9 @@ img, svg {
 }
 
 /* Glassmorphism يظهر عند التمرير لأسفل */
+/* الشفافية عند 70% (بدل 85% السابقة) ليظهر تأثير blur خلف الـnavbar فعلياً */
 .navbar.scrolled {
-  background: color-mix(in srgb, var(--bg-card) 85%, transparent);
+  background: color-mix(in srgb, var(--bg-card) 70%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-sm);
@@ -1117,7 +1118,7 @@ html[dir="rtl"] .form-select {
 .hero-grid {
   position: relative;
   z-index: 1;
-  max-width: 1080px;
+  max-width: 1280px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
@@ -1182,7 +1183,7 @@ html[dir="rtl"] .form-select {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 600px;
+  max-width: 720px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -1196,7 +1197,7 @@ html[dir="rtl"] .form-select {
 .hero-3d-image {
   width: 100%;
   height: auto;
-  max-width: 600px;
+  max-width: 720px;
   display: block;
   /* صورة PNG شفّافة — تظهر كما هي في الوضعين بدون أي filter */
   animation: heroFloat 6s ease-in-out infinite;
@@ -1492,21 +1493,21 @@ html[dir="rtl"] .form-select {
 
   /* تصغير صورة Hero على الموبايل + إبعادها قليلاً عن النصّ */
   .hero-image-container {
-    max-width: 400px;
+    max-width: 480px;
     margin-top: 40px;
   }
   .hero-3d-image {
-    max-width: 400px;
+    max-width: 480px;
   }
 }
 
 /* ≤480px — هواتف صغيرة جداً: تقليص الصورة أكثر */
 @media (max-width: 480px) {
   .hero-image-container {
-    max-width: 320px;
+    max-width: 360px;
   }
   .hero-3d-image {
-    max-width: 320px;
+    max-width: 360px;
   }
 }
 
