@@ -2,7 +2,11 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models import User
-from .models import Transaction
+from .models import (
+    Transaction,
+    MIN_TRANSACTION_AMOUNT,
+    MAX_TRANSACTION_AMOUNT,
+)
 
 
 class CreateTransactionForm(forms.Form):
@@ -17,8 +21,15 @@ class CreateTransactionForm(forms.Form):
     )
     amount = forms.DecimalField(
         label=_('المبلغ (دج)'),
-        min_value=1,
+        min_value=MIN_TRANSACTION_AMOUNT,
+        max_value=MAX_TRANSACTION_AMOUNT,
         decimal_places=2,
+        widget=forms.NumberInput(attrs={
+            'min': str(int(MIN_TRANSACTION_AMOUNT)),
+            'max': str(int(MAX_TRANSACTION_AMOUNT)),
+            'step': '0.01',
+            'placeholder': _('من 10,000 إلى 1,000,000 دج'),
+        }),
     )
     delivery_company = forms.ModelChoiceField(
         label=_('شركة التوصيل'),
@@ -27,3 +38,12 @@ class CreateTransactionForm(forms.Form):
         required=False,
     )
 
+    def clean_amount(self):
+        amount = self.cleaned_data.get('amount')
+        if amount is None:
+            return amount
+        if amount < MIN_TRANSACTION_AMOUNT:
+            raise forms.ValidationError(_('المبلغ الأدنى للصفقة هو 10,000 دج'))
+        if amount > MAX_TRANSACTION_AMOUNT:
+            raise forms.ValidationError(_('المبلغ الأقصى للصفقة هو 1,000,000 دج'))
+        return amount

@@ -729,9 +729,25 @@ html.light #themeToggle .icon-moon { display: inline; }
 .form-input::placeholder { color: var(--text-muted); }
 
 .form-error {
+  display: block;
   margin-top: 4px;
   font-size: 12px;
   color: var(--red);
+}
+.form-error[hidden] { display: none; }
+
+/* ملاحظة توضيحية رمادية تحت الحقل (مثلاً نطاق المبلغ المسموح) */
+.form-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* تمييز الحقل بحدّ أحمر عند فشل التحقّق (يتزامن مع رسالة .form-error) */
+.form-input[aria-invalid="true"] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 22%, transparent);
 }
 
 /* ── القائمة المنسدلة (select) — تطابق .form-input ── */

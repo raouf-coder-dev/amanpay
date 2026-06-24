@@ -1,10 +1,17 @@
 import random
 import string
+from decimal import Decimal
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+# حدود مبلغ الصفقة (بالدينار الجزائري) — مرجعها الوحيد هذا الملف
+MIN_TRANSACTION_AMOUNT = Decimal('10000')
+MAX_TRANSACTION_AMOUNT = Decimal('1000000')
 
 
 def _generate_transaction_code():
@@ -66,6 +73,10 @@ class Transaction(models.Model):
     amount = models.DecimalField(
         max_digits=12,
         decimal_places=2,
+        validators=[
+            MinValueValidator(MIN_TRANSACTION_AMOUNT),
+            MaxValueValidator(MAX_TRANSACTION_AMOUNT),
+        ],
         verbose_name=_('المبلغ'),
     )
     status = models.CharField(
@@ -122,6 +133,19 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f'#{self.code} — {self.product_name} ({self.get_status_display()})'
+
+    def clean(self):
+        """تحقّق دفاعي من نطاق المبلغ — يكمّل الـvalidators على الحقل."""
+        super().clean()
+        if self.amount is not None:
+            if self.amount < MIN_TRANSACTION_AMOUNT:
+                raise ValidationError({
+                    'amount': _('المبلغ الأدنى للصفقة هو 10,000 دج'),
+                })
+            if self.amount > MAX_TRANSACTION_AMOUNT:
+                raise ValidationError({
+                    'amount': _('المبلغ الأقصى للصفقة هو 1,000,000 دج'),
+                })
 
 
 class Review(models.Model):

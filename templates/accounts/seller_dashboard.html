@@ -145,8 +145,12 @@
           <textarea class="form-input" name="description" rows="3" style="resize:vertical;"></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label">{% trans "المبلغ" %} ({% trans "دج" %})</label>
-          <input class="form-input" type="number" name="amount" min="1" step="0.01" required>
+          <label class="form-label" for="id_amount">{% trans "المبلغ" %} ({% trans "دج" %})</label>
+          <input class="form-input" type="number" name="amount" id="id_amount"
+                 min="10000" max="1000000" step="0.01" required
+                 placeholder="{% trans 'من 10,000 إلى 1,000,000 دج' %}">
+          <small class="form-hint">{% trans "الحدّ الأدنى: 10,000 دج | الحدّ الأقصى: 1,000,000 دج" %}</small>
+          <span class="form-error" data-amount-error hidden></span>
         </div>
         <div class="form-group">
           <label class="form-label">{% trans "شركة التوصيل" %} / Société de livraison</label>
@@ -185,5 +189,52 @@
     const modal = document.getElementById('newTxModal');
     if (e.target === modal) modal.style.display = 'none';
   });
+
+  // تحقّق فوري من نطاق المبلغ — التحقّق الإلزامي يبقى في Backend
+  (function() {
+    var input = document.getElementById('id_amount');
+    if (!input) return;
+    var errEl = document.querySelector('[data-amount-error]');
+    if (!errEl) return;
+
+    var MIN = 10000;
+    var MAX = 1000000;
+    var MSG_MIN = '{% trans "المبلغ الأدنى للصفقة هو 10,000 دج" %}';
+    var MSG_MAX = '{% trans "المبلغ الأقصى للصفقة هو 1,000,000 دج" %}';
+
+    function showError(msg) {
+      errEl.textContent = msg;
+      errEl.hidden = false;
+      input.setAttribute('aria-invalid', 'true');
+    }
+    function clearError() {
+      errEl.textContent = '';
+      errEl.hidden = true;
+      input.removeAttribute('aria-invalid');
+    }
+
+    function validate() {
+      if (input.value === '') { clearError(); return true; }
+      var v = parseFloat(input.value);
+      if (isNaN(v))      { clearError(); return true; }
+      if (v < MIN)       { showError(MSG_MIN); return false; }
+      if (v > MAX)       { showError(MSG_MAX); return false; }
+      clearError();
+      return true;
+    }
+
+    input.addEventListener('input', validate);
+    input.addEventListener('blur', validate);
+
+    var form = input.closest('form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        if (!validate()) {
+          e.preventDefault();
+          input.focus();
+        }
+      });
+    }
+  })();
 </script>
 {% endblock %}

@@ -32,7 +32,8 @@
       "Bash(echo \"/ -> $\\(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8766/\\)\")",
       "Bash(curl -s http://127.0.0.1:8766/)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8766/static/css/design-system.css)",
-      "Bash(pkill -f \"manage.py runserver\")"
+      "Bash(pkill -f \"manage.py runserver\")",
+      "Bash(python manage.py makemessages -l fr --ignore=venv --ignore=.venv --ignore=.claude --ignore=staticfiles)"
     ]
   }
 }

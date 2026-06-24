@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-01 18:29+0100\n"
+"POT-Creation-Date: 2026-06-24 18:19+0100\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -75,14 +75,12 @@ msgid "الدور"
 msgstr "Rôle"
 
 #: .\accounts\models.py:20 .\templates\accounts\admin_user_detail.html:28
-#: .\templates\accounts\register.html:119
-#: .\templates\accounts\settings.html:81
+#: .\templates\accounts\register.html:119 .\templates\accounts\settings.html:81
 msgid "رقم الهاتف"
 msgstr "Numéro de téléphone"
 
 #: .\accounts\models.py:27 .\templates\accounts\admin_user_detail.html:31
-#: .\templates\accounts\register.html:156
-#: .\templates\accounts\settings.html:93
+#: .\templates\accounts\register.html:156 .\templates\accounts\settings.html:93
 msgid "اسم المتجر"
 msgstr "Nom du magasin"
 
@@ -127,7 +125,6 @@ msgstr "Utilisateur"
 
 # ── Wallet ──
 #: .\accounts\models.py:96 .\accounts\models.py:203
-#: .\templates\accounts\landing.html:53
 msgid "الرصيد"
 msgstr "Solde"
 
@@ -187,7 +184,7 @@ msgstr "Type"
 #: .\templates\accounts\buyer_dashboard.html:108
 #: .\templates\accounts\seller_dashboard.html:89
 #: .\templates\accounts\seller_dashboard.html:148
-#: .\templates\accounts\wallet_history.html:77 .\transactions\models.py:69
+#: .\templates\accounts\wallet_history.html:77 .\transactions\models.py:80
 msgid "المبلغ"
 msgstr "Montant"
 
@@ -203,7 +200,7 @@ msgstr "Solde après opération"
 #: .\templates\accounts\wallet_history.html:79
 #: .\templates\transactions\preview_transaction.html:109
 #: .\templates\transactions\transaction_detail.html:144
-#: .\transactions\forms.py:14 .\transactions\models.py:64
+#: .\transactions\forms.py:18 .\transactions\models.py:71
 msgid "الوصف"
 msgstr "Description"
 
@@ -239,8 +236,7 @@ msgstr "Dernière mise à jour"
 
 #: .\accounts\models.py:209 .\templates\accounts\admin_dashboard.html:150
 #: .\templates\accounts\admin_platform_wallet.html:4
-#: .\templates\accounts\admin_platform_wallet.html:13
-#: .\templates\base.html:225
+#: .\templates\accounts\admin_platform_wallet.html:13 .\templates\base.html:225
 msgid "سلة AmanPay"
 msgstr "Caisse AmanPay"
 
@@ -303,8 +299,7 @@ msgstr "Page introuvable"
 
 #: .\templates\404.html:48
 msgid "عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها."
-msgstr ""
-"Désolé, la page que vous recherchez est introuvable ou a été déplacée."
+msgstr "Désolé, la page que vous recherchez est introuvable ou a été déplacée."
 
 # ── Admin Dashboard ──
 #: .\templates\404.html:49 .\templates\500.html:49
@@ -449,7 +444,7 @@ msgstr "Avec succès"
 
 #: .\templates\accounts\admin_dashboard.html:127
 #: .\templates\transactions\transaction_detail.html:87
-#: .\transactions\models.py:20
+#: .\transactions\models.py:27
 msgid "في الانتظار"
 msgstr "En attente"
 
@@ -500,7 +495,6 @@ msgstr "Nécessite une révision"
 #: .\templates\accounts\buyer_dashboard.html:52
 #: .\templates\accounts\buyer_dashboard.html:120
 #: .\templates\accounts\delivery_dashboard.html:110
-#: .\templates\accounts\landing.html:54 .\templates\accounts\landing.html:61
 #: .\templates\accounts\seller_dashboard.html:53
 #: .\templates\accounts\seller_dashboard.html:60
 #: .\templates\accounts\seller_dashboard.html:107
@@ -564,7 +558,7 @@ msgstr "Au"
 #: .\templates\accounts\admin_dashboard.html:242
 #: .\templates\accounts\admin_user_detail.html:104
 #: .\templates\accounts\buyer_dashboard.html:109
-#: .\templates\accounts\seller_dashboard.html:90 .\transactions\models.py:75
+#: .\templates\accounts\seller_dashboard.html:90 .\transactions\models.py:86
 msgid "الحالة"
 msgstr "Statut"
 
@@ -594,13 +588,13 @@ msgstr "Code"
 #: .\templates\accounts\buyer_dashboard.html:107
 #: .\templates\accounts\delivery_dashboard.html:102
 #: .\templates\transactions\review_transaction.html:33
-#: .\transactions\models.py:40 .\transactions\models.py:146
+#: .\transactions\models.py:47 .\transactions\models.py:170
 msgid "البائع"
 msgstr "Vendeur"
 
 #: .\templates\accounts\admin_dashboard.html:240
 #: .\templates\accounts\delivery_dashboard.html:106
-#: .\templates\accounts\seller_dashboard.html:87 .\transactions\models.py:48
+#: .\templates\accounts\seller_dashboard.html:87 .\transactions\models.py:55
 msgid "المشتري"
 msgstr "Acheteur"
 
@@ -649,8 +643,7 @@ msgstr "Tous les utilisateurs"
 
 #: .\templates\accounts\admin_dashboard.html:355
 #: .\templates\accounts\admin_user_detail.html:27
-#: .\templates\accounts\register.html:125
-#: .\templates\accounts\settings.html:77
+#: .\templates\accounts\register.html:125 .\templates\accounts\settings.html:77
 msgid "البريد الإلكتروني"
 msgstr "Email"
 
@@ -813,7 +806,7 @@ msgstr "Note moyenne"
 
 #: .\templates\accounts\admin_user_detail.html:82
 #: .\templates\transactions\preview_transaction.html:142
-#: .\transactions\models.py:160
+#: .\transactions\models.py:184
 msgid "تقييم"
 msgstr "avis"
 
@@ -921,7 +914,7 @@ msgstr "En attente de remise"
 
 #: .\templates\accounts\delivery_dashboard.html:71
 #: .\templates\transactions\transaction_detail.html:103
-#: .\transactions\models.py:23
+#: .\transactions\models.py:30
 msgid "تم التسليم"
 msgstr "Livré"
 
@@ -958,7 +951,7 @@ msgstr "Ouvrir un litige"
 msgid "لا توجد شحنات مسندة إليك حالياً."
 msgstr "Aucune expédition ne vous est assignée actuellement."
 
-#: .\templates\accounts\landing.html:4
+#: .\templates\accounts\landing.html:5
 msgid "وسيط مالي آمن للتجارة الإلكترونية"
 msgstr "Intermédiaire financier sécurisé pour le e-commerce"
 
@@ -970,202 +963,197 @@ msgstr ""
 "<span class=\"hero-title-accent\">Sécurité</span> à chaque transaction, "
 "<span class=\"hero-title-accent\">confiance</span> entre les parties"
 
-#: .\templates\accounts\landing.html:13
+#: .\templates\accounts\landing.html:14
 msgid "أمان باي وسيط مالي محايد يحمي البائع والمشتري في كل صفقة عبر الإنترنت."
 msgstr ""
 "AmanPay est un intermédiaire financier neutre qui protège vendeurs et "
 "acheteurs dans chaque transaction en ligne."
 
-#: .\templates\accounts\landing.html:17 .\templates\accounts\landing.html:198
+#: .\templates\accounts\landing.html:18 .\templates\accounts\landing.html:188
 msgid "ابدأ الآن"
 msgstr "Commencer maintenant"
 
-#: .\templates\accounts\landing.html:21
+#: .\templates\accounts\landing.html:22
 msgid "كيف يعمل"
 msgstr "Comment ça marche"
 
-#: .\templates\accounts\landing.html:28
+#: .\templates\accounts\landing.html:29
 msgid "أموالك محفوظة حتى تأكيد الاستلام"
 msgstr "Vos fonds sont protégés jusqu'à confirmation de réception"
 
-#: .\templates\accounts\landing.html:32
+#: .\templates\accounts\landing.html:33
 msgid "اتصال آمن مشفّر"
 msgstr "Connexion sécurisée et chiffrée"
 
-#: .\templates\accounts\landing.html:36 .\templates\accounts\landing.html:168
-#: .\templates\accounts\landing.html:181
+#: .\templates\accounts\landing.html:37 .\templates\accounts\landing.html:158
+#: .\templates\accounts\landing.html:171
 msgid "وسيط محايد"
 msgstr "Intermédiaire neutre"
 
-#: .\templates\accounts\landing.html:41 .\templates\accounts\register.html:191
+#: .\templates\accounts\landing.html:42 .\templates\accounts\register.html:191
 msgid "لديك حساب بالفعل؟"
 msgstr "Vous avez déjà un compte ?"
 
-#: .\templates\accounts\landing.html:42 .\templates\accounts\login.html:4
+#: .\templates\accounts\landing.html:43 .\templates\accounts\login.html:4
 #: .\templates\accounts\login.html:9 .\templates\accounts\register.html:192
 #: .\templates\base.html:281
 msgid "تسجيل الدخول"
 msgstr "Connexion"
 
-# ── Delivery Dashboard ──
 #: .\templates\accounts\landing.html:50
-msgid "لوحة التحكم"
-msgstr "Tableau de bord"
+msgid "AmanPay - منصة الوساطة المالية"
+msgstr ""
 
-#: .\templates\accounts\landing.html:57
-msgid "صفقة قيد التنفيذ"
-msgstr "Transaction en cours"
-
-#: .\templates\accounts\landing.html:69
+#: .\templates\accounts\landing.html:59
 msgid "كيف يعمل أمان باي"
 msgstr "Comment fonctionne AmanPay"
 
-#: .\templates\accounts\landing.html:70
+#: .\templates\accounts\landing.html:60
 msgid "خمس خطوات بسيطة لإتمام صفقة آمنة"
 msgstr "Cinq étapes simples pour une transaction sécurisée"
 
-#: .\templates\accounts\landing.html:75
+#: .\templates\accounts\landing.html:65
 msgid "اتفاق المشتري والبائع"
 msgstr "Accord entre acheteur et vendeur"
 
-#: .\templates\accounts\landing.html:76
+#: .\templates\accounts\landing.html:66
 msgid "يتفقان على الصفقة وتفاصيلها"
 msgstr "Ils conviennent de la transaction et de ses détails"
 
-#: .\templates\accounts\landing.html:81
+#: .\templates\accounts\landing.html:71
 msgid "دفع آمن للوسيط"
 msgstr "Paiement sécurisé à l'intermédiaire"
 
-#: .\templates\accounts\landing.html:82
+#: .\templates\accounts\landing.html:72
 msgid "المشتري يودع المبلغ في أمان باي"
 msgstr "L'acheteur dépose le montant chez AmanPay"
 
-#: .\templates\accounts\landing.html:87
+#: .\templates\accounts\landing.html:77
 msgid "البائع يشحن المنتج"
 msgstr "Le vendeur expédie le produit"
 
-#: .\templates\accounts\landing.html:88
+#: .\templates\accounts\landing.html:78
 msgid "بعد تأكيد حجز المبلغ"
 msgstr "Après confirmation du dépôt du montant"
 
-#: .\templates\accounts\landing.html:93
+#: .\templates\accounts\landing.html:83
 msgid "المشتري يؤكد الاستلام"
 msgstr "L'acheteur confirme la réception"
 
-#: .\templates\accounts\landing.html:94
+#: .\templates\accounts\landing.html:84
 msgid "بعد فحص المنتج"
 msgstr "Après inspection du produit"
 
-#: .\templates\accounts\landing.html:99
+#: .\templates\accounts\landing.html:89
 msgid "تحرير الأموال بأمان"
 msgstr "Libération sécurisée des fonds"
 
-#: .\templates\accounts\landing.html:100
+#: .\templates\accounts\landing.html:90
 msgid "المبلغ يُحوَّل للبائع"
 msgstr "Le montant est transféré au vendeur"
 
-#: .\templates\accounts\landing.html:107
+#: .\templates\accounts\landing.html:97
 msgid "لماذا أمان باي"
 msgstr "Pourquoi AmanPay"
 
-#: .\templates\accounts\landing.html:111
+#: .\templates\accounts\landing.html:101
 msgid "أمان مالي للطرفين"
 msgstr "Sécurité financière pour les deux parties"
 
-#: .\templates\accounts\landing.html:112
+#: .\templates\accounts\landing.html:102
 msgid "حماية الأموال حتى يكتمل التسليم بنجاح"
 msgstr "Protection des fonds jusqu'à livraison réussie"
 
-#: .\templates\accounts\landing.html:116
+#: .\templates\accounts\landing.html:106
 msgid "حماية من الاحتيال"
 msgstr "Protection contre la fraude"
 
-#: .\templates\accounts\landing.html:117
+#: .\templates\accounts\landing.html:107
 msgid "لا أحد يستلم ماله إلا بعد إتمام الصفقة"
 msgstr "Personne ne reçoit l'argent avant la finalisation"
 
-#: .\templates\accounts\landing.html:121
+#: .\templates\accounts\landing.html:111
 msgid "شفافية كاملة"
 msgstr "Transparence totale"
 
-#: .\templates\accounts\landing.html:122
+#: .\templates\accounts\landing.html:112
 msgid "كل خطوة موثّقة ومرئية لجميع الأطراف"
 msgstr "Chaque étape est documentée et visible pour toutes les parties"
 
-#: .\templates\accounts\landing.html:126
+#: .\templates\accounts\landing.html:116
 msgid "عمولة منخفضة"
 msgstr "Commission réduite"
 
-#: .\templates\accounts\landing.html:127
+#: .\templates\accounts\landing.html:117
 #, python-format
 msgid "ابتداءً من 1%% فقط حسب حجم الصفقة"
 msgstr "À partir de 1%% seulement selon le montant"
 
-#: .\templates\accounts\landing.html:134
+#: .\templates\accounts\landing.html:124
 msgid "لمن أمان باي"
 msgstr "À qui s'adresse AmanPay"
 
-#: .\templates\accounts\landing.html:138
+#: .\templates\accounts\landing.html:128
 msgid "التجار الإلكترونيون"
 msgstr "Vendeurs en ligne"
 
-#: .\templates\accounts\landing.html:139
+#: .\templates\accounts\landing.html:129
 msgid "متاجر إنستغرام وفيسبوك التي تبيع للمشترين عن بعد"
 msgstr "Boutiques Instagram et Facebook vendant à distance"
 
-#: .\templates\accounts\landing.html:143
+#: .\templates\accounts\landing.html:133
 msgid "التجار التقليديون"
 msgstr "Commerçants traditionnels"
 
-#: .\templates\accounts\landing.html:144
+#: .\templates\accounts\landing.html:134
 msgid "أصحاب المحلات الذين بدؤوا البيع أونلاين"
 msgstr "Commerçants qui se lancent en ligne"
 
-#: .\templates\accounts\landing.html:148
+#: .\templates\accounts\landing.html:138
 msgid "أصحاب الخدمات"
 msgstr "Prestataires de services"
 
-#: .\templates\accounts\landing.html:149
+#: .\templates\accounts\landing.html:139
 msgid "المستقلون والمصممون والمطورون وغيرهم"
 msgstr "Freelances, designers, développeurs et autres"
 
-#: .\templates\accounts\landing.html:156
+#: .\templates\accounts\landing.html:146
 msgid "لماذا تثق بأمان باي"
 msgstr "Pourquoi faire confiance à AmanPay"
 
-#: .\templates\accounts\landing.html:160
+#: .\templates\accounts\landing.html:150
 msgid "المال محجوز بأمان حتى تأكيد الاستلام"
 msgstr "Les fonds sont bloqués en sécurité jusqu'à confirmation de réception"
 
-#: .\templates\accounts\landing.html:164
+#: .\templates\accounts\landing.html:154
 msgid "عمولة منخفضة تبدأ من"
 msgstr "Commission réduite à partir de"
 
-#: .\templates\accounts\landing.html:172
+#: .\templates\accounts\landing.html:162
 msgid "تتبّع فوري لحالة كل صفقة"
 msgstr "Suivi en temps réel de chaque transaction"
 
-#: .\templates\accounts\landing.html:185
+#: .\templates\accounts\landing.html:175
 msgid "حماية مضمونة"
 msgstr "Protection garantie"
 
-#: .\templates\accounts\landing.html:189
+#: .\templates\accounts\landing.html:179
 msgid "معاملات آمنة"
 msgstr "Transactions sécurisées"
 
-#: .\templates\accounts\landing.html:195
+#: .\templates\accounts\landing.html:185
 msgid "ابدأ أول صفقة آمنة اليوم"
 msgstr "Commencez votre première transaction sécurisée aujourd'hui"
 
-#: .\templates\accounts\landing.html:201
+#: .\templates\accounts\landing.html:191
 msgid "أو سجّل الدخول"
 msgstr "Ou se connecter"
 
-#: .\templates\accounts\landing.html:208
+#: .\templates\accounts\landing.html:198
 msgid "وسيط مالي آمن للتجارة الإلكترونية في الجزائر"
 msgstr "Intermédiaire financier sécurisé pour le e-commerce en Algérie"
 
-#: .\templates\accounts\landing.html:209
+#: .\templates\accounts\landing.html:199
 msgid "جامعة العربي بن مهيدي — أم البواقي"
 msgstr "Université Larbi Ben M'hidi — Oum El Bouaghi"
 
@@ -1184,7 +1172,6 @@ msgstr "Comptes de démonstration"
 
 #: .\templates\accounts\login.html:48 .\templates\accounts\login.html:53
 #: .\templates\accounts\login.html:58 .\templates\accounts\login.html:63
-#| msgid "المستخدم"
 msgid "استخدام"
 msgstr "Utiliser"
 
@@ -1193,7 +1180,6 @@ msgid "أدمن"
 msgstr "Administrateur"
 
 #: .\templates\accounts\login.html:67
-#| msgid "كلمتا المرور غير متطابقتين"
 msgid "كلمة المرور لكل الحسابات:"
 msgstr "Mot de passe pour tous les comptes :"
 
@@ -1223,8 +1209,7 @@ msgstr "Choisissez votre type de compte"
 msgid "البيانات الأساسية"
 msgstr "Informations de base"
 
-#: .\templates\accounts\register.html:149
-#: .\templates\accounts\settings.html:90
+#: .\templates\accounts\register.html:149 .\templates\accounts\settings.html:90
 msgid "بيانات المتجر"
 msgstr "Informations du magasin"
 
@@ -1280,9 +1265,9 @@ msgid "صفقة ناجحة"
 msgstr "Transaction réussie"
 
 #: .\templates\accounts\seller_dashboard.html:88
-#: .\templates\accounts\seller_dashboard.html:152
+#: .\templates\accounts\seller_dashboard.html:156
 #: .\templates\transactions\preview_transaction.html:115
-#: .\transactions\forms.py:24 .\transactions\models.py:56
+#: .\transactions\forms.py:35 .\transactions\models.py:63
 msgid "شركة التوصيل"
 msgstr "Société de livraison"
 
@@ -1301,30 +1286,48 @@ msgstr "Créez votre première transaction"
 #: .\templates\accounts\seller_dashboard.html:140
 #: .\templates\transactions\preview_transaction.html:104
 #: .\templates\transactions\transaction_detail.html:139
-#: .\transactions\forms.py:10 .\transactions\models.py:60
+#: .\transactions\forms.py:14 .\transactions\models.py:67
 msgid "اسم المنتج"
 msgstr "Nom du produit"
 
-#: .\templates\accounts\seller_dashboard.html:154
+#: .\templates\accounts\seller_dashboard.html:151 .\transactions\forms.py:31
+msgid "من 10,000 إلى 1,000,000 دج"
+msgstr "De 10 000 à 1 000 000 DZD"
+
+#: .\templates\accounts\seller_dashboard.html:152
+msgid "الحدّ الأدنى: 10,000 دج | الحدّ الأقصى: 1,000,000 دج"
+msgstr "Minimum : 10 000 DZD | Maximum : 1 000 000 DZD"
+
+#: .\templates\accounts\seller_dashboard.html:158
 msgid "اختر شركة التوصيل"
 msgstr "Choisir une société de livraison"
 
-#: .\templates\accounts\seller_dashboard.html:158
+#: .\templates\accounts\seller_dashboard.html:162
 msgid "لا توجد شركات توصيل مسجلة"
 msgstr "Aucune société de livraison enregistrée"
 
-#: .\templates\accounts\seller_dashboard.html:165
+#: .\templates\accounts\seller_dashboard.html:169
 #: .\templates\transactions\open_dispute.html:32
 msgid "إلغاء"
 msgstr "Annuler"
 
-#: .\templates\accounts\seller_dashboard.html:169
+#: .\templates\accounts\seller_dashboard.html:173
 msgid "إنشاء الصفقة"
 msgstr "Créer la transaction"
 
-#: .\templates\accounts\seller_dashboard.html:181
+#: .\templates\accounts\seller_dashboard.html:185
 msgid "تم نسخ الكود"
 msgstr "Code copié"
+
+#: .\templates\accounts\seller_dashboard.html:202 .\transactions\forms.py:46
+#: .\transactions\models.py:143
+msgid "المبلغ الأدنى للصفقة هو 10,000 دج"
+msgstr "Le montant minimum de la transaction est de 10 000 DZD"
+
+#: .\templates\accounts\seller_dashboard.html:203 .\transactions\forms.py:48
+#: .\transactions\models.py:147
+msgid "المبلغ الأقصى للصفقة هو 1,000,000 دج"
+msgstr "Le montant maximum de la transaction est de 1 000 000 DZD"
 
 #: .\templates\accounts\settings.html:4 .\templates\accounts\settings.html:39
 msgid "إعدادات الحساب"
@@ -1467,8 +1470,8 @@ msgstr ""
 
 #: .\templates\transactions\preview_transaction.html:203
 msgid ""
-"عند الضغط على «قبول وتجميد المبلغ»، سيُحجز المبلغ في نظام AmanPay الضمان ولن"
-" يُحرَّر للبائع إلا بعد تأكيدك استلام البضاعة."
+"عند الضغط على «قبول وتجميد المبلغ»، سيُحجز المبلغ في نظام AmanPay الضمان ولن "
+"يُحرَّر للبائع إلا بعد تأكيدك استلام البضاعة."
 msgstr ""
 "En cliquant sur «Accepter et bloquer le montant», le montant sera bloqué "
 "dans le système de garantie AmanPay et ne sera libéré au vendeur qu'après "
@@ -1490,7 +1493,7 @@ msgstr "Évaluer le vendeur"
 #: .\templates\transactions\review_transaction.html:43
 #: .\templates\transactions\transaction_detail.html:168
 #: .\templates\transactions\transaction_detail.html:363
-#: .\transactions\models.py:151
+#: .\transactions\models.py:175
 msgid "التقييم"
 msgstr "Évaluation"
 
@@ -1519,38 +1522,38 @@ msgid "مسار الصفقة"
 msgstr "Suivi de la transaction"
 
 #: .\templates\transactions\transaction_detail.html:93
-#: .\transactions\models.py:21
+#: .\transactions\models.py:28
 msgid "ممول"
 msgstr "Financé"
 
 #: .\templates\transactions\transaction_detail.html:98
-#: .\transactions\models.py:22
+#: .\transactions\models.py:29
 msgid "تم الشحن"
 msgstr "Expédié"
 
 #: .\templates\transactions\transaction_detail.html:107
-#: .\transactions\models.py:24
+#: .\transactions\models.py:31
 msgid "مكتمل"
 msgstr "Complété"
 
 #: .\templates\transactions\transaction_detail.html:114
-#: .\transactions\models.py:25
+#: .\transactions\models.py:32
 msgid "متنازع عليه"
 msgstr "En litige"
 
 #: .\templates\transactions\transaction_detail.html:119
-#: .\transactions\models.py:26
+#: .\transactions\models.py:33
 msgid "مسترجع"
 msgstr "Remboursé"
 
 # ── Transaction Model ──
 #: .\templates\transactions\transaction_detail.html:124
-#: .\transactions\models.py:27
+#: .\transactions\models.py:34
 msgid "ملغى"
 msgstr "Annulé"
 
 #: .\templates\transactions\transaction_detail.html:149
-#: .\transactions\models.py:77 .\transactions\models.py:157
+#: .\transactions\models.py:88 .\transactions\models.py:181
 msgid "تاريخ الإنشاء"
 msgstr "Date de création"
 
@@ -1599,8 +1602,7 @@ msgstr "En attente du financement de l'acheteur."
 #: .\templates\transactions\transaction_detail.html:249
 msgid "المبلغ محجوز. أرسل البضاعة وأدخل بيانات الشحن."
 msgstr ""
-"Montant bloqué. Envoyez la marchandise et saisissez les données "
-"d'expédition."
+"Montant bloqué. Envoyez la marchandise et saisissez les données d'expédition."
 
 #: .\templates\transactions\transaction_detail.html:255
 msgid "تأكيد الشحن"
@@ -1685,67 +1687,67 @@ msgstr "Parties"
 msgid "التواريخ"
 msgstr "Dates"
 
-#: .\transactions\forms.py:19
+#: .\transactions\forms.py:23
 msgid "المبلغ (دج)"
 msgstr "Montant (DA)"
 
-#: .\transactions\forms.py:26
+#: .\transactions\forms.py:37
 msgid "— اختر شركة التوصيل —"
 msgstr "— Choisir une société de livraison —"
 
-#: .\transactions\models.py:34
+#: .\transactions\models.py:41
 msgid "كود المعاملة"
 msgstr "Code de transaction"
 
-#: .\transactions\models.py:78
+#: .\transactions\models.py:89
 msgid "تاريخ التحديث"
 msgstr "Date de mise à jour"
 
-#: .\transactions\models.py:82
+#: .\transactions\models.py:93
 msgid "تاريخ الإفراج عن المبلغ"
 msgstr "Date de libération du montant"
 
-#: .\transactions\models.py:89
+#: .\transactions\models.py:100
 msgid "وصف النزاع"
 msgstr "Description du litige"
 
-#: .\transactions\models.py:97
+#: .\transactions\models.py:108
 msgid "فاتح النزاع"
 msgstr "Auteur du litige"
 
-#: .\transactions\models.py:102
+#: .\transactions\models.py:113
 msgid "تاريخ فتح النزاع"
 msgstr "Date d'ouverture du litige"
 
-#: .\transactions\models.py:107
+#: .\transactions\models.py:118
 msgid "تاريخ الاطلاع على النزاع"
 msgstr "Date de consultation du litige"
 
-#: .\transactions\models.py:115
+#: .\transactions\models.py:126
 msgid "من اطّلع على النزاع"
 msgstr "Consulté par"
 
-#: .\transactions\models.py:119
+#: .\transactions\models.py:130
 msgid "معاملة"
 msgstr "Transaction"
 
-#: .\transactions\models.py:120
+#: .\transactions\models.py:131
 msgid "المعاملات"
 msgstr "Transactions"
 
-#: .\transactions\models.py:134
+#: .\transactions\models.py:158
 msgid "المعاملة"
 msgstr "La transaction"
 
-#: .\transactions\models.py:140
+#: .\transactions\models.py:164
 msgid "المقيِّم"
 msgstr "Évaluateur"
 
-#: .\transactions\models.py:155
+#: .\transactions\models.py:179
 msgid "التعليق"
 msgstr "Commentaire"
 
-#: .\transactions\models.py:161
+#: .\transactions\models.py:185
 msgid "التقييمات"
 msgstr "Avis"
 
@@ -1822,6 +1824,13 @@ msgstr "Votre avis a été envoyé avec succès"
 msgid "ليس لديك صلاحية لعرض هذه الصفقة"
 msgstr "Vous n'avez pas accès à cette transaction"
 
+# ── Delivery Dashboard ──
+#~ msgid "لوحة التحكم"
+#~ msgstr "Tableau de bord"
+
+#~ msgid "صفقة قيد التنفيذ"
+#~ msgstr "Transaction en cours"
+
 #~ msgid "الرئيسية"
 #~ msgstr "Accueil"
 
@@ -1862,7 +1871,8 @@ msgstr "Vous n'avez pas accès à cette transaction"
 
 #~ msgid "ادفع بأمان وأطلق المبلغ فقط بعد استلام منتجك."
 #~ msgstr ""
-#~ "Payez en sécurité et libérez le paiement après réception de votre commande."
+#~ "Payez en sécurité et libérez le paiement après réception de votre "
+#~ "commande."
 
 #~ msgid "أنشئ صفقاتك واستلم مدفوعاتك بعد تأكيد التسليم."
 #~ msgstr ""

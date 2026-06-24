@@ -52,7 +52,7 @@ class FullFlowTest(TestCase):
         self.seller_client.post(reverse('transactions:create'), {
             'product_name': 'هاتف تجريبي',
             'description': 'وصف تجريبي',
-            'amount': '8000',
+            'amount': '10000',
             'delivery_company': self.delivery.id,
         })
         self.assertEqual(Transaction.objects.count(), 1, "الصفقة لم تُنشأ")
@@ -66,7 +66,7 @@ class FullFlowTest(TestCase):
         self.seller_client.post(reverse('transactions:create'), {
             'product_name': 'هاتف تجريبي',
             'description': 'وصف',
-            'amount': '8000',
+            'amount': '10000',
             'delivery_company': self.delivery.id,
         })
         transaction = Transaction.objects.first()
@@ -82,7 +82,7 @@ class FullFlowTest(TestCase):
         self.seller_client.post(reverse('transactions:create'), {
             'product_name': 'هاتف تجريبي',
             'description': 'وصف',
-            'amount': '8000',
+            'amount': '10000',
             'delivery_company': self.delivery.id,
         })
         transaction = Transaction.objects.first()
@@ -96,17 +96,17 @@ class FullFlowTest(TestCase):
         self.assertEqual(transaction.status, 'FUNDED', "الصفقة لم تُموَّل")
         self.assertEqual(
             self.buyer.wallet.frozen_balance,
-            Decimal('8000'),
+            Decimal('10000'),
             "المبلغ لم يُجمَّد"
         )
-        print("  [PASS] Transaction funded, 8000 frozen")
+        print("  [PASS] Transaction funded, 10000 frozen")
 
     def test_05_ship_transaction(self):
         """اختبار تأكيد الشحن"""
         self.seller_client.post(reverse('transactions:create'), {
             'product_name': 'هاتف تجريبي',
             'description': 'وصف',
-            'amount': '8000',
+            'amount': '10000',
             'delivery_company': self.delivery.id,
         })
         transaction = Transaction.objects.first()
@@ -124,7 +124,7 @@ class FullFlowTest(TestCase):
         self.seller_client.post(reverse('transactions:create'), {
             'product_name': 'هاتف تجريبي',
             'description': 'وصف',
-            'amount': '8000',
+            'amount': '10000',
             'delivery_company': self.delivery.id,
         })
         transaction = Transaction.objects.first()
@@ -142,7 +142,7 @@ class FullFlowTest(TestCase):
         self.seller_client.post(reverse('transactions:create'), {
             'product_name': 'هاتف تجريبي',
             'description': 'وصف',
-            'amount': '8000',
+            'amount': '10000',
             'delivery_company': self.delivery.id,
         })
         transaction = Transaction.objects.first()
@@ -150,8 +150,8 @@ class FullFlowTest(TestCase):
         transaction.status = 'DELIVERED'
         transaction.save()
 
-        self.buyer.wallet.frozen_balance = Decimal('8000')
-        self.buyer.wallet.balance = Decimal('42000')
+        self.buyer.wallet.frozen_balance = Decimal('10000')
+        self.buyer.wallet.balance = Decimal('40000')
         self.buyer.wallet.save()
 
         seller_balance_before = self.seller.wallet.balance
@@ -161,9 +161,9 @@ class FullFlowTest(TestCase):
         self.seller.wallet.refresh_from_db()
         self.buyer.wallet.refresh_from_db()
 
-        # 8000 دج → 1.5% = 120 دج عمولة، البائع يستلم 7880 دج
-        expected_commission = Decimal('120')
-        expected_seller_receives = Decimal('7880')
+        # 10000 دج → 1.5% = 150 دج عمولة، البائع يستلم 9850 دج
+        expected_commission = Decimal('150')
+        expected_seller_receives = Decimal('9850')
 
         self.assertEqual(transaction.status, 'COMPLETED', "الصفقة لم تكتمل")
         self.assertEqual(
@@ -171,11 +171,11 @@ class FullFlowTest(TestCase):
             expected_seller_receives,
             f"البائع لم يستلم الصحيح: توقعنا {expected_seller_receives}"
         )
-        # رصيد المشتري يجب أن ينخفض (42000 - 8000 = 34000)
+        # رصيد المشتري يجب أن ينخفض (40000 - 10000 = 30000)
         self.assertEqual(
             self.buyer.wallet.balance,
-            Decimal('34000'),
-            f"رصيد المشتري خاطئ: توقعنا 34000 وجدنا {self.buyer.wallet.balance}"
+            Decimal('30000'),
+            f"رصيد المشتري خاطئ: توقعنا 30000 وجدنا {self.buyer.wallet.balance}"
         )
         self.assertEqual(self.buyer.wallet.frozen_balance, Decimal('0'), "frozen المشتري لم يُصفَّر")
         platform = PlatformWallet.get_instance()
@@ -184,7 +184,7 @@ class FullFlowTest(TestCase):
             expected_commission,
             f"عمولة AmanPay خاطئة: توقعنا {expected_commission}"
         )
-        print(f"  [PASS] Complete OK — buyer -8000 (34000) — seller +{expected_seller_receives} — commission {expected_commission}")
+        print(f"  [PASS] Complete OK — buyer -10000 (30000) — seller +{expected_seller_receives} — commission {expected_commission}")
 
     def test_08_wallet_history(self):
         """اختبار سجل الرصيد"""
@@ -221,7 +221,7 @@ class FullFlowTest(TestCase):
         self.seller_client.post(reverse('transactions:create'), {
             'product_name': 'منتج اختبار',
             'description': 'وصف',
-            'amount': '5000',
+            'amount': '10000',
             'delivery_company': self.delivery.id,
         })
         transaction = Transaction.objects.first()
@@ -229,7 +229,7 @@ class FullFlowTest(TestCase):
         transaction.status = 'FUNDED'
         transaction.save()
 
-        self.buyer.wallet.frozen_balance = Decimal('5000')
+        self.buyer.wallet.frozen_balance = Decimal('10000')
         self.buyer.wallet.balance = Decimal('50000')
         self.buyer.wallet.save()
         balance_before = self.buyer.wallet.balance
@@ -264,3 +264,50 @@ class FullFlowTest(TestCase):
         self.buyer.wallet.refresh_from_db()
         self.assertEqual(self.buyer.wallet.frozen_balance, Decimal('0'), "frozen تغيّر رغم الرفض")
         print("  [PASS] Insufficient balance correctly blocked")
+
+    def test_13_amount_below_min_rejected(self):
+        """تحقق أن صفقة بمبلغ < 10,000 دج تُرفض من النموذج"""
+        before = Transaction.objects.count()
+        self.seller_client.post(reverse('transactions:create'), {
+            'product_name': 'منتج صغير',
+            'description': 'وصف',
+            'amount': '9999',
+            'delivery_company': self.delivery.id,
+        })
+        self.assertEqual(
+            Transaction.objects.count(), before,
+            "صفقة بمبلغ أقلّ من الحدّ الأدنى أُنشئت رغم الرفض المتوقّع"
+        )
+        print("  [PASS] Amount < 10,000 correctly rejected")
+
+    def test_14_amount_above_max_rejected(self):
+        """تحقق أن صفقة بمبلغ > 1,000,000 دج تُرفض من النموذج"""
+        before = Transaction.objects.count()
+        self.seller_client.post(reverse('transactions:create'), {
+            'product_name': 'منتج باهظ',
+            'description': 'وصف',
+            'amount': '1000001',
+            'delivery_company': self.delivery.id,
+        })
+        self.assertEqual(
+            Transaction.objects.count(), before,
+            "صفقة بمبلغ أكبر من الحدّ الأقصى أُنشئت رغم الرفض المتوقّع"
+        )
+        print("  [PASS] Amount > 1,000,000 correctly rejected")
+
+    def test_15_amount_within_range_accepted(self):
+        """تحقق أن صفقة بمبلغ 50,000 دج (داخل النطاق) تُقبل"""
+        before = Transaction.objects.count()
+        self.seller_client.post(reverse('transactions:create'), {
+            'product_name': 'منتج عادي',
+            'description': 'وصف',
+            'amount': '50000',
+            'delivery_company': self.delivery.id,
+        })
+        self.assertEqual(
+            Transaction.objects.count(), before + 1,
+            "صفقة بمبلغ صحيح ضمن النطاق لم تُنشأ"
+        )
+        latest = Transaction.objects.first()
+        self.assertEqual(latest.amount, Decimal('50000.00'), "المبلغ المُسجَّل خاطئ")
+        print("  [PASS] Amount 50,000 (within range) accepted")
